@@ -84,7 +84,7 @@ TileEngine.prototype.getCell = function(cell) {
     //  Returns false otherwise.
     if ((cell.x >= 0) && (cell.x < this.columns) &&
         (cell.y >= 0) && (cell.y < this.rows)) {
-        return this.tileMap[x][y];
+        return this.tileMap[cell.x][cell.y];
     } else {
         return false;
     }
