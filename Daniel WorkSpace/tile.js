@@ -78,14 +78,45 @@ TileEngine.prototype.loadTile = function(image){
 };
 
 
-TileEngine.prototype.getTile = function(x, y) {
+TileEngine.prototype.getCell = function(cell) {
     //If x and y are within the bounds of the tileMap,
     //  returns the cell at that position in the array.
-    if ((x >= 0) && (x < this.columns) &&
-        (y >= 0) && (y < this.rows))
+    //  Returns false otherwise.
+    if ((cell.x >= 0) && (cell.x < this.columns) &&
+        (cell.y >= 0) && (cell.y < this.rows)) {
         return this.tileMap[x][y];
-    else
+    } else {
         return false;
+    }
+};
+
+
+TileEngine.prototype.posToCell = function(pos) {
+    //Returns the cell containing pos on the pixel scale
+    //  given that (0, 0) is the top-left pixel in the
+    //  top left cell. Returns false if pos lies outside
+    //  of the tileMap.
+    if ((pos.x >= 0) && (pos.x < this.columns * this.cellSize) &&
+        (pos.y > -0) && (pos.y < this.rows * this.cellSize)) {
+        var x = Math.floor(pos.x / this.cellSize);
+        var y = Math.floor(pos.y / this.cellSize);
+        return this.tileMap[x][y];
+    } else {
+        return false;
+    }
+};
+
+
+TileEngine.prototype.cellToPos = function (cell) {
+    //Returns the position of the top left of cell. If the
+    //  given cell is out of bounds, returns false.
+    if ((cell.x >= 0) && (cell.x < this.columns) &&
+        (cell.y >= 0) && (cell.y < this.rows)) {
+        var pos = {x: cell.x * this.cellSize, y: cell.y * this.cellSize};
+        return pos;
+    } else {
+        return false;
+    }
 };
 
 

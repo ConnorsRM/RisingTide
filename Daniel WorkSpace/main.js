@@ -55,7 +55,7 @@ function imageLoad() {
 function initGame() {
     for (var x = 0; x < 10; ++x) {
         for (var y = 0; y < 20; ++y) {
-            tileEngine.getTile(x, y).tile = Math.floor(3*Math.random());
+            tileEngine.getCell(x, y).tile = Math.floor(3*Math.random());
         }
     }
     
