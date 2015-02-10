@@ -19,7 +19,13 @@ var playerImage = new Image();
 playerImage.onload = function () {
 	playerReady = true;
 };
-playerImage.src = "http://media.tumblr.com/2ef84d9755cc02d1c864c28cc4a1b315/tumblr_inline_njfty1W25B1t3ppxd.png";
+playerImage.src = "playersheet.png";
+
+var charWidth = 30;
+var charHeight = 43;
+var currX = 0;
+var currY = 0;
+
 
 // Animal img
 var animalReady = false;
@@ -66,17 +72,39 @@ var reset = function () {
 
 // Update game objects
 var update = function (modifier) {
-	if (38 in keysDown) { 
+	if (38 in keysDown) { //up
 		player.y -= player.speed * modifier;
+                currY = charHeight;
+		currX += charWidth;
+		if(currX >= charWidth*4){
+		currX = 0;
+		}
+		
+		
 	}
-	if (40 in keysDown) { 
+	if (40 in keysDown) { //down
 		player.y += player.speed * modifier;
+                currY = 0;
+                currX += charWidth;
+                if(currX >= charWidth*4){
+		currX = 0;
+		}
 	}
-	if (37 in keysDown) { 
+	if (37 in keysDown) { //left
 		player.x -= player.speed * modifier;
+                currY = 0;
+                currX += charWidth;
+                if(currX >= charWidth*7){
+		currX = charWidth*4;
+		}
 	}
-	if (39 in keysDown) { 
+	if (39 in keysDown) { //right
 		player.x += player.speed * modifier;
+                currY = charHeight;
+                currX += charWidth;
+                if(currX >= charWidth*7){
+		currX = charWidth*4;
+		}
 	}
 
 	// check collision
@@ -101,6 +129,8 @@ var update = function (modifier) {
 	}
 };
 
+
+
 // Draw
 var render = function () {
 	if (bgReady) {
@@ -108,7 +138,7 @@ var render = function () {
 	}
 
 	if (playerReady) {
-		ctx.drawImage(playerImage, player.x, player.y);
+		ctx.drawImage(playerImage,currX,currY,charWidth,charHeight,player.x,player.y,charWidth,charHeight);
 	}
 
 	if (animalReady) {
