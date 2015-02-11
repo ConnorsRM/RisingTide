@@ -2,78 +2,71 @@
 //tiles should be generated
 
 //Object Data Accumulation
-var canvas = document.getElementById ( 'canvas' );
-var context = canvas.getContext ( '2d' );
+var DRAW_OFFSET_WIDTH = 150;
+var DRAW_OFFSET_HEIGHT = 150;
+var CANVAS_DIMENSION = 300;
 
 //camera object manipulation values
 //change-able by mutation
 var camera_speed = 0;
 //----------------------Camera Initialization----------------------------//
-function iniCam(camSpd) {
+Camera.prototype.iniCam = function(camSpd) {
 	camera_speed = camSpd;
-}
+};
 
 //-----------------Camera Object and Support Functions-------------------//
 //Camera Object encapsulates camera data
 //such as position and scope
-function Camera(x, y) {
+function Camera(x, y, canvas_width, canvas_height) {
 	this.x = x;
 	this.y = y;
-	this.viewHeight = undefined;
-	this.viewWidth = undefined;
+	this.viewHeight = canvas_height;
+	this.viewWidth = canvas_width;
 }
 
-function moveCamera(cam, x, y) {
-	if (typeof cam != "Camera") {
-		console.error("moveCamera : called with non-camera Object");
-		return;
-	}
-	cam.x = x;
-	cam.y = y;
-}
+Camera.prototype.moveCamera = function(x, y) {
+	this.x = x;
+	this.y = y;
+};
 
-function stepCameraX(cam) {
-	if (typeof cam != "Camera") {
-		console.error("moveCamera : called with non-camera Object");
-		return;
-	}	
-	camera.x += camera_speed;
-}
+Camera.prototype.stepCameraX = function() {
+	this.x += camera_speed;
+};
 
-function stepCameraY(cam) {
-	if (typeof cam != "Camera") {
-		console.error("moveCamera : called with non-camera Object");
-		return;
-	}
-	camera.y += camera_speed;
-}
+Camera.prototype.stepCameraY = function() {
+	this.y += camera_speed;
+};
 
-function mutCamHeight(cam, height) {
-	if (typeof cam != "Camera") {
-		console.error("moveCamera : called with non-camera Object");
-		return;
-	}
-	cam.viewHeight = height;
-}
+Camera.prototype.mutCamHeight = function(height) {
+	this.viewHeight = height;
+};
 
-function mutCamWidth(cam, width) {
-	if (typeof cam != "Camera") {
-		console.error("moveCamera : called with non-camera Object");
-		return;
-	}
-	cam.viewWidth = width;
-}
+Camera.prototype.mutCamWidth = function(width) {
+	this.viewWidth = width;
+};
 
 //----------------------Camera Draw Functions------------------------//
-//camUpdate is a function that accepts a camera
-//object and a set of objects in an array
-function camUpdate(cam, objects) {
-	//Need idea of object passing to reliably draw
-	return;
-}
 
-function camDraw(cam, objects) {
+Camera.prototype.camDraw = function(tileSys, player) {
 	//this should scale objects by width and height
 	//before drawing them to the frame.
+	//tileSys.drawSection( {x:0,y:0}, {x:0, y:0}, {x:this.viewWidth, y:this.viewHeight} );
+	
+	//variables declared in this manner purely so others
+	//may read
+	
+	//never draw something that isn't defined so set 0 as min
+	var startX = Math.max(0, this.x - DRAW_OFFSET_WIDTH);
+	var startY = Math.max(0, this.y - DRAW_OFFSET_HEIGHT);
+	var endX = startX + CANVAS_DIMENSION;
+	var endY = startY + CANVAS_DIMENSION;
+	
+	var startPos = {x:startX, y:startY};
+	var endPos = {x:endX, y:endY};
+	
+	tileSys.drawSection({x:0, y:0}, startPos, endPos);
+	console.log(this.x);
+	
+	//This is optional
 	return;
-}
+};

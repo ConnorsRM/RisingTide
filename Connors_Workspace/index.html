@@ -2,10 +2,18 @@
 "http://www.w3.org/TR/html4/loose.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <title>New Web Project</title>
+        <meta name="author" content="Daniel Luna, Ryan Connors"/>
+        <meta content="charset=utf-8"/>
+        <title>Tile Engine</title>
+        <script src="tile.js"></script>
+        <scriptsrc="player.js"></script>
+        <script src="CamSys.js"></script>
+        <script src="main.js"></script>
     </head>
-    <body>
-        <h1>New Web Project Page</h1>
+    <body onload="gameLoad();">
+        <canvas id="canvas" width="400" height="400" style="border: 1px solid gray">
+            ERROR 001: Canvas Failed to Load!
+        </canvas>
+        <div id="console"></div>
     </body>
 </html>
