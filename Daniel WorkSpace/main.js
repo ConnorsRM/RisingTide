@@ -1,3 +1,4 @@
+// Daniel Luna
 //-----------------------------------------------------
 // Game Creation and Update
 //-----------------------------------------------------
@@ -9,11 +10,10 @@ var c_width;
 var c_height;
 
 //Create images
-var gameImages = 3;
-var loadedImages = 0;
-var water;
-var sand;
-var grass;
+var imageLoader;
+var water = new Image();
+var sand = new Image();
+var grass = new Image();
 
 //tile engine
 var tileEngine;
@@ -27,28 +27,17 @@ function gameLoad() {
     c_height = canvas.height;
     
     //Load Images
-    water = new Image();
-    water.src = "water.png";
-    water.onload = imageLoad;
-    sand = new Image();
-    sand.src = "sand.png";
-    sand.onload = imageLoad;
-    grass = new Image();
-    grass.src = "grass.png";
-    grass.onload = imageLoad;
+    imageLoader = new imgLoader(initGame);
+    imageLoader.loadImage(water, "water.png");
+    imageLoader.loadImage(sand, "sand.png");
+    imageLoader.loadImage(grass, "grass.png");
     
     tileEngine = new TileEngine(10, 15, 40);
     tileEngine.loadTile(water);
     tileEngine.loadTile(sand);
     tileEngine.loadTile(grass);
-};
-
-
-function imageLoad() {
-    ++loadedImages;
-    if (loadedImages == gameImages) {
-        initGame();
-    }
+    
+    imageLoader.callWhenReady();
 };
 
 
