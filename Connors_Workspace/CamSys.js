@@ -65,7 +65,9 @@ Camera.prototype.camDraw = function(tileSys, player) {
 	var endPos = {x:endX, y:endY};
 	
 	tileSys.drawSection({x:0, y:0}, startPos, endPos);
-	console.log(this.x);
+	
+	//now draw player
+	player.draw();
 	
 	//This is optional
 	return;

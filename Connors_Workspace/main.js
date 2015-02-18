@@ -18,6 +18,10 @@ var grass;
 //tile engine
 var tileEngine;
 
+//key tracking
+var keysDown = {};
+
+
 function gameLoad() {
     console.log("gameLoad();");
     //Anything in here will be done only on load:
@@ -51,6 +55,15 @@ function imageLoad() {
     }
 };
 
+//keyboard
+addEventListener("keydown", function (e) {
+    keysDown[e.keyCode] = true;
+}, false);
+
+addEventListener("keyup", function (e) {
+    delete keysDown[e.keyCode];
+}, false);
+
 
 function initGame() {
     for (var x = 0; x < 10; ++x) {
@@ -69,12 +82,10 @@ function initGame() {
     tileEngine.drawSection({x:0, y:0}, {x:20, y:50}, {x:300, y:400});
     */
     var cam = new Camera(150, 150, 300, 300);
-    cam.moveCamera(165, 165);
-    console.log(cam.x);
-    
-    
+    var player = new Player();
     
     //will be player encapsulation when defined
-    cam.camDraw(tileEngine, undefined);
-    console.log("Drawn at (10, 20)");
+    cam.camDraw(tileEngine, player);
+    cam.camDraw(tileEngine, player);
+    cam.camDraw(tileEngine, player);
 };
