@@ -19,12 +19,13 @@ var playerImage = new Image();
 playerImage.onload = function () {
     playerReady = true;
 };
-playerImage.src = "playersheet.png";
+playerImage.src = "playersheetTrans.png";
 
 var charWidth = 30;
 var charHeight = 43;
 var currX = 0;
 var currY = 0;
+var itemHeld = 0;
 
 
 // Animal img
@@ -47,12 +48,14 @@ var animalsCaught = 0;
 
 // keyboard controls
 var keysDown = {};
+var lastKeyUp;
 
 addEventListener("keydown", function (e) {
     keysDown[e.keyCode] = true;
 }, false);
 
 addEventListener("keyup", function (e) {
+    lastKeyUp = e.keyCode;
     delete keysDown[e.keyCode];
 }, false);
 
@@ -72,6 +75,7 @@ var reset = function () {
 
 // encapsulation function for movement - player.move(direction)
 var move = function (direction) {
+
     if (direction === "up") {
         player.y -= player.speed * modifier;
         currY = charHeight;
@@ -111,13 +115,36 @@ var move = function (direction) {
         }
     }
 
+
 }
 
 //this code will be removed, only for testing purposes
 var update = function (modifier) {
+    if (lastKeyUp == 32) { //space
+        if (itemHeld != charHeight * 2) {
+            itemHeld = charHeight * 2;
+        }
+        else
+            itemHeld = 0;
+    }
+
+    if (lastKeyUp == 69) { //e
+        if (itemHeld == charHeight * 2) {
+            if (currX >= charWidth * 4)
+                
+
+            
+
+                currX = charWidth * 9;
+                for(i = 0;i<4;i++){
+                    currX += charWidth;
+                }
+        }
+    }
+
     if (38 in keysDown) { //up
         player.y -= player.speed * modifier;
-        currY = charHeight;
+        currY = itemHeld + charHeight;
         currX += charWidth;
         if (currX >= charWidth * 4) {
             currX = 0;
@@ -127,14 +154,14 @@ var update = function (modifier) {
     }
     if (40 in keysDown) { //down
         player.y += player.speed * modifier;
-        currY = 0;
+        currY = itemHeld;
         currX += charWidth;
         if (currX >= charWidth * 4) {
             currX = 0;
         }
     }
     if (37 in keysDown) { //left
-        currY = 0;
+        currY = itemHeld;
         if (currX < charWidth * 4) {
             currX = charWidth * 4;
         }
@@ -146,7 +173,7 @@ var update = function (modifier) {
         }
     }
     if (39 in keysDown) { //right
-        currY = charHeight;
+        currY = itemHeld + charHeight;
         if (currX < charWidth * 4) {
             currX = charWidth * 4;
         }
