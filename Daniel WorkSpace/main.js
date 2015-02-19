@@ -8,6 +8,7 @@ var canvas;
 var context;
 var c_width;
 var c_height;
+var FPS = 30;   //FramesPerSecond
 
 //Create images
 var imageLoader;
@@ -32,7 +33,7 @@ function gameLoad() {
     imageLoader.loadImage(sand, "sand.png");
     imageLoader.loadImage(grass, "grass.png");
     
-    tileEngine = new TileEngine(10, 15, 40);
+    tileEngine = new TileEngine(10, 15, 40);    //Set Tile Size and World Size
     tileEngine.loadTile(water);
     tileEngine.loadTile(sand);
     tileEngine.loadTile(grass);
@@ -58,4 +59,19 @@ function initGame() {
     tileEngine.drawSection({x:0, y:0}, {x:20, y:50}, {x:300, y:400});
     
     console.log("Drawn at (10, 20)");
+    setInterval(update, 1000 / FPS);
+};
+
+
+function update() {
+    for (var i = 0; i < InterfaceStack.length; ++i) {
+        InterfaceStack[i].update();
+    }
+};
+
+
+function draw() {
+    for (var i = 0; i < InterfaceStack.length; ++i) {
+        InterfaceStack[i].draw();
+    }
 };

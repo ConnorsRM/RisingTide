@@ -40,8 +40,8 @@ function loadedImagesTest() {
     //This function is called every time an image is loaded
     //  so we can detect if we are done.
     console.log("loadedTest();");
-    console.log(this.imagesLoaded);
     ++imageLoader.imagesLoaded;
+    console.log(this.imagesLoaded);
     if ((imageLoader.imagesLoaded == imageLoader.imagesToLoad) && (imageLoader.allLoadingQueued)) {
         imageLoader.functionToCall();
     }
