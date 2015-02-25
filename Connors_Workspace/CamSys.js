@@ -4,7 +4,7 @@
 //Object Data Accumulation
 var DRAW_OFFSET_WIDTH = 150;
 var DRAW_OFFSET_HEIGHT = 150;
-var CANVAS_DIMENSION = 300;
+var CANVAS_DIMENSION = 800;
 
 //camera object manipulation values
 //change-able by mutation

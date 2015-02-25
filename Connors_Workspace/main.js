@@ -41,7 +41,7 @@ function gameLoad() {
     grass.src = "grass.png";
     grass.onload = imageLoad;
     
-    tileEngine = new TileEngine(10, 15, 40);
+    tileEngine = new TileEngine(100, 100, 40);
     tileEngine.loadTile(water);
     tileEngine.loadTile(sand);
     tileEngine.loadTile(grass);
@@ -64,11 +64,46 @@ addEventListener("keyup", function (e) {
     delete keysDown[e.keyCode];
 }, false);
 
+function update() {
+	// 1.) walk through all tiles
+	// 2.) find those that should be flooded by checking elevation
+	// 3.) are they in danger of flooding?
+	// 4.) then flood them
+	for (var x = 0; x < 100; ++x) {
+		for (var y = 0; y < 100; ++y) {
+			var thisTile = {x: x, y: y};
+			if(tileEngine.getCell(thisTile).elevation - tileEngine.sea_level <= 0
+				&& tileEngine.getCell(thisTile).danger) {
+				tileEngine.getCell(thisTile).flooded = true;
+				tileEngine.getCell(thisTile).tile = 0;
+				tileEngine.propagateDanger(thisTile);
+			}
+			else if (tileEngine.getCell(thisTile).elevation - tileEngine.sea_level == 1) {
+				tileEngine.getCell(thisTile).tile = 1;
+			}
+		}
+	}
+	
+}
 
 function initGame() {
-    for (var x = 0; x < 10; ++x) {
-        for (var y = 0; y < 20; ++y) {
-            tileEngine.getCell({x: x, y: y}).tile = Math.floor(3*Math.random());
+    for (var x = 0; x < 100; ++x) {
+        for (var y = 0; y < 100; ++y) {
+        	var thisTile = {x: x, y: y};
+        	
+            switch(tileEngine.getCell(thisTile).elevation) {
+            	case 0:
+            		tileEngine.getCell(thisTile).tile = 0;
+            		tileEngine.getCell(thisTile).flooded = true;
+            		tileEngine.getCell(thisTile).danger = true;
+            		break;
+            	case 1:
+            		tileEngine.getCell(thisTile).tile = 1;
+            		tileEngine.getCell(thisTile).danger = true;
+            		break;
+            	default:
+            		tileEngine.getCell(thisTile).tile = 2;
+            }
         }
     }
     /*
@@ -81,11 +116,14 @@ function initGame() {
     //Draws Region
     tileEngine.drawSection({x:0, y:0}, {x:20, y:50}, {x:300, y:400});
     */
-    var cam = new Camera(150, 150, 300, 300);
+    var cam = new Camera(150, 150, 800, 800);
     var player = new Player();
+    
+    console.log(tileEngine.sea_level);
+    tileEngine.sea_level = tileEngine.sea_level + 8;
+    update();
     
     //will be player encapsulation when defined
     cam.camDraw(tileEngine, player);
-    cam.camDraw(tileEngine, player);
-    cam.camDraw(tileEngine, player);
+
 };
