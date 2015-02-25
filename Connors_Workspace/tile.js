@@ -15,6 +15,10 @@ var TileEngine = function(columns, rows, cellSize) {
     //  later if it's decided we need to figure out
     //  how to scale.
     
+    //denotes the current sea level of the world
+    this.sea_level = 0;
+    
+    
     this.columns = columns;
     this.rows = rows;
     //Denotes the amount of columns and rows in the
@@ -47,7 +51,9 @@ var TileEngine = function(columns, rows, cellSize) {
                 x: col,
                 y: row,
                 tile: -1,
-                elevation: 0
+                elevation: islandHeights[col][row],
+                danger : false,
+                fooded : false
             };
             //Default cell definition defined here. (x, y)
             //  simply denotes the position of this cell.
@@ -62,6 +68,42 @@ var TileEngine = function(columns, rows, cellSize) {
     }
     
 };
+
+//propagateDanger will accept a tile {x, y} as argument
+//and appropriately flag any exisitng adjacent tiles 
+//as being in danger.
+TileEngine.prototype.propagateDanger = function(tile) {
+	//look at adjacent tiles in tilemap
+	//8 tiles to check
+	//tile has flooded;
+	
+	var xsub1 = tile.x - 1;
+	var xadd1 = tile.x + 1;
+	var ysub1 = tile.y - 1;
+	var yadd1 = tile.y + 1;
+	
+	if ( xsub1 >= 0) {
+		if ( ysub1 >= 0 )
+			this.tileMap[xsub1][ysub1].danger = true;
+		if ( yadd1 < this.tileMap[xsub1].length )
+			this.tileMap[xsub1][yadd1].danger = true;
+		this.tileMap[xsub1][tile.y].danger = true;
+	}
+	
+	if ( xadd1 < this.tileMap.length ) {
+		if ( ysub1 >= 0 )
+			this.tileMap[xadd1][ysub1].danger = true;
+		if ( yadd1 < this.tileMap[xadd1].length )
+			this.tileMap[xadd1][yadd1].danger = true;
+		this.tileMap[xadd1][tile.y].danger = true;
+	}
+	
+	if ( yadd1 < this.tileMap[tile.x].length )
+		this.tileMap[tile.x][yadd1].danger = true;
+		
+	if ( ysub1 >= 0 )
+		this.tileMap[tile.x][ysub1].danger = true;
+}
 
 
 TileEngine.prototype.loadTile = function(image){
