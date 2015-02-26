@@ -5,34 +5,27 @@
  frameX/Y : width and height of a single frame
  */
 
-function Sprite(url, imageX,imageY,frameX, frameY) {
+function Sprite(url, imageX, imageY, frameX, frameY) {
     this.image = new Image();
     this.imageX = imageX;
     this.imageY = imageY;
     this.frameX = frameX;
     this.frameY = frameY;
-    this.framesPerRow = framesPerRow;
+     var self = this;
+    this.image.onload = function() {
+      self.framesPerRow = Math.floor(self.image.width / self.frameWidth); //used if sprite is a spritesheet
+    };
     this.image.src = url;
 }
 
 
 /**
-   * Creates a Spritesheet using an already existing sprite i.e. sprite.SpriteSheet
-
-   */
-Sprite.prototype.SpriteSheet = new function()  {
-      framesPerRow = 8;//Math.floor(imageX / frameX);
-  }
-
-
-
-  /**
-   * Creates an animation from a spritesheet.
-   * @param {number}      - Number of frames to wait for before transitioning the animation.
-   * @param {array}       - Range or sequence of frame numbers for the animation.
-   * @param {boolean}     - Repeat the animation once completed.
-   */
-  Sprite.Animation = new function(frameSpeed, startFrame, endFrame) {
+ * Creates an animation from a spritesheet.
+ * @param {number}      - Number of frames to wait for before transitioning the animation.
+ * @param {array}       - Range or sequence of frame numbers for the animation.
+ * @param {boolean}     - Repeat the animation once completed.
+ */
+function Animation(sprite, frameSpeed, startFrame, endFrame) {
 
     var animationSequence = [];  // array holding the order of the animation
     var currentFrame = 0;        // the current frame to draw
@@ -40,19 +33,19 @@ Sprite.prototype.SpriteSheet = new function()  {
 
     // start and end range for frames
     for (var frameNumber = startFrame; frameNumber <= endFrame; frameNumber++)
-      animationSequence.push(frameNumber);
+        animationSequence.push(frameNumber);
 
     /**
      * Update the animation
      */
-    this.update = function() {
+    this.update = function () {
 
-      // update to the next frame if it is time
-      if (counter == (frameSpeed - 1))
-        currentFrame = (currentFrame + 1) % animationSequence.length;
+        // update to the next frame if it is time
+        if (counter == (frameSpeed - 1))
+            currentFrame = (currentFrame + 1) % animationSequence.length;
 
-      // update the counter
-      counter = (counter + 1) % frameSpeed;
+        // update the counter
+        counter = (counter + 1) % frameSpeed;
     };
 
     /**
@@ -60,22 +53,23 @@ Sprite.prototype.SpriteSheet = new function()  {
      * @param {integer} x - X position to draw
      * @param {integer} y - Y position to draw
      */
-    this.draw = function(x, y) {
-      // get the row and col of the frame
-      var row = Math.floor(animationSequence[currentFrame] / framesPerRow);
-      var col = Math.floor(animationSequence[currentFrame] % framesPerRow);
+    this.draw = function (x, y) {
+        // get the row and col of the frame
+        var row = Math.floor(animationSequence[currentFrame] / sprite.framesPerRow);
+        var col = Math.floor(animationSequence[currentFrame] % sprite.framesPerRow);
 
-      ctx.drawImage(
-        image,
-        col * frameX, row * frameY,
-        frameX, frameY,
-        x, y,
-        frameX, frameY);
+        ctx.drawImage(
+                sprite.image,
+                col * sprite.frameX, row * sprite.frameY,
+                sprite.frameX, sprite.frameY,
+                x, y,
+                sprite.frameX, sprite.frameY);
     };
-  }
+};
 
 
-
+var playerSprite = new Sprite("playersheet.png", 480, 270, 30, 43);
+walk = new Animation(playerSprite, 10, 0, 10);
 
 
 
@@ -109,9 +103,9 @@ var charHeight = 43;
 var currX = 0;
 var currY = 0;
 
-var sprite = new Sprite("playersheet.png",480,270,30,43);
-//sprite.SpriteSheet();
-sprite.Animation(10,0,7).draw(100,100);
+
+
+
 // Animal img
 var animalReady = false;
 var animalImage = new Image();
@@ -153,60 +147,11 @@ var reset = function () {
     animal.y = 32 + (Math.random() * (canvas.height - 64));
 };
 
-// encapsulation function for movement - player.move(direction)
-var move = function (direction) {
-    if (direction === "up") {
-        player.y -= player.speed * modifier;
-        currY = charHeight;
-        currX += charWidth;
-        if (currX >= charWidth * 4) {
-            currX = 0;
-        }
-    }
-    if (direction === "down") {
-        player.y += player.speed * modifier;
-        currY = 0;
-        currX += charWidth;
-        if (currX >= charWidth * 4) {
-            currX = 0;
-        }
-    }
-    if (direction === "left") {
-        currY = 0;
-        if (currX < charWidth * 4) {
-            currX = charWidth * 4;
-        }
-        player.x -= player.speed * modifier;
-        currX += charWidth;
-        if (currX >= charWidth * 7) {
-            currX = charWidth * 4;
-        }
-    }
-    if (direction === "right") {
-        currY = charHeight;
-        if (currX < charWidth * 4) {
-            currX = charWidth * 4;
-        }
-        player.x += player.speed * modifier;
-        currX += charWidth;
-        if (currX >= charWidth * 7) {
-            currX = charWidth * 4;
-        }
-    }
 
-}
-
-//this code will be removed, only for testing purposes
 var update = function (modifier) {
     if (38 in keysDown) { //up
-        player.y -= player.speed * modifier;
-        currY = charHeight;
-        currX += charWidth;
-        if (currX >= charWidth * 4) {
-            currX = 0;
-        }
 
-
+        walk.draw(10,10); //testing of the new sprite functions
     }
     if (40 in keysDown) { //down
         player.y += player.speed * modifier;
@@ -270,10 +215,11 @@ var render = function () {
         ctx.drawImage(bgImage, 0, 0);
     }
 
-    //if (playerReady) {
-     //   ctx.drawImage(playerImage, currX, currY, charWidth, charHeight, 
-      //  	player.x, player.y, charWidth, charHeight);
-    //}
+    if (playerReady) {
+        
+       ctx.drawImage(playerImage, currX, currY, charWidth, charHeight, 
+      	player.x, player.y, charWidth, charHeight);
+    }
 
     if (animalReady) {
         ctx.drawImage(animalImage, animal.x, animal.y);
