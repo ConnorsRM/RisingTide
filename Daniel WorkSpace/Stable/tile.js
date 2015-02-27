@@ -191,8 +191,8 @@ TileEngine.prototype.drawCell = function(pos, cell) {
     //Draws the cell at (cell.x, cell.y) on the canvas at
     //  (pos.x, pos.y).
     var Tile = this.tileMap[cell.x][cell.y].tile;
-        if (Tile != -1)
-            Context.drawImage(this.tileDictionary[Tile], pos.x, pos.y, this.cellSize, this.cellSize);
+    if (Tile != -1)
+        Context.drawImage(this.tileDictionary[Tile], pos.x, pos.y, this.cellSize, this.cellSize);
 };
 
 
