@@ -22,7 +22,7 @@ var Player = function (pos){
 
 Player.prototype.changeDirection = function(direction){
 	//changes current direction
-	if((direction > 3 || direction < 0) || direction == undefined){
+	if ((direction == undefined) || (direction > 3) || (direction < 0)) {
 		console.error("Error: Player.changeDirection called with invalid direction");
 		return;
 	}
