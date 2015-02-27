@@ -16,13 +16,22 @@ function Sprite(imageWidth,imageHeight,frameWidth, frameHeight) {
     this.Animations = [];
 }
 
+/**
+A simple draw function.
+Draw's the sprite at x,y
+*/
 
 
+Sprite.prototype.draw =  function(x,y){
+Context.drawImage(this.image,x,y);
+}
 /**
 Creates an animation for the sprite starting from startFrame and ending at endFrame
 startFrame - the starting frame in the spritesheet
 endFrame - the ending frame in the spritesheet
  */
+ 
+}
 Sprite.prototype.loadAnimation = function (startFrame, endFrame) {
 
     var animationSequence = [];  // array holding the order of the animation
@@ -41,7 +50,7 @@ Sprite.prototype.loadAnimation = function (startFrame, endFrame) {
  x - X position to draw
  y - Y position to draw
  */
-Sprite.prototype.draw = function (animIndex,animFrame,x, y) {
+Sprite.prototype.drawFrame = function (animIndex,animFrame,x, y) {
     // get the row and col of the frame via the framesPerRow and Animations index.
     
     var row = Math.floor(this.Animations[animIndex][animFrame] / this.framesPerRow);
