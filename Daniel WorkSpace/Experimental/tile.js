@@ -8,6 +8,7 @@
 //  represent this cell when drawing), as well as be
 //  able to discern if a point (x, y) is inside of it.
 
+var SeaLevelRise;
 
 var TileEngine = function(columns, rows, cellSize) {
     //Assumes cellSize is the same as the Tile image
@@ -239,19 +240,24 @@ TileEngine.prototype.drawSection = function(pos, startDraw, endDraw) {
 TileEngine.prototype.update = function() {
     //Handles Island Update
     
-    for (var x = 0; x < 100; ++x) {
-        for (var y = 0; y < 100; ++y) {
-            var thisTile = {x: x, y: y};
-            if((this.getCell(thisTile).elevation - this.sea_level <= 0) &&
-                   (this.getCell(thisTile).danger)) {
-                this.getCell(thisTile).flooded = true;
-                this.getCell(thisTile).tile = 0;
-                this.propagateDanger(thisTile);
-            }
-            else if ((this.getCell(thisTile).elevation - this.sea_level >= 0.5) ||
-                     (this.getCell(thisTile).elvation - this.sea_level <= 1.5)) {
-                if(this.getCell(thisTile).danger == true)
-                    this.getCell(thisTile).tile = 1;  
+    this.sea_level += SeaLevelRise;
+    
+    //Check if the sea_level has actually risen before updating tiles
+    if (Math.floor(this.sea_level) > Math.floor(this.sea_level - SeaLevelRise)) {
+        for (var x = 0; x < 100; ++x) {
+            for (var y = 0; y < 100; ++y) {
+                var thisTile = {x: x, y: y};
+                if((this.getCell(thisTile).elevation - this.sea_level <= 0) &&
+                       (this.getCell(thisTile).danger)) {
+                    this.getCell(thisTile).flooded = true;
+                    this.getCell(thisTile).tile = 0;
+                    this.propagateDanger(thisTile);
+                }
+                else if ((this.getCell(thisTile).elevation - this.sea_level >= 0.5) ||
+                         (this.getCell(thisTile).elvation - this.sea_level <= 1.5)) {
+                    if(this.getCell(thisTile).danger == true)
+                        this.getCell(thisTile).tile = 1;  
+                }
             }
         }
     }

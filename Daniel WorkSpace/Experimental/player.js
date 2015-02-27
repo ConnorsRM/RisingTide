@@ -74,7 +74,7 @@ Player.prototype.move = function(){
 };
 
 Player.prototype.draw = function(){
-	this.spr.draw(0, 0, this.x, this.y);
+	this.spr.draw(0, 0, this.x - this.spr.frameWidth / 2, this.y - this.spr.frameWidth / 2);
 };
 
 Player.prototype.update = function(){

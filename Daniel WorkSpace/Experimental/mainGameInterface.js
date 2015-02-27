@@ -10,7 +10,8 @@ var PlayerIndex;
 mainGame.init = function() {
     this.id = InterfaceStack.push(this);
     
-    var playerStartingPos = {x: 0, y: 0};
+    SeaLevelRise = 0.01;
+    var playerStartingPos = {x: 400, y: 300};
     
     //Creating Objects
     CameraIndex = this.obj_array.push(new Camera(playerStartingPos)) - 1;

@@ -8,7 +8,7 @@
 //Global Game Variables
 var Canvas;
 var Context;
-var FramesPerSecond;
+var FramesPerSecond = 30;
 
 //Image Loader
 var ImageLoader;

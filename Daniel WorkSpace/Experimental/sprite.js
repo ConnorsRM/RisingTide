@@ -6,7 +6,7 @@ framesPerRow - caluculates the frames per row via imageWidth/frameWidth
 Animations - an array of arrays. each element is an set of animation frames
  */
 
-function Sprite(imageWidth,imageHeight,frameWidth, frameHeight) {
+function Sprite(imageWidth, imageHeight, frameWidth, frameHeight) {
     this.image = new Image();
     this.imageWidth = imageWidth;
     this.imageHeight = imageHeight;
