@@ -21,11 +21,11 @@ Camera.prototype.iniCam = function(camSpd) {
 //-----------------Camera Object and Support Functions-------------------//
 //Camera Object encapsulates camera data
 //such as position and scope
-function Camera(x, y, canvas_width, canvas_height) {
+function Camera(x, y) {
 	this.x = x;
 	this.y = y;
-	this.viewHeight = canvas_height;
-	this.viewWidth = canvas_width;
+	this.viewHeight = Canvas.height;
+	this.viewWidth = Canvas.height;
 	this.camera_speed = 0;
 }
 

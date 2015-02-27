@@ -13,9 +13,23 @@ var FramesPerSecond;
 //Image Loader
 var ImageLoader;
 //Images to Load Go Here:
+var water = new Image();
+var sand = new Image();
+var grass = new Image();
 
 
-function gameLoad() {
+//Sprites and Animations
+var playerSprite;
+//PlayerSprite Animations
+var walkDown;
+var walkLeft;
+var walkUp;
+var walkRight;
+var stabRight;
+var stabLeft;
+
+
+function loadGame() {
     //All loading of game resources should be done in this function
     //  which should be called before all other functions.
     
@@ -26,12 +40,30 @@ function gameLoad() {
     //Set Up The Initial Interface
     mainGame.init();
     
+    //Initialize Sprites
+    playerSprite = new Sprite(480, 180, 30, 43);
+    
     //Set up imageLoader
-    ImageLoader = new imgLoader();
+    ImageLoader = new imgLoader(initGame);
+    ImageLoader.loadImage(water, "images/water.png");
+    ImageLoader.loadImage(sand, "images/sand.png");
+    ImageLoader.loadImage(grass, "images/grass.png");
+    ImageLoader.loadImage(playerSprite.image, "images/playersheetTrans.png");
+    
+    //Set up playerSprite Animations
+    walkDown = playerSprite.loadAnimation(0, 3);
+    walkLeft = playerSprite.loadAnimation(4, 7);
+    walkUp = playerSprite.loadAnimation(16, 19);
+    walkRight = playerSprite.loadAnimation(20, 23);
+    stabRight = playerSprite.loadAnimation(28,31);
+    stabLeft = playerSprite.loadAnimation(42,45);
+    
+    //Set up to initialize the game
+    ImageLoader.callWhenReady();
 };
 
 
-function gameInit() {
+function initGame() {
     //This function should be called to reset the game to it's initial
     //  status.
     

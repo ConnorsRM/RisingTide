@@ -112,8 +112,8 @@ Interface.prototype.update = function() {
     //  update() function. Passes this object as an argument in case
     //  access to the Interface the object lies in is necessary.
     if (this.active == true) {
-        for (var i = 0; i < this.obj_array.length; ++i) {
-            this.obj_array[i].update(this);
+        for (var i = 1; i < this.obj_array.length; ++i) {
+            this.obj_array[i].update();
         }
     }
 };
@@ -123,8 +123,12 @@ Interface.prototype.draw = function() {
     //Draws all of the objects in the obj_array by calling their draw()
     //  function.
     if (this.visible == true) {
-        for (var i = 0; i < this.obj_array.length; ++i) {
-            this.obj_array[i].draw();
+        if (this.obj_array[0].camDraw) {
+            this.obj_array[0].camDraw(this);
+        } else {
+            for (var i = 0; i < this.obj_array.length; ++i) {
+                this.obj_array[i].draw();
+            }
         }
     }
 };
