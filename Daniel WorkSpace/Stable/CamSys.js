@@ -52,7 +52,7 @@ Camera.prototype.stepBackCameraX = function() {
 
 Camera.prototype.stepBackCameraY = function() {
 	if(this.y - this.camera_speed > DRAW_OFFSET_HEIGHT)
-		this.y -= this.camera_speed
+		this.y -= this.camera_speed;
 };
 
 Camera.prototype.mutCamHeight = function(height) {

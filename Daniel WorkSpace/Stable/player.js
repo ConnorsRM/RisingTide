@@ -74,11 +74,7 @@ Player.prototype.move = function(){
 };
 
 Player.prototype.draw = function(){
-	Context.drawImage(this.spr.image,
-					  this.spr.imageWidth,
-					  this.spr.imageHeight,
-					  this.x,
-					  this.y);
+	this.spr.draw(0, 0, this.x, this.y);
 };
 
 Player.prototype.update = function(){
