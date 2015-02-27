@@ -6,6 +6,8 @@
 //A simple object designed to take care of loading images
 //  for the game and then call a function once ready.
 
+
+
 var imgLoader = function(afterDoneCall) {
     this.imagesLoaded = 0;
     this.imagesToLoad = 0;
@@ -41,7 +43,7 @@ function loadedImagesTest() {
     //  so we can detect if we are done.
     console.log("loadedTest();");
     ++imageLoader.imagesLoaded;
-    console.log(this.imagesLoaded);
+    console.log(imageLoader.imagesLoaded);
     if ((imageLoader.imagesLoaded == imageLoader.imagesToLoad) && (imageLoader.allLoadingQueued)) {
         imageLoader.functionToCall();
     }

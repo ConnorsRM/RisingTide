@@ -5,10 +5,19 @@
 
 //Initialize some global variables about the working space:
 var canvas;
-var context;
+var Context;
 var c_width;
 var c_height;
-var FPS = 30;   //FramesPerSecond
+var FPS = 1;   //FramesPerSecond
+var currFrame = 0;
+var playerSprite = new Sprite(480, 180, 30, 43);
+var walkDown = playerSprite.loadAnimation(0, 3);
+var walkLeft = playerSprite.loadAnimation(4, 7);
+var walkUp = playerSprite.loadAnimation(16, 19);
+var walkRight = playerSprite.loadAnimation(20, 23);
+var stabRight = playerSprite.loadAnimation(28,31);
+var stabLeft =  playerSprite.loadAnimation(42,45);
+
 
 //Create images
 var imageLoader;
@@ -23,55 +32,44 @@ function gameLoad() {
     console.log("gameLoad();");
     //Anything in here will be done only on load:
     canvas = document.getElementById("canvas");
-    context = canvas.getContext("2d");
+    Context = canvas.getContext("2d");
     c_width = canvas.width;
     c_height = canvas.height;
-    
+
     //Load Images
     imageLoader = new imgLoader(initGame);
     imageLoader.loadImage(water, "water.png");
     imageLoader.loadImage(sand, "sand.png");
     imageLoader.loadImage(grass, "grass.png");
-    
+    imageLoader.loadImage(playerSprite.image, "playersheetTrans.png");
+
     tileEngine = new TileEngine(10, 15, 40);    //Set Tile Size and World Size
     tileEngine.loadTile(water);
     tileEngine.loadTile(sand);
     tileEngine.loadTile(grass);
-    
+
     imageLoader.callWhenReady();
 };
 
 
 function initGame() {
-    for (var x = 0; x < 10; ++x) {
-        for (var y = 0; y < 20; ++y) {
-            tileEngine.getCell({x: x, y: y}).tile = Math.floor(3*Math.random());
-        }
-    }
-    
-    //Draws Whole Map
-    tileEngine.draw({x: 0, y: 400});
-    
-    //Draws Cell (5, 5)
-    tileEngine.drawCell({x: 440, y: 20}, {x:5, y:5});
-    
-    //Draws Region
-    tileEngine.drawSection({x:0, y:0}, {x:20, y:50}, {x:300, y:400});
-    
-    console.log("Drawn at (10, 20)");
+
     setInterval(update, 1000 / FPS);
 };
 
 
 function update() {
-    for (var i = 0; i < InterfaceStack.length; ++i) {
-        InterfaceStack[i].update();
-    }
+    Context.clearRect(0, 0, canvas.width, canvas.height);
+
+    playerSprite.draw(walkUp, currFrame, 10, 10);
+    if (currFrame <= 2) {
+        currFrame++;
+    } else
+        currFrame = 0;
 };
 
 
 function draw() {
-    for (var i = 0; i < InterfaceStack.length; ++i) {
-        InterfaceStack[i].draw();
-    }
-};
+
+}
+;
