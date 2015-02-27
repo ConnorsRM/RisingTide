@@ -2,16 +2,20 @@
 //tiles should be generated
 
 //Object Data Accumulation
-var DRAW_OFFSET_WIDTH = 150;
-var DRAW_OFFSET_HEIGHT = 150;
+var DRAW_OFFSET_WIDTH = 400;
+var DRAW_OFFSET_HEIGHT = 400;
 var CANVAS_DIMENSION = 800;
+
+//World Dim is tile Width * num tiles
+var WORLD_DIMENSION  = 4000;
+
 
 //camera object manipulation values
 //change-able by mutation
-var camera_speed = 0;
+
 //----------------------Camera Initialization----------------------------//
 Camera.prototype.iniCam = function(camSpd) {
-	camera_speed = camSpd;
+	this.camera_speed = camSpd;
 };
 
 //-----------------Camera Object and Support Functions-------------------//
@@ -22,6 +26,7 @@ function Camera(x, y, canvas_width, canvas_height) {
 	this.y = y;
 	this.viewHeight = canvas_height;
 	this.viewWidth = canvas_width;
+	this.camera_speed = 0;
 }
 
 Camera.prototype.moveCamera = function(x, y) {
@@ -29,13 +34,26 @@ Camera.prototype.moveCamera = function(x, y) {
 	this.y = y;
 };
 
-Camera.prototype.stepCameraX = function() {
-	this.x += camera_speed;
+Camera.prototype.stepForCameraX = function() {
+	console.log(this.x);
+	if (this.x + this.camera_speed < (WORLD_DIMENSION - DRAW_OFFSET_WIDTH))
+		this.x += this.camera_speed;
 };
 
-Camera.prototype.stepCameraY = function() {
-	this.y += camera_speed;
+Camera.prototype.stepForCameraY = function() {
+	if(this.y + this.camera_speed < (WORLD_DIMENSION - DRAW_OFFSET_HEIGHT))
+		this.y += this.camera_speed;
 };
+
+Camera.prototype.stepBackCameraX = function() {
+	if(this.x - this.camera_speed > DRAW_OFFSET_WIDTH)
+		this.x -= this.camera_speed;
+}
+
+Camera.prototype.stepBackCameraY = function() {
+	if(this.y - this.camera_speed > DRAW_OFFSET_HEIGHT)
+		this.y -= this.camera_speed
+}
 
 Camera.prototype.mutCamHeight = function(height) {
 	this.viewHeight = height;
@@ -58,8 +76,9 @@ Camera.prototype.camDraw = function(tileSys, player) {
 	//never draw something that isn't defined so set 0 as min
 	var startX = Math.max(0, this.x - DRAW_OFFSET_WIDTH);
 	var startY = Math.max(0, this.y - DRAW_OFFSET_HEIGHT);
-	var endX = startX + CANVAS_DIMENSION;
-	var endY = startY + CANVAS_DIMENSION;
+	var endX = Math.min(WORLD_DIMENSION, startX + CANVAS_DIMENSION);
+	var endY = Math.min(WORLD_DIMENSION, startY + CANVAS_DIMENSION);
+	
 	
 	var startPos = {x:startX, y:startY};
 	var endPos = {x:endX, y:endY};

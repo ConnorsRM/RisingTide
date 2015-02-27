@@ -191,8 +191,10 @@ TileEngine.prototype.drawSection = function(pos, startDraw, endDraw) {
     offset.x += pos.x;
     offset.y += pos.y;
     
-    var cellsWide = Math.ceil((endDraw.x - startDraw.x) / this.cellSize);
-    var cellsHigh = Math.ceil((endDraw.y - startDraw.y) / this.cellSize);
+    //add one for draw buffer
+    var cellsWide = Math.ceil((endDraw.x - startDraw.x) / this.cellSize) + firstCell.x + 1;
+    var cellsHigh = Math.ceil((endDraw.y - startDraw.y) / this.cellSize) + firstCell.y + 1;
+    
     
     for (var x = firstCell.x; x < cellsWide; ++x) {
         for (var y = firstCell.y; y < cellsHigh; ++y) {
@@ -203,6 +205,7 @@ TileEngine.prototype.drawSection = function(pos, startDraw, endDraw) {
             var Tile = this.tileMap[x][y].tile;
             if (Tile != -1)
                 context.drawImage(this.tileDictionary[Tile], drawAt.x, drawAt.y, this.cellSize, this.cellSize);
+
         }
     }
 };
