@@ -48,12 +48,12 @@ Camera.prototype.stepForCameraY = function() {
 Camera.prototype.stepBackCameraX = function() {
 	if(this.x - this.camera_speed > DRAW_OFFSET_WIDTH)
 		this.x -= this.camera_speed;
-}
+};
 
 Camera.prototype.stepBackCameraY = function() {
 	if(this.y - this.camera_speed > DRAW_OFFSET_HEIGHT)
 		this.y -= this.camera_speed
-}
+};
 
 Camera.prototype.mutCamHeight = function(height) {
 	this.viewHeight = height;
@@ -83,10 +83,9 @@ Camera.prototype.camDraw = function(ifs) {
 	var startPos = {x:startX, y:startY};
 	var endPos = {x:endX, y:endY};
 	
-	tileSys = ifs.obj_array[0];
-	tileSys.drawSection({x:0, y:0}, startPos, endPos);
+	ifs.obj_array[1].drawSection({x:0, y:0}, startPos, endPos);
 	
-	for (var i = 1; i < ifs.obj_array.length; ++i) {
+	for (var i = 2; i < ifs.obj_array.length; ++i) {
 	    ifs.obj_array[i].draw();   //Needs a check to see if obj is even partially on screen
     }	
 	

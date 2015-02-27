@@ -113,7 +113,7 @@ Interface.prototype.update = function() {
     //  access to the Interface the object lies in is necessary.
     if (this.active == true) {
         for (var i = 1; i < this.obj_array.length; ++i) {
-            this.obj_array[i].update();
+            this.obj_array[i].update(this);
         }
     }
 };
@@ -127,7 +127,7 @@ Interface.prototype.draw = function() {
             this.obj_array[0].camDraw(this);
         } else {
             for (var i = 0; i < this.obj_array.length; ++i) {
-                this.obj_array[i].draw();
+                this.obj_array[i].draw(this);
             }
         }
     }

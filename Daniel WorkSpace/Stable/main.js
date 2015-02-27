@@ -41,14 +41,16 @@ function loadGame() {
     mainGame.init();
     
     //Initialize Sprites
-    playerSprite = new Sprite(480, 180, 30, 43);
+    mainGame.obj_array[PlayerIndex].spr = new Sprite(480, 180, 30, 43);
     
     //Set up imageLoader
     ImageLoader = new imgLoader(initGame);
     ImageLoader.loadImage(water, "images/water.png");
     ImageLoader.loadImage(sand, "images/sand.png");
     ImageLoader.loadImage(grass, "images/grass.png");
-    ImageLoader.loadImage(playerSprite.image, "images/playersheetTrans.png");
+    ImageLoader.loadImage(mainGame.obj_array[PlayerIndex].spr.image, "images/playersheetTrans.png");
+    
+    var playerSprite = mainGame.obj_array[PlayerIndex].spr;
     
     //Set up playerSprite Animations
     walkDown = playerSprite.loadAnimation(0, 3);

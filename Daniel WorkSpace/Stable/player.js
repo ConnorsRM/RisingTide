@@ -5,12 +5,10 @@ var DIRECTIONS = {
 	RIGHT: 3
 };
 
-var Player = function (){
+var Player = function (x, y){
 	//position
-	this.currX = 0;
-	this.currY = 0;
-	this.x = 0;
-	this.y = 0;
+	this.x = x;
+	this.y = y;
 	
 	//movement
 	this.speed = 256;
@@ -18,7 +16,7 @@ var Player = function (){
 	this.direction = DIRECTIONS.DOWN;
 	
 	//sprite things
-	sprite = new Sprite();
+	this.spr = new Sprite();
 	
 };
 
@@ -76,13 +74,11 @@ Player.prototype.move = function(){
 };
 
 Player.prototype.draw = function(){
-	context.drawImage(this.Sprite,
-					  this.Spr.Width,
-					  this.Spr.Height,
+	Context.drawImage(this.spr.image,
+					  this.spr.imageWidth,
+					  this.spr.imageHeight,
 					  this.x,
-					  this.y,
-					  this.currX,
-					  this.currY);
+					  this.y);
 };
 
 Player.prototype.update = function(){

@@ -55,6 +55,7 @@ var TileEngine = function(columns, rows, cellSize) {
                 danger : false,
                 fooded : false
             };
+            
             //Default cell definition defined here. (x, y)
             //  simply denotes the position of this cell.
             //  tile is set to null initially (null == -1),
@@ -63,8 +64,32 @@ var TileEngine = function(columns, rows, cellSize) {
             //  height of this tile.
             
             tileColumn.push(defaultCell);
+            
         }
         this.tileMap.push(tileColumn);
+    }
+    
+    for (var i = 0; i < 100; ++i) {
+        for (var j = 0; j < 100; ++j) {
+            var thisTile = {x: i, y: j};
+            
+            switch(this.getCell(thisTile).elevation) {
+                case 0:
+                    this.getCell(thisTile).tile = 0;
+                    this.getCell(thisTile).flooded = true;
+                    this.getCell(thisTile).danger = true;
+                    break;
+                case 1:
+                    this.getCell(thisTile).tile = 1;
+                    this.getCell(thisTile).danger = true;
+                    break;
+                default:
+                    if(this.getCell(thisTile).danger == false) {
+                        this.getCell(thisTile).tile = 2;
+                    }
+                    break;
+            }
+        }
     }
     
 };
@@ -167,7 +192,7 @@ TileEngine.prototype.drawCell = function(pos, cell) {
     //  (pos.x, pos.y).
     var Tile = this.tileMap[cell.x][cell.y].tile;
         if (Tile != -1)
-            context.drawImage(this.tileDictionary[Tile], pos.x, pos.y, this.cellSize, this.cellSize);
+            Context.drawImage(this.tileDictionary[Tile], pos.x, pos.y, this.cellSize, this.cellSize);
 };
 
 
@@ -204,7 +229,7 @@ TileEngine.prototype.drawSection = function(pos, startDraw, endDraw) {
             };
             var Tile = this.tileMap[x][y].tile;
             if (Tile != -1)
-                context.drawImage(this.tileDictionary[Tile], drawAt.x, drawAt.y, this.cellSize, this.cellSize);
+                Context.drawImage(this.tileDictionary[Tile], drawAt.x, drawAt.y, this.cellSize, this.cellSize);
 
         }
     }
@@ -244,7 +269,7 @@ TileEngine.prototype.draw = function(pos) {
             };
             var Tile = this.tileMap[x][y].tile;
             if (Tile != -1)
-                context.drawImage(this.tileDictionary[Tile], offset.x, offset.y, this.cellSize, this.cellSize);
+                Context.drawImage(this.tileDictionary[Tile], offset.x, offset.y, this.cellSize, this.cellSize);
         }
     }
 };
