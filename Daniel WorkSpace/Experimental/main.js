@@ -29,25 +29,6 @@ var stabRight;
 var stabLeft;
 
 
-//Input:
-//Interesting Input:
-var KEY = {
-    UP: 8
-};
-
-//Input Loggers:
-var KeysDown = [];
-
-//Event Listeners:
-addEventListener("keydown", function(e) {
-    KeysDown[e.keyCode] = true;
-}, false);
-
-addEventListener("keyup", function(e) {
-    delete KeysDown[e.keyCode];
-}, false);
-
-
 function loadGame() {
     //All loading of game resources should be done in this function
     //  which should be called before all other functions.
