@@ -149,6 +149,32 @@ var reset = function () {
 
 
 var update = function (modifier) {
+<<<<<<< Updated upstream:Player/spriteClassTest.js
+=======
+<<<<<<< Updated upstream
+    if (lastKeyUp == 32) { //space
+        if (itemHeld != charHeight * 2) {
+            itemHeld = charHeight * 2;
+        }
+        else
+            itemHeld = 0;
+    }
+
+    if (lastKeyUp == 69) { //e
+        if (itemHeld == charHeight * 2) {
+            if (currX >= charWidth * 4)
+                
+
+            
+
+                currX = charWidth * 9;
+                for(i = 0;i<4;i++){
+                    currX += charWidth;
+                }
+        }
+    }
+
+>>>>>>> Stashed changes:Player/player.js
     if (38 in keysDown) { //up
 
         walk.draw(10,10); //testing of the new sprite functions
@@ -205,6 +231,63 @@ var update = function (modifier) {
     } else if (player.y <= 0) {
         player.y = 0;
     }
+=======
+	if (38 in keysDown) { //up
+		player.y -= player.speed * modifier;
+                currY = charHeight;
+		currX += charWidth;
+		if(currX >= charWidth*4){
+		currX = 0;
+		}
+		
+		
+	}
+	if (40 in keysDown) { //down
+		player.y += player.speed * modifier;
+                currY = 0;
+                currX += charWidth;
+                if(currX >= charWidth*4){
+		currX = 0;
+		}
+	}
+	if (37 in keysDown) { //left
+		player.x -= player.speed * modifier;
+                currY = 0;
+                currX += charWidth;
+                if(currX >= charWidth*7){
+		currX = charWidth*4;
+		}
+	}
+	if (39 in keysDown) { //right
+		player.x += player.speed * modifier;
+                currY = charHeight;
+                currX += charWidth;
+                if(currX >= charWidth*7){
+		currX = charWidth*4;
+		}
+	}
+
+	// check collision
+	if (
+		player.x <= (animal.x + 32)
+		&& animal.x <= (player.x + 32)
+		&& player.y <= (animal.y + 32)
+		&& animal.y <= (player.y + 32)
+	) {
+		reset();
+	}
+	//keep player within canvas
+    if (player.x >= canvas.width - charWidth) {
+		player.x = canvas.width - charWidth;
+	} else if (player.x <= 0) {
+		player.x = 0;
+	}
+	if (player.y >= canvas.height - charHeight) {
+		player.y = canvas.height - charHeight;
+	}else if (player.y <= 0) {
+		player.y = 0;
+	}
+>>>>>>> Stashed changes
 };
 
 

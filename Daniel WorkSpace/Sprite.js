@@ -19,10 +19,9 @@ function Sprite(imageWidth,imageHeight,frameWidth, frameHeight) {
 
 
 /**
- * Creates an animation from a spritesheet.
- * @param {number}      - Number of frames to wait for before transitioning the animation.
- * @param {array}       - Range or sequence of frame numbers for the animation.
- * @param {boolean}     - Repeat the animation once completed.
+Creates an animation for the sprite starting from startFrame and ending at endFrame
+startFrame - the starting frame in the spritesheet
+endFrame - the ending frame in the spritesheet
  */
 Sprite.prototype.loadAnimation = function (startFrame, endFrame) {
 
@@ -36,18 +35,20 @@ Sprite.prototype.loadAnimation = function (startFrame, endFrame) {
 }
 
 /**
- * Draw the current frame
- * @param {integer} x - X position to draw
- * @param {integer} y - Y position to draw
+ * Draw the animFrame of the requested animation (animIndex)
+ animIndex - the animation to draw
+ animFrame - the frame of the animation to draw
+ x - X position to draw
+ y - Y position to draw
  */
 Sprite.prototype.draw = function (animIndex,animFrame,x, y) {
-    // get the row and col of the frame
+    // get the row and col of the frame via the framesPerRow and Animations index.
     
     var row = Math.floor(this.Animations[animIndex][animFrame] / this.framesPerRow);
     var col = Math.floor(this.Animations[animIndex][animFrame] % this.framesPerRow);
 
 
-    Context.drawImage(
+    Context.drawImage( //draws the frame of the animation
             this.image,
             col * this.frameWidth, row * this.frameHeight,
             this.frameWidth, this.frameHeight,
