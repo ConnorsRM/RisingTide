@@ -7,7 +7,7 @@ var canvas;
 var context;
 var c_width;
 var c_height;
-var FPS = 30;
+var FPS = 1;
 
 //Create images
 var gameImages = 3;
@@ -21,6 +21,7 @@ var tileEngine;
 
 var cam;
 var player;
+var obj_array = new Array();
 
 //key tracking
 var keysDown = {};
@@ -84,11 +85,11 @@ function update() {
 				tileEngine.getCell(thisTile).tile = 0;
 				tileEngine.propagateDanger(thisTile);
 			}
-			else if (tileEngine.getCell(thisTile).elevation - tileEngine.sea_level >= 0.5 ||
-					 tileEngine.getCell(thisTile).elvation - tileEngine.sea_level <= 1.5) {
+			else if(tileEngine.getCell(thisTile).elevation - tileEngine.sea_level == 1) {
+				
 				if(tileEngine.getCell(thisTile).danger == true)
 					tileEngine.getCell(thisTile).tile = 1;	
-			}
+				}
 		}
 	}
 	
@@ -107,12 +108,19 @@ function update() {
 		cam.stepBackCameraX();
 	}
 	
+	if(18 in keysDown) {
+		var newDam = new Dam(player.x, player.y, tileEngine);
+		obj_array.push(newDam);
+	}
+	
+	/*for (obj in obj_array)
+		obj.draw();
+	*/
 	cam.camDraw(tileEngine, player);
 	
-	tileEngine.sea_level += 0.01;
+	tileEngine.sea_level = 2;
 	
 }
-
 
 function initGame() {
     for (var x = 0; x < 100; ++x) {
@@ -136,6 +144,8 @@ function initGame() {
             		break
             }
         }
+        
+        tileEngine.sea_level = 0;
     }
     /*
     //Draws Whole Map
@@ -151,10 +161,12 @@ function initGame() {
     cam = new Camera(150, 150, 800, 800);
     cam.iniCam(5);
     cam.moveCamera(500, 500);
+    obj_array.push(cam);
     
     player = new Player();
     player.x = 300;
     player.y = 300;
+    obj_array.push(player);
     /*
     tileEngine.sea_level = tileEngine.sea_level;
     update();

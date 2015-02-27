@@ -81,13 +81,15 @@ TileEngine.prototype.propagateDanger = function(tile) {
 	var xadd1 = tile.x + 1;
 	var ysub1 = tile.y - 1;
 	var yadd1 = tile.y + 1;
+	var x     = tile.x;
+	var y     = tile.y;
 	
 	if ( xsub1 >= 0) {
 		if ( ysub1 >= 0 )
 			this.tileMap[xsub1][ysub1].danger = true;
 		if ( yadd1 < this.tileMap[xsub1].length )
 			this.tileMap[xsub1][yadd1].danger = true;
-		this.tileMap[xsub1][tile.y].danger = true;
+		this.tileMap[xsub1][y].danger = true;
 	}
 	
 	if ( xadd1 < this.tileMap.length ) {
@@ -95,14 +97,14 @@ TileEngine.prototype.propagateDanger = function(tile) {
 			this.tileMap[xadd1][ysub1].danger = true;
 		if ( yadd1 < this.tileMap[xadd1].length )
 			this.tileMap[xadd1][yadd1].danger = true;
-		this.tileMap[xadd1][tile.y].danger = true;
+		this.tileMap[xadd1][y].danger = true;
 	}
 	
 	if ( yadd1 < this.tileMap[tile.x].length )
-		this.tileMap[tile.x][yadd1].danger = true;
+		this.tileMap[x][yadd1].danger = true;
 		
 	if ( ysub1 >= 0 )
-		this.tileMap[tile.x][ysub1].danger = true;
+		this.tileMap[x][ysub1].danger = true;
 }
 
 

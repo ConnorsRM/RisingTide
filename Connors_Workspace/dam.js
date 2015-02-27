@@ -20,7 +20,7 @@ function Dam(xpos, ypos, tileEng) {
 }
 
 Dam.prototype.update = function(inface){
-	//this will degrade damn later.
+	//this will degrade dam later.
 	
 }
 
