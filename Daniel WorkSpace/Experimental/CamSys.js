@@ -3,7 +3,7 @@
 
 //Object Data Accumulation
 var DRAW_OFFSET_WIDTH = 400;
-var DRAW_OFFSET_HEIGHT = 400;
+var DRAW_OFFSET_HEIGHT = 300;
 var CANVAS_DIMENSION = 800;
 
 //World Dim is tile Width * num tiles
@@ -86,7 +86,7 @@ Camera.prototype.camDraw = function(ifs) {
 	ifs.obj_array[1].drawSection({x:0, y:0}, startPos, endPos);
 	
 	for (var i = 2; i < ifs.obj_array.length; ++i) {
-	    ifs.obj_array[i].draw();   //Needs a check to see if obj is even partially on screen
+	    ifs.obj_array[i].draw(this);   //Needs a check to see if obj is even partially on screen
     }	
 	
 	//This is optional

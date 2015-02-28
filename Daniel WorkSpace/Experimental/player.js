@@ -43,48 +43,23 @@ Player.prototype.move = function(){
 	switch(this.direction){
 		case DIRECTIONS.UP:
 			this.y -= this.speed * this.speedMod;
-			this.currY = this.spr.Height;
-			this.currX = this.spr.Width;
-			if(this.currX >= this.spr.Width * 4){
-				this.currX = 0;
-			}
 			break;
 		case DIRECTIONS.DOWN:
 			this.y += this.speed * this.speedMod;
-			this.currY = 0;
-			this.currX = this.spr.Width;
-			if(this.currX >= this.spr.Width * 4){
-				this.currX = 0;
-			}
 			break;
 		case DIRECTIONS.LEFT:
 			this.x -= this.speed * this.speedMod;
-			this.currX = this.spr.Width;
-			if(this.currX >= this.spr.Width * 7){
-				this.currX = this.spr.Width * 4;
-			}
-			this.currY = 0;
-			if(this.currX < this.spr.Width * 4){
-				this.currX = this.spr.Width * 4;
-			}
 			break;
 		case DIRECTIONS.RIGHT:
 			this.x += this.speed * this.speedMod;
-			this.currX = this.spr.Width;
-			if(this.currX >= this.spr.Width * 7){
-				this.currX = this.spr.Width * 4;
-			}
-			this.currY = this.spr.Height;
-			if(this.currX < this.spr.Width * 4){
-				this.currX = this.spr.Width * 4;
-			}
 			break;
 	}
 };
 
-Player.prototype.draw = function(ifs){
+Player.prototype.draw = function(camera){
 	this.spr.draw(this.animationIndex, this.imageIndex,
-	this.x - this.spr.frameWidth / 2, this.y - this.spr.frameWidth / 2);
+	this.x - this.spr.frameWidth / 2 - camera.x + DRAW_OFFSET_WIDTH,
+	this.y - this.spr.frameWidth / 2 - camera.y + DRAW_OFFSET_HEIGHT);
 	
 	//Manage Animation Indexing
 	this.animationCounter++;
@@ -101,14 +76,33 @@ Player.prototype.draw = function(ifs){
 
 Player.prototype.update = function(ifs){
     
+    //Set Camera to this Position
+    ifs.obj_array[CameraIndex].moveCamera(this.x, this.y);
+    
+    //Check for input Settings (Set Animations Here)
+    if (this.inputVars[DIRECTIONS.UP]) {
+        this.y -= this.speed * this.speedMod;
+    } 
+    if (this.inputVars[DIRECTIONS.DOWN]) {
+        this.y += this.speed * this.speedMod;
+    }
+    if (this.inputVars[DIRECTIONS.LEFT]) {
+        this.x -= this.speed * this.speedMod;
+    }
+    if (this.inputVars[DIRECTIONS.RIGHT]) {
+        this.x += this.speed * this.speedMod;
+    }
+    
     //Check For Drowning
     if (ifs.obj_array[IslandIndex].posToCell({x:this.x, y:this.y}).tile == 0) {
         --this.drownCounter;
+        this.speedMod -= 1.0 / this.drownMax;
         if (this.drownCounter == 0) {
             this.spr = undefined;
         }
     } else {
         this.drownCounter = this.drownMax;
+        this.speedMod = 1;
     }
     
 };

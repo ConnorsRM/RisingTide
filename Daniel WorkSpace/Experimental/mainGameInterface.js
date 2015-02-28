@@ -26,21 +26,17 @@ mainGame.init = function() {
     
     //Input Definitions
     this.inputHandler = function(e, status) {
-        if ((e.keyCode == 87) && (status)) {
-            this.obj_array[PlayerIndex].changeDirection(DIRECTIONS.UP);
-            this.obj_array[PlayerIndex].move();
+        if (e.keyCode == 87) {
+            this.obj_array[PlayerIndex].inputVars[DIRECTIONS.UP] = status;
         } 
-        if ((e.keyCode == 83) && (status)) {
-            this.obj_array[PlayerIndex].changeDirection(DIRECTIONS.DOWN);
-            this.obj_array[PlayerIndex].move();
+        if (e.keyCode == 83) {
+            this.obj_array[PlayerIndex].inputVars[DIRECTIONS.DOWN] = status;
         } 
-        if ((e.keyCode == 65) && (status)) {
-            this.obj_array[PlayerIndex].changeDirection(DIRECTIONS.LEFT);
-            this.obj_array[PlayerIndex].move();
+        if (e.keyCode == 65) {
+            this.obj_array[PlayerIndex].inputVars[DIRECTIONS.LEFT] = status;
         } 
-        if ((e.keyCode == 68) && (status)) {
-            this.obj_array[PlayerIndex].changeDirection(DIRECTIONS.RIGHT);
-            this.obj_array[PlayerIndex].move();
+        if (e.keyCode == 68) {
+            this.obj_array[PlayerIndex].inputVars[DIRECTIONS.RIGHT] = status;
         }
     };
 };
