@@ -8,7 +8,7 @@
 //Global Game Variables
 var Canvas;
 var Context;
-var FramesPerSecond = 1;
+var FramesPerSecond = 30;
 
 //Image Loader
 var ImageLoader;
@@ -16,6 +16,16 @@ var ImageLoader;
 var water = new Image();
 var sand = new Image();
 var grass = new Image();
+
+//Input:
+//Keyboard Listeners
+addEventListener("keydown", function (e) {
+    InterfaceStack[InterfaceStack.length - 1].inputHandler(e, true);
+}, false);
+
+addEventListener("keyup", function (e) {
+    InterfaceStack[InterfaceStack.length - 1].inputHandler(e, false);
+}, false);
 
 
 //Sprites and Animations

@@ -5,21 +5,23 @@ var DIRECTIONS = {
 	RIGHT: 3
 };
 
+
 var Player = function (pos){
 	//position
 	this.x = pos.x;
 	this.y = pos.y;
 	
 	//movement
-	this.speed = 256;
+	this.speed = 4;
 	this.speedMod = 1;
 	this.direction = DIRECTIONS.DOWN;
 	
 	//sprite things
-	this.spr = new Sprite();
+	this.spr = new sprite();
 	this.imageIndex = 0;
 	this.animationIndex = 0;
-	
+	this.animationFreq = 3;
+	this.animationCounter = 0;
 };
 
 Player.prototype.changeDirection = function(direction){
@@ -36,56 +38,63 @@ Player.prototype.move = function(){
 	switch(this.direction){
 		case DIRECTIONS.UP:
 			this.y -= this.speed * this.speedMod;
-			this.currY = this.Spr.Height;
-			this.currX = this.Spr.Width;
-			if(this.currX >= this.Spr.Width * 4){
+			this.currY = this.spr.Height;
+			this.currX = this.spr.Width;
+			if(this.currX >= this.spr.Width * 4){
 				this.currX = 0;
 			}
 			break;
 		case DIRECTIONS.DOWN:
 			this.y += this.speed * this.speedMod;
 			this.currY = 0;
-			this.currX = this.Spr.Width;
-			if(this.currX >= this.Spr.Width * 4){
+			this.currX = this.spr.Width;
+			if(this.currX >= this.spr.Width * 4){
 				this.currX = 0;
 			}
 			break;
 		case DIRECTIONS.LEFT:
 			this.x -= this.speed * this.speedMod;
-			this.currX = this.Spr.Width;
-			if(this.currX >= this.Spr.Width * 7){
-				this.currX = this.Spr.Width * 4;
+			this.currX = this.spr.Width;
+			if(this.currX >= this.spr.Width * 7){
+				this.currX = this.spr.Width * 4;
 			}
 			this.currY = 0;
-			if(this.currX < this.Spr.Width * 4){
-				this.currX = this.Spr.Width * 4;
+			if(this.currX < this.spr.Width * 4){
+				this.currX = this.spr.Width * 4;
 			}
 			break;
 		case DIRECTIONS.RIGHT:
 			this.x += this.speed * this.speedMod;
-			this.currX = this.Spr.Width;
-			if(this.currX >= this.Spr.Width * 7){
-				this.currX = this.Spr.Width * 4;
+			this.currX = this.spr.Width;
+			if(this.currX >= this.spr.Width * 7){
+				this.currX = this.spr.Width * 4;
 			}
-			this.currY = this.Spr.Height;
-			if(this.currX < this.Spr.Width * 4){
-				this.currX = this.Spr.Width * 4;
+			this.currY = this.spr.Height;
+			if(this.currX < this.spr.Width * 4){
+				this.currX = this.spr.Width * 4;
 			}
 			break;
 	}
 };
 
-Player.prototype.draw = function(){
+Player.prototype.draw = function(ifs){
 	this.spr.draw(this.animationIndex, this.imageIndex,
 	this.x - this.spr.frameWidth / 2, this.y - this.spr.frameWidth / 2);
-	this.imageIndex++;
-	console.log(this.imageIndex);
-	if(this.imageIndex >= this.spr.maxFrames){
-		this.imageIndex = 0;
-	}
+	
+	//Manage Animation Indexing
+	this.animationCounter++;
+	if (this.animationCounter >= this.animationFreq) {
+	    this.animationCounter = 0;
+	    
+        this.imageIndex++;
+    	if(this.imageIndex >= this.spr.maxFrames){
+    		this.imageIndex = 0;
+    	}
+    }
 
 };
 
-Player.prototype.update = function(){
-
+Player.prototype.update = function(ifs){
+    
+    //Check to see if we're
 };
