@@ -38,23 +38,6 @@ Player.prototype.changeDirection = function(direction){
 	this.direction = direction;
 };
 
-Player.prototype.move = function(){
-	//movement of player
-	switch(this.direction){
-		case DIRECTIONS.UP:
-			this.y -= this.speed * this.speedMod;
-			break;
-		case DIRECTIONS.DOWN:
-			this.y += this.speed * this.speedMod;
-			break;
-		case DIRECTIONS.LEFT:
-			this.x -= this.speed * this.speedMod;
-			break;
-		case DIRECTIONS.RIGHT:
-			this.x += this.speed * this.speedMod;
-			break;
-	}
-};
 
 Player.prototype.draw = function(camera){
 	this.spr.draw(this.animationIndex, this.imageIndex,
@@ -65,8 +48,17 @@ Player.prototype.draw = function(camera){
 	this.animationCounter++;
 	if (this.animationCounter >= this.animationFreq) {
 	    this.animationCounter = 0;
-	    
-        this.imageIndex++;
+
+	inputCount= 0; //counts how many inputs are true or false 4 means all inputs are false
+
+	for(i = 0;i<this.inputVars.length;i++){
+		if(this.inputVars[i] == false) {count++}
+	}
+
+	if(count != 4){	    
+        	this.imageIndex++;
+	} else {this.imageIndex = 0; }
+
     	if(this.imageIndex >= this.spr.maxFrames){
     		this.imageIndex = 0;
     	}
@@ -75,22 +67,28 @@ Player.prototype.draw = function(camera){
 };
 
 Player.prototype.update = function(ifs){
+
     
+
     //Set Camera to this Position
     ifs.obj_array[CameraIndex].moveCamera(this.x, this.y);
     
     //Check for input Settings (Set Animations Here)
     if (this.inputVars[DIRECTIONS.UP]) {
         this.y -= this.speed * this.speedMod;
+	this.animationIndex = walkUp;
     } 
     if (this.inputVars[DIRECTIONS.DOWN]) {
         this.y += this.speed * this.speedMod;
+	this.animationIndex = walkDown;
     }
     if (this.inputVars[DIRECTIONS.LEFT]) {
         this.x -= this.speed * this.speedMod;
+	this.animationIndex = walkLeft;
     }
     if (this.inputVars[DIRECTIONS.RIGHT]) {
         this.x += this.speed * this.speedMod;
+	this.animationIndex = walkRight;
     }
     
     //Check For Drowning

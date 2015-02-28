@@ -63,7 +63,6 @@ function loadGame() {
     var playerSprite = mainGame.obj_array[PlayerIndex].spr;
     
     //Set up playerSprite Animations
-    idle = playerSprite.loadAnimation(0,0);
     walkDown = playerSprite.loadAnimation(0, 3);
     walkLeft = playerSprite.loadAnimation(4, 7);
     walkUp = playerSprite.loadAnimation(17, 20);
