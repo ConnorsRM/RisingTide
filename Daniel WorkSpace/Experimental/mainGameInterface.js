@@ -29,13 +29,16 @@ mainGame.init = function() {
         if ((e.keyCode == 87) && (status)) {
             this.obj_array[PlayerIndex].changeDirection(DIRECTIONS.UP);
             this.obj_array[PlayerIndex].move();
-        } else if ((e.keyCode == 83) && (status)) {
+        } 
+        if ((e.keyCode == 83) && (status)) {
             this.obj_array[PlayerIndex].changeDirection(DIRECTIONS.DOWN);
             this.obj_array[PlayerIndex].move();
-        } else if ((e.keyCode == 65) && (status)) {
+        } 
+        if ((e.keyCode == 65) && (status)) {
             this.obj_array[PlayerIndex].changeDirection(DIRECTIONS.LEFT);
             this.obj_array[PlayerIndex].move();
-        } else if ((e.keyCode == 68) && (status)) {
+        } 
+        if ((e.keyCode == 68) && (status)) {
             this.obj_array[PlayerIndex].changeDirection(DIRECTIONS.RIGHT);
             this.obj_array[PlayerIndex].move();
         }

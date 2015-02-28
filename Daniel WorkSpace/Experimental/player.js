@@ -15,6 +15,11 @@ var Player = function (pos){
 	this.speed = 6;
 	this.speedMod = 1;
 	this.direction = DIRECTIONS.DOWN;
+	this.inputVars = [false, false, false, false];
+	
+	//Drowning
+	this.drownCounter = 50;
+	this.drownMax = 50;
 	
 	//sprite things
 	this.spr = new Sprite();
@@ -96,5 +101,14 @@ Player.prototype.draw = function(ifs){
 
 Player.prototype.update = function(ifs){
     
-    //Check to see if we're
+    //Check For Drowning
+    if (ifs.obj_array[IslandIndex].posToCell({x:this.x, y:this.y}).tile == 0) {
+        --this.drownCounter;
+        if (this.drownCounter == 0) {
+            this.spr = undefined;
+        }
+    } else {
+        this.drownCounter = this.drownMax;
+    }
+    
 };
