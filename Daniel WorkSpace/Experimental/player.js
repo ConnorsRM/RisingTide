@@ -12,12 +12,12 @@ var Player = function (pos){
 	this.y = pos.y;
 	
 	//movement
-	this.speed = 4;
+	this.speed = 6;
 	this.speedMod = 1;
 	this.direction = DIRECTIONS.DOWN;
 	
 	//sprite things
-	this.spr = new sprite();
+	this.spr = new Sprite();
 	this.imageIndex = 0;
 	this.animationIndex = 0;
 	this.animationFreq = 3;
