@@ -23,4 +23,24 @@ mainGame.init = function() {
     this.visible = true;
     this.drawFrame = 0;
     this.updateFrame = 0;
+    
+    //Input Definitions
+    this.inputHandler = function(e, status) {
+        if ((e.keyCode == 87) && (status)) {
+            this.obj_array[PlayerIndex].changeDirection(DIRECTIONS.UP);
+            this.obj_array[PlayerIndex].move();
+        } 
+        if ((e.keyCode == 83) && (status)) {
+            this.obj_array[PlayerIndex].changeDirection(DIRECTIONS.DOWN);
+            this.obj_array[PlayerIndex].move();
+        } 
+        if ((e.keyCode == 65) && (status)) {
+            this.obj_array[PlayerIndex].changeDirection(DIRECTIONS.LEFT);
+            this.obj_array[PlayerIndex].move();
+        } 
+        if ((e.keyCode == 68) && (status)) {
+            this.obj_array[PlayerIndex].changeDirection(DIRECTIONS.RIGHT);
+            this.obj_array[PlayerIndex].move();
+        }
+    };
 };

@@ -15,8 +15,8 @@ var Interface = function() {
     this.updateFrame = 0;
     this.drawFrame = 0;
     
-    //Handles to the updates
-    this.refreshHandle;
+    //Input Handling Function
+    this.inputHandler;
     
     //Booleans to test if the room is active or visible
     this.active = false;

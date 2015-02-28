@@ -8,7 +8,7 @@
 //Global Game Variables
 var Canvas;
 var Context;
-var FramesPerSecond = 1;
+var FramesPerSecond = 30;
 
 //Image Loader
 var ImageLoader;
@@ -16,6 +16,16 @@ var ImageLoader;
 var water = new Image();
 var sand = new Image();
 var grass = new Image();
+
+//Input:
+//Keyboard Listeners
+addEventListener("keydown", function (e) {
+    InterfaceStack[InterfaceStack.length - 1].inputHandler(e, true);
+}, false);
+
+addEventListener("keyup", function (e) {
+    InterfaceStack[InterfaceStack.length - 1].inputHandler(e, false);
+}, false);
 
 
 //Sprites and Animations
@@ -27,25 +37,6 @@ var walkUp;
 var walkRight;
 var stabRight;
 var stabLeft;
-
-
-//Input:
-//Interesting Input:
-var KEY = {
-    UP: 8
-};
-
-//Input Loggers:
-var KeysDown = [];
-
-//Event Listeners:
-addEventListener("keydown", function(e) {
-    KeysDown[e.keyCode] = true;
-}, false);
-
-addEventListener("keyup", function(e) {
-    delete KeysDown[e.keyCode];
-}, false);
 
 
 function loadGame() {
@@ -60,22 +51,23 @@ function loadGame() {
     mainGame.init();
     
     //Initialize Sprites
-    mainGame.obj_array[PlayerIndex].spr = new Sprite(881, 335, 70, 42);
+    mainGame.obj_array[PlayerIndex].spr = new Sprite(1190, 400, 70, 42);
     
     //Set up imageLoader
     ImageLoader = new imgLoader(initGame);
     ImageLoader.loadImage(water, "images/water.png");
     ImageLoader.loadImage(sand, "images/sand.png");
     ImageLoader.loadImage(grass, "images/grass.png");
-    ImageLoader.loadImage(mainGame.obj_array[PlayerIndex].spr.image, "images/playersheetTrans.png");
+    ImageLoader.loadImage(mainGame.obj_array[PlayerIndex].spr.image, "images/finalsprite.png");
     
     var playerSprite = mainGame.obj_array[PlayerIndex].spr;
     
     //Set up playerSprite Animations
+    idle = playerSprite.loadAnimation(0,0);
     walkDown = playerSprite.loadAnimation(0, 3);
     walkLeft = playerSprite.loadAnimation(4, 7);
-    walkUp = playerSprite.loadAnimation(16, 19);
-    walkRight = playerSprite.loadAnimation(20, 23);
+    walkUp = playerSprite.loadAnimation(17, 20);
+    walkRight = playerSprite.loadAnimation(21, 24);
     stabRight = playerSprite.loadAnimation(28,31);
     stabLeft = playerSprite.loadAnimation(42,45);
     
