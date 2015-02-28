@@ -30,8 +30,8 @@ function Camera(pos) {
 }
 
 Camera.prototype.moveCamera = function(x, y) {
-	this.x = x;
-	this.y = y;
+	this.x = x - DRAW_OFFSET_WIDTH;
+	this.y = y - DRAW_OFFSET_HEIGHT;
 };
 
 Camera.prototype.stepForCameraX = function() {
@@ -74,6 +74,10 @@ Camera.prototype.camDraw = function(ifs) {
 	//may read
 	
 	//never draw something that isn't defined so set 0 as min
+	
+	//this.x = Math.min(Math.max(this.x, 0), WORLD_DIMENSION);
+    //this.y = Math.min(Math.max(this.y, 0), WORLD_DIMENSION);
+	
 	var startX = Math.max(0, this.x - DRAW_OFFSET_WIDTH);
 	var startY = Math.max(0, this.y - DRAW_OFFSET_HEIGHT);
 	var endX = Math.min(WORLD_DIMENSION, startX + CANVAS_DIMENSION);

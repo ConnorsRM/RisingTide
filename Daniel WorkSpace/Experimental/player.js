@@ -41,7 +41,7 @@ Player.prototype.changeDirection = function(direction){
 
 Player.prototype.draw = function(camera){
 	this.spr.draw(this.animationIndex, this.imageIndex,
-	this.x - this.spr.frameWidth / 2 - camera.x + DRAW_OFFSET_WIDTH,
+	this.x - this.spr.frameWidth / 2 - camera.x + DRAW_OFFSET_WIDTH, 
 	this.y - this.spr.frameWidth / 2 - camera.y + DRAW_OFFSET_HEIGHT);
 	
 	//Manage Animation Indexing
@@ -71,7 +71,7 @@ Player.prototype.update = function(ifs){
     
 
     //Set Camera to this Position
-    ifs.obj_array[CameraIndex].moveCamera(this.x, this.y);
+    ifs.obj_array[CameraIndex].moveCamera(this.x + DRAW_OFFSET_WIDTH, this.y + DRAW_OFFSET_HEIGHT);
     
     //Check for input Settings (Set Animations Here)
     if (this.inputVars[DIRECTIONS.UP]) {
@@ -90,6 +90,10 @@ Player.prototype.update = function(ifs){
         this.x += this.speed * this.speedMod;
 	this.animationIndex = walkRight;
     }
+    
+    //Player Position Validation
+    this.x = Math.min(Math.max(this.x, 0), WORLD_DIMENSION);
+    this.y = Math.min(Math.max(this.y, 0), WORLD_DIMENSION);
     
     //Check For Drowning
     if (ifs.obj_array[IslandIndex].posToCell({x:this.x, y:this.y}).tile == 0) {

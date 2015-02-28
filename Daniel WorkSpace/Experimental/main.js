@@ -104,6 +104,7 @@ function update() {
 function draw() {
     //This function is called every game step. It steps through
     //  all of the objects in obj_array and calls their draw function.
+    Context.clearRect(0, 0, Canvas.width, Canvas.height);
     
     for (var i = 0; i < InterfaceStack.length; ++i) {
         InterfaceStack[i].draw();
