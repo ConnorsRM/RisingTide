@@ -103,12 +103,12 @@ Player.prototype.update = function(ifs){
         this.animationIndex = this.walkDown;
     }
     if (this.inputVars[DIRECTIONS.LEFT]) {
-        this.x -= this.speed * this.speedMod;
-        this.animationIndex = this.walkLeft;
+        //this.x -= this.speed * this.speedMod;
+        this.animationIndex = this.pickUp;
     }
     if (this.inputVars[DIRECTIONS.RIGHT]) {
-        this.x += this.speed * this.speedMod;
-        this.animationIndex = this.walkRight;
+        //this.x += this.speed * this.speedMod;
+        this.animationIndex = this.eatFood;
     }
     
     //Player Position Validation

@@ -10,7 +10,7 @@ var PlayerIndex;
 mainGame.init = function() {
     this.id = InterfaceStack.push(this);
     
-    SeaLevelRise = 0.01;
+    SeaLevelRise = 0.001;
     var playerStartingPos = {x: 400, y: 300};
     
     //Creating Objects
