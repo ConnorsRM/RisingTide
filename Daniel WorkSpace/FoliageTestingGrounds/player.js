@@ -8,6 +8,8 @@ var DIRECTIONS = {
 
 //Single Holder for Player Image Data
 var PlayerSprite = new Sprite(881, 335, 70, 42);
+//Single Holder for Player Animation Indices
+var PlayerAnims = {};
 
 
 var Player = function (pos){
@@ -39,8 +41,9 @@ var Player = function (pos){
     this.walkUp = animIndex++;
     this.walkRight = animIndex++;
     this.eatFood = animIndex++;
-    this.stabRight = animIndex++;
-    this.stabLeft = animIndex++;
+    this.spearWD = 
+    this.spearSR = animIndex++;
+    this.spearSL = animIndex++;
 };
 
 
@@ -50,14 +53,18 @@ Player.prototype.load = function() {
     //Set up Player Sprite
     ImageLoader.loadImage(PlayerSprite.image, "images/playersheetTrans.png");
     //Set up Sprite Animations
-    /*walkDown = */ PlayerSprite.loadAnimation(0, 3);
-    /*walkLeft = */ PlayerSprite.loadAnimation(4, 7);
-    /*pickUp   = */ PlayerSprite.loadAnimation(8, 11); 
-    /*walkUp   = */ PlayerSprite.loadAnimation(12, 15);
-    /*walkRight= */ PlayerSprite.loadAnimation(16, 19);
-    /*eatFood  = */ PlayerSprite.loadAnimation(20, 23);
-    /*stabRight= */ PlayerSprite.loadAnimation(24, 27);
-    /*stabLeft = */ PlayerSprite.loadAnimation(28, 31);
+    PlayerAnims.walkD       = PlayerSprite.loadAnimation( 0,  3);
+    PlayerAnims.walkL       = PlayerSprite.loadAnimation( 4,  7);
+    PlayerAnims.pickUp      = PlayerSprite.loadAnimation( 8, 11); 
+    PlayerAnims.walkU       = PlayerSprite.loadAnimation(12, 15);
+    PlayerAnims.walkR       = PlayerSprite.loadAnimation(16, 19);
+    PlayerAnims.eatFood     = PlayerSprite.loadAnimation(20, 23);
+    PlayerAnims.spearWD     = PlayerSprite.loadAnimation(20, 23);
+    PlayerAnims.spearWL     = PlayerSprite.loadAnimation(20, 23);
+    PlayerAnims.spearSR     = PlayerSprite.loadAnimation(24, 27);
+    PlayerAnims.spearWU     = PlayerSprite.loadAnimation(20, 23);
+    PlayerAnims.spearWR     = PlayerSprite.loadAnimation(20, 23);
+    PlayerAnims.spearSL     = PlayerSprite.loadAnimation(28, 31);
 };
 
 
@@ -96,19 +103,19 @@ Player.prototype.update = function(ifs){
     //Check for input Settings (Set Animations Here)
     if (this.inputVars[DIRECTIONS.UP]) {
         this.y -= this.speed * this.speedMod;
-        this.animationIndex = this.walkUp; 
+        this.animationIndex = PlayerAnims.walkU; 
     } 
     if (this.inputVars[DIRECTIONS.DOWN]) {
         this.y += this.speed * this.speedMod;
-        this.animationIndex = this.walkDown;
+        this.animationIndex = PlayerAnims.walkD;
     }
     if (this.inputVars[DIRECTIONS.LEFT]) {
-        //this.x -= this.speed * this.speedMod;
-        this.animationIndex = this.pickUp;
+        this.x -= this.speed * this.speedMod;
+        this.animationIndex = PlayerAnims.walkL;
     }
     if (this.inputVars[DIRECTIONS.RIGHT]) {
-        //this.x += this.speed * this.speedMod;
-        this.animationIndex = this.eatFood;
+        this.x += this.speed * this.speedMod;
+        this.animationIndex = PlayerAnims.walkR;
     }
     
     //Player Position Validation
