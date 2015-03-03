@@ -6,7 +6,7 @@ framesPerRow - caluculates the frames per row via imageWidth/frameWidth
 Animations - an array of arrays. each element is an set of animation frames
  */
 
-function Sprite(imageWidth,imageHeight,frameWidth, frameHeight) {
+function Sprite(imageWidth, imageHeight, frameWidth, frameHeight) {
     this.image = new Image();
     this.imageWidth = imageWidth;
     this.imageHeight = imageHeight;
@@ -14,6 +14,7 @@ function Sprite(imageWidth,imageHeight,frameWidth, frameHeight) {
     this.frameHeight = frameHeight;
     this.framesPerRow = Math.floor(this.imageWidth/this.frameWidth); //used if sprite is a spritesheet
     this.Animations = [];
+    this.maxFrames = 0;
 }
 
 
@@ -43,6 +44,7 @@ Sprite.prototype.loadAnimation = function (startFrame, endFrame) {
  */
 Sprite.prototype.draw = function (animIndex,animFrame,x, y) {
     // get the row and col of the frame via the framesPerRow and Animations index.
+    this.maxFrames = this.Animations[animIndex].length;
     
     var row = Math.floor(this.Animations[animIndex][animFrame] / this.framesPerRow);
     var col = Math.floor(this.Animations[animIndex][animFrame] % this.framesPerRow);
@@ -54,11 +56,5 @@ Sprite.prototype.draw = function (animIndex,animFrame,x, y) {
             this.frameWidth, this.frameHeight,
             x, y,
             this.frameWidth, this.frameHeight);
+            
 };
-
-
-
-
-
-
-
