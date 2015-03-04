@@ -80,8 +80,8 @@ Player.prototype.changeDirection = function(direction){
 
 Player.prototype.draw = function(camera){
 	this.spr.draw(this.animationIndex, this.imageIndex,
-	this.x - this.spr.frameWidth / 2 - camera.x + DRAW_OFFSET_WIDTH, 
-	this.y - this.spr.frameWidth / 2 - camera.y + DRAW_OFFSET_HEIGHT);
+	this.x - (this.spr.frameWidth / 2) - camera.x + camera.viewWidth, 
+	this.y - (this.spr.frameWidth / 2) - camera.y + camera.viewHeight);
 	
 	//Manage Animation Indexing
 	this.animationCounter++;
