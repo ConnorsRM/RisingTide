@@ -1,10 +1,8 @@
-var DIRECTIONS = {
-	UP: 0,
-	DOWN: 1,
-	LEFT: 2,
-	RIGHT: 3
-};
-
+///////////////////////////////////////////////////////
+//
+// Player.js
+//
+///////////////////////////////////////////////////////
 
 //Single Holder for Player Image Data
 var PlayerSprite = new Sprite(881, 335, 70, 42);
@@ -13,37 +11,60 @@ var PlayerAnims = {};
 
 
 var Player = function (pos){
+    //sprite things
+    this.spr = PlayerSprite;
+    this.imageIndex = 0;
+    this.animationIndex = 0;
+    this.animationFreq = 3;
+    this.animationCounter = 0;
+    
 	//position
 	this.x = pos.x;
 	this.y = pos.y;
 	
-	//movement
-	this.speed = 6;
-	this.speedMod = 1;
-	this.direction = DIRECTIONS.DOWN;
-	this.inputVars = [false, false, false, false];
+	//Movement
+    this.speed = 6;
+    this.speedMod = 1;
+    this.direction = 1;
+	this.DIRECTIONS = {
+        UP:     0,
+        DOWN:   1,
+        LEFT:   2,
+        RIGHT:  3
+    };
+    
+    //Input
+    this.inputVars = [];
+    this.currentAction = -1;
+    this.ACTIONS = {
+        UP: 0, DOWN: 1, LEFT: 2, RIGHT: 3,
+        CYCLEITEMLEFT: 4, CYCLEITEMRIGHT: 5,
+        //Actions Below this line are uninterruptible
+        INTERRUPTABLEMARKER: 6,
+        ITEMLEFT: 6, ITEMRIGHT: 7,
+        TOTALCOUNT: 8
+    };
+    for (var i = 0; i < this.ACTIONS.TOTALCOUNT; ++i) {
+        //Populates inputVars with false for each ACTION
+        this.inputVars.push(false);
+    }
+    
+    //Equipment
+    this.equipped = 0;
+    this.EQUIPMENT = {
+        //Items that don't appear when walking:
+        FOOD:   0,
+        WOOD:   1,
+        FREEHANDSCOUNT: 2,
+        //Items that appear when walking:
+        AXE:    2,
+        SPEAR:  3,
+        TOTALCOUNT: 4
+    };
 	
 	//Drowning
-	this.drownCounter = 50;
-	this.drownMax = 50;
-	
-	//sprite things
-	this.spr = PlayerSprite;
-	this.imageIndex = 0;
-	this.animationIndex = 0;
-	this.animationFreq = 3;
-	this.animationCounter = 0;
-	//Animations
-	var animIndex = 0;
-	this.walkDown = animIndex++;
-    this.walkLeft = animIndex++;
-    this.pickUp = animIndex++;
-    this.walkUp = animIndex++;
-    this.walkRight = animIndex++;
-    this.eatFood = animIndex++;
-    this.spearWD = 
-    this.spearSR = animIndex++;
-    this.spearSL = animIndex++;
+	this.drownMax = FramesPerSecond * 3;
+	this.drownCounter = this.drownMax;
 };
 
 
@@ -59,75 +80,177 @@ Player.prototype.load = function() {
     PlayerAnims.walkU       = PlayerSprite.loadAnimation(12, 15);
     PlayerAnims.walkR       = PlayerSprite.loadAnimation(16, 19);
     PlayerAnims.eatFood     = PlayerSprite.loadAnimation(20, 23);
-    PlayerAnims.spearWD     = PlayerSprite.loadAnimation(20, 23);
-    PlayerAnims.spearWL     = PlayerSprite.loadAnimation(20, 23);
-    PlayerAnims.spearSR     = PlayerSprite.loadAnimation(24, 27);
-    PlayerAnims.spearWU     = PlayerSprite.loadAnimation(20, 23);
-    PlayerAnims.spearWR     = PlayerSprite.loadAnimation(20, 23);
-    PlayerAnims.spearSL     = PlayerSprite.loadAnimation(28, 31);
+    PlayerAnims.spearWD     = PlayerSprite.loadAnimation(24, 27);
+    PlayerAnims.spearWL     = PlayerSprite.loadAnimation(28, 31);
+    PlayerAnims.spearSR     = PlayerSprite.loadAnimation(32, 35);
+    PlayerAnims.spearWU     = PlayerSprite.loadAnimation(36, 39);
+    PlayerAnims.spearWR     = PlayerSprite.loadAnimation(40, 43);
+    PlayerAnims.spearSL     = PlayerSprite.loadAnimation(44, 47);
+    PlayerAnims.axeWD       = PlayerSprite.loadAnimation(48, 51);
+    PlayerAnims.axeWL       = PlayerSprite.loadAnimation(52, 55);
+    PlayerAnims.axeSR       = PlayerSprite.loadAnimation(56, 58);
+    PlayerAnims.axeWU       = PlayerSprite.loadAnimation(60, 63);
+    PlayerAnims.axeWR       = PlayerSprite.loadAnimation(64, 67);
+    PlayerAnims.axeSL       = PlayerSprite.loadAnimation(68, 70);
+    PlayerAnims.swim        = PlayerSprite.loadAnimation(72, 76);
+    PlayerAnims.drown       = PlayerSprite.loadAnimation(84, 86);
 };
 
 
-Player.prototype.changeDirection = function(direction){
-	//changes current direction
-	if ((direction == undefined) || (direction > 3) || (direction < 0)) {
-		console.error("Error: Player.changeDirection called with invalid direction");
-		return;
-	}
-	this.direction = direction;
+Player.prototype.die = function(ifs) {
+    //Should be called when the player expires
+    Player.prototype.update = function() {};
+    Player.prototype.draw = function() {};
+};
+
+
+Player.prototype.parseInput = function() {
+    //Checks for input and sets the internal variables accordingly
+    
+    if (this.currentAction < this.ACTIONS.INTERRUPTABLEMARKER) {
+        //Test if we're not trying to move
+        if (!this.inputVars[this.ACTIONS.UP] && !this.inputVars[this.ACTIONS.DOWN] &&
+                !this.inputVars[this.ACTIONS.LEFT] && !this.inputVars[this.ACTIONS.RIGHT]) {
+            if (this.currentAction < 4)
+                this.frameIndex = 0;
+        } else {
+            //Vertical Movement
+            if (this.inputVars[this.ACTIONS.UP] &&
+                    !this.inputVars[this.ACTIONS.DOWN]) {
+                this.y -= this.speed * this.speedMod;
+                this.direction = this.DIRECTIONS.UP;
+                if (this.currentAction != this.ACTIONS.UP)
+                    this.frameIndex = 0;
+                this.currentAction = this.ACTIONS.UP;
+            } else if (this.inputVars[this.ACTIONS.DOWN] &&
+                    !this.inputVars[this.ACTIONS.UP]) {
+                this.y += this.speed * this.speedMod;
+                this.direction = this.DIRECTIONS.DOWN;
+                if (this.currentAction != this.ACTIONS.DOWN)
+                    this.frameIndex = 0;
+                this.currentAction = this.ACTIONS.DOWN;
+            }
+            
+            //Horizontal Movement
+            if (this.inputVars[this.ACTIONS.LEFT] &&
+                    !this.inputVars[this.ACTIONS.RIGHT]) {
+                this.x -= this.speed * this.speedMod;
+                this.direction = this.DIRECTIONS.LEFT;
+                if (this.currentAction != this.ACTIONS.LEFT)
+                    this.frameIndex = 0;
+                this.currentAction = this.ACTIONS.LEFT;
+            } else if (this.inputVars[this.ACTIONS.RIGHT] &&
+                    !this.inputVars[this.ACTIONS.LEFT]) {
+                this.x += this.speed * this.speedMod;
+                this.direction = this.DIRECTIONS.RIGHT;
+                if (this.currentAction != this.ACTIONS.RIGHT)
+                    this.frameIndex = 0;
+                this.currentAction = this.ACTIONS.RIGHT;
+            }
+        }
+    }
+};
+
+
+Player.prototype.parseAnimation = function() {
+    //Code to figure out what frame of what animation we are interested
+    //  in drawing.
+    
+    //Store Previous Animation
+    var previousAnim = this.animationIndex;
+    
+    //First Check if we are swimming / drowning
+    if (this.drownCounter < this.drownMax) {
+        this.animationIndex = PlayerAnims.swim;
+        if (this.drownCounter < this.drownMax * .5) {
+            this.animationIndex = PlayerAnims.drown;
+        }
+    } else {
+        //Equipment Dependant Animations go here:
+        if (this.equipped < this.EQUIPMENT.FREEHANDSCOUNT) {
+            
+            if (this.currentAction == this.ACTIONS.DOWN)
+                this.animationIndex = PlayerAnims.walkD;
+            else if (this.currentAction == this.ACTIONS.LEFT)
+                this.animationIndex = PlayerAnims.walkL;
+            else if (this.currentAction == this.ACTIONS.UP)
+                this.animationIndex = PlayerAnims.walkU;
+            else if (this.currentAction == this.ACTIONS.RIGHT)
+                this.animationIndex = PlayerAnims.walkR;
+                
+        } else if (this.equipped == this.EQUIPMENT.AXE) {
+            
+            if (this.currentAction == this.ACTIONS.DOWN)
+                this.animationIndex = PlayerAnims.axeWD;
+            else if (this.currentAction == this.ACTIONS.LEFT)
+                this.animationIndex = PlayerAnims.axeWL;
+            else if (this.currentAction == this.ACTIONS.UP)
+                this.animationIndex = PlayerAnims.axeWU;
+            else if (this.currentAction == this.ACTIONS.RIGHT)
+                this.animationIndex = PlayerAnims.axeWR;
+                
+        } else if (this.equipped == this.EQUIPMENT.SPEAR) {
+            
+            if (this.currentAction == this.ACTIONS.DOWN)
+                this.animationIndex = PlayerAnims.spearWD;
+            else if (this.currentAction == this.ACTIONS.LEFT)
+                this.animationIndex = PlayerAnims.spearWL;
+            else if (this.currentAction == this.ACTIONS.UP)
+                this.animationIndex = PlayerAnims.spearWU;
+            else if (this.currentAction == this.ACTIONS.RIGHT)
+                this.animationIndex = PlayerAnims.spearWR;
+                
+        }
+    }
+    
+    //Manage Animation Indexing (only necessary if we maintained animations)
+    if (this.animationIndex == previousAnim) {
+        this.animationCounter++;
+        if (this.animationCounter >= this.animationFreq) {
+            this.animationCounter = 0;
+            this.imageIndex++;
+            if(this.imageIndex >= this.spr.maxFrames) {
+                this.imageIndex = 0;
+                if (this.currentAction >= this.INTERRUPTABLEMARKER)
+                    this.currentAction = (this.currentAction % 2) + 2;
+                    if (this.currentAction == this.ACTIONS.LEFT)
+                        this.animationIndex = PlayerAnims.walkL;
+                    else if (this.currentAction == this.ACTIONS.RIGHT)
+                        this.animationIndex = PlayerAnims.walkR; 
+            }
+        }
+    } else
+        this.imageIndex = 0;
 };
 
 
 Player.prototype.draw = function(camera){
+    
+    this.parseAnimation();
+    
 	this.spr.draw(this.animationIndex, this.imageIndex,
-	this.x - this.spr.frameWidth / 2 - camera.x + DRAW_OFFSET_WIDTH, 
-	this.y - this.spr.frameWidth / 2 - camera.y + DRAW_OFFSET_HEIGHT);
-	
-	//Manage Animation Indexing
-	this.animationCounter++;
-	if (this.animationCounter >= this.animationFreq) {
-        this.animationCounter = 0;
-        this.imageIndex++;
-        if(this.imageIndex >= this.spr.maxFrames){
-            this.imageIndex = 0;
-    	}
-    }
+	this.x - this.spr.frameWidth / 2 - camera.x + camera.viewWidth, 
+	this.y - this.spr.frameWidth / 2 - camera.y + camera.viewHeight);
 
 };
 
 Player.prototype.update = function(ifs){
-
-    //Set Camera to this Position
-    ifs.obj_array[CameraIndex].moveCamera(this.x + DRAW_OFFSET_WIDTH, this.y + DRAW_OFFSET_HEIGHT);
     
-    //Check for input Settings (Set Animations Here)
-    if (this.inputVars[DIRECTIONS.UP]) {
-        this.y -= this.speed * this.speedMod;
-        this.animationIndex = PlayerAnims.walkU; 
-    } 
-    if (this.inputVars[DIRECTIONS.DOWN]) {
-        this.y += this.speed * this.speedMod;
-        this.animationIndex = PlayerAnims.walkD;
-    }
-    if (this.inputVars[DIRECTIONS.LEFT]) {
-        this.x -= this.speed * this.speedMod;
-        this.animationIndex = PlayerAnims.walkL;
-    }
-    if (this.inputVars[DIRECTIONS.RIGHT]) {
-        this.x += this.speed * this.speedMod;
-        this.animationIndex = PlayerAnims.walkR;
-    }
+    this.parseInput();
     
     //Player Position Validation
     this.x = Math.min(Math.max(this.x, 0), WORLD_DIMENSION);
     this.y = Math.min(Math.max(this.y, 0), WORLD_DIMENSION);
     
+    //Set Camera to this Position
+    ifs.obj_array[CameraIndex].moveCamera(this.x + DRAW_OFFSET_WIDTH, this.y + DRAW_OFFSET_HEIGHT);
+    
     //Check For Drowning
     if (ifs.obj_array[IslandIndex].posToCell({x:this.x, y:this.y}).tile == 0) {
         --this.drownCounter;
         this.speedMod -= 1.0 / this.drownMax;
-        if (this.drownCounter == 0) {
-            this.spr = undefined;
+        if (this.drownCounter <= 0) {
+            this.die(ifs);
         }
     } else {
         this.drownCounter = this.drownMax;

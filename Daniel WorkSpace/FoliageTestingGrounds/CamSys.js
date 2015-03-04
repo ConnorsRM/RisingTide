@@ -24,14 +24,23 @@ Camera.prototype.iniCam = function(camSpd) {
 function Camera(pos) {
 	this.x = pos.x;
 	this.y = pos.y;
-	this.viewHeight = Canvas.height;
-	this.viewWidth = Canvas.height;
+	this.viewHeight = DRAW_OFFSET_HEIGHT;
+	this.viewWidth = DRAW_OFFSET_WIDTH;
 	this.camera_speed = 0;
 }
 
 Camera.prototype.moveCamera = function(x, y) {
-	this.x = x - DRAW_OFFSET_WIDTH;
-	this.y = y - DRAW_OFFSET_HEIGHT;
+	if((x - DRAW_OFFSET_WIDTH) < DRAW_OFFSET_WIDTH)
+		this.x = DRAW_OFFSET_WIDTH;
+	else if(x > WORLD_DIMENSION){} //this empty clause will be removed when I have more time to edit, it's a byproduct of the debug
+	else
+		this.x = x - DRAW_OFFSET_WIDTH;
+
+	if((y - DRAW_OFFSET_HEIGHT) < DRAW_OFFSET_HEIGHT)
+		this.y = DRAW_OFFSET_HEIGHT;
+	else if(y > WORLD_DIMENSION) {}
+	else
+		this.y = y - DRAW_OFFSET_HEIGHT;
 };
 
 Camera.prototype.stepForCameraX = function() {
@@ -83,14 +92,18 @@ Camera.prototype.camDraw = function(ifs) {
 	var endX = Math.min(WORLD_DIMENSION, startX + CANVAS_DIMENSION);
 	var endY = Math.min(WORLD_DIMENSION, startY + CANVAS_DIMENSION);
 	
-	
 	var startPos = {x:startX, y:startY};
 	var endPos = {x:endX, y:endY};
 	
 	ifs.obj_array[1].drawSection({x:0, y:0}, startPos, endPos);
 	
 	for (var i = 2; i < ifs.obj_array.length; ++i) {
-	    ifs.obj_array[i].draw(this);   //Needs a check to see if obj is even partially on screen
+
+		//var drawObj = translatedPosition(ifs.obj_array[i]);
+
+	 	ifs.obj_array[i].draw(this);
+	 	
+
     }	
 	
 	//This is optional
