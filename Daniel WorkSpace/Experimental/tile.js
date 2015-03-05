@@ -254,7 +254,7 @@ TileEngine.prototype.drawSection = function(pos, startDraw, endDraw) {
                 	else
                 		Context.fillStyle = 'black';
                 	
-                	Context.fillText(elevationStr, drawAt.x + this.cellSize/2.6, drawAt.y + this.cellSize/2.0);
+                	Context.fillText(elevationStr, drawAt.x + this.cellSize/2.6, drawAt.y + this.cellSize/1.8);
                 }
 
         }

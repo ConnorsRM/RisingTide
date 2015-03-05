@@ -5,7 +5,7 @@
 ///////////////////////////////////////////////////////
 
 //Single Holder for Player Image Data
-var PlayerSprite = new Sprite(881, 335, 70, 42);
+var PlayerSprite = new Sprite(1120, 294, 70, 42);
 //Single Holder for Player Animation Indices
 var PlayerAnims = {};
 
@@ -41,8 +41,9 @@ var Player = function (pos){
         CYCLEITEMLEFT: 4, CYCLEITEMRIGHT: 5,
         //Actions Below this line are uninterruptible
         INTERRUPTABLEMARKER: 6,
-        ITEMLEFT: 6, ITEMRIGHT: 7,
-        TOTALCOUNT: 8
+        ITEMUP: 6, ITEMDOWN: 7,
+        ITEMLEFT: 8, ITEMRIGHT: 9,
+        TOTALCOUNT: 10
     };
     for (var i = 0; i < this.ACTIONS.TOTALCOUNT; ++i) {
         //Populates inputVars with false for each ACTION
@@ -51,7 +52,7 @@ var Player = function (pos){
     
     //Equipment
     this.equipped = 0;
-    this.equipTime = Math.floor(FramesPerSecond * 0.1);
+    this.equipTime = Math.floor(FramesPerSecond * 0.3);
     this.equipPause = 0;
     this.EQUIPMENT = {
         //Items that don't appear when walking:
@@ -65,7 +66,7 @@ var Player = function (pos){
     };
 	
 	//Drowning
-	this.drownMax = FramesPerSecond * 1;
+	this.drownMax = FramesPerSecond * 1.5;
 	this.drownCounter = this.drownMax;
 };
 
@@ -74,28 +75,38 @@ Player.prototype.load = function() {
     //A Simple function that takes care of player animation and initialization.
     
     //Set up Player Sprite
-    ImageLoader.loadImage(PlayerSprite.image, "images/playersheetTrans.png");
+    ImageLoader.loadImage(PlayerSprite.image, "images/playersheet.png");
     //Set up Sprite Animations
+    PlayerAnims.walkU       = PlayerSprite.loadAnimation(16, 19);
     PlayerAnims.walkD       = PlayerSprite.loadAnimation( 0,  3);
     PlayerAnims.walkL       = PlayerSprite.loadAnimation( 4,  7);
-    PlayerAnims.pickUp      = PlayerSprite.loadAnimation( 8, 11); 
-    PlayerAnims.walkU       = PlayerSprite.loadAnimation(12, 15);
-    PlayerAnims.walkR       = PlayerSprite.loadAnimation(16, 19);
-    PlayerAnims.eatFood     = PlayerSprite.loadAnimation(20, 23);
-    PlayerAnims.spearWD     = PlayerSprite.loadAnimation(24, 27);
-    PlayerAnims.spearWL     = PlayerSprite.loadAnimation(28, 31);
-    PlayerAnims.spearSR     = PlayerSprite.loadAnimation(32, 35);
-    PlayerAnims.spearWU     = PlayerSprite.loadAnimation(36, 39);
-    PlayerAnims.spearWR     = PlayerSprite.loadAnimation(40, 43);
-    PlayerAnims.spearSL     = PlayerSprite.loadAnimation(44, 47);
-    PlayerAnims.axeWD       = PlayerSprite.loadAnimation(48, 51);
-    PlayerAnims.axeWL       = PlayerSprite.loadAnimation(52, 55);
-    PlayerAnims.axeSR       = PlayerSprite.loadAnimation(56, 58);
-    PlayerAnims.axeWU       = PlayerSprite.loadAnimation(60, 63);
-    PlayerAnims.axeWR       = PlayerSprite.loadAnimation(64, 67);
-    PlayerAnims.axeSL       = PlayerSprite.loadAnimation(68, 70);
-    PlayerAnims.swim        = PlayerSprite.loadAnimation(72, 76);
-    PlayerAnims.drown       = PlayerSprite.loadAnimation(84, 86);
+    PlayerAnims.walkR       = PlayerSprite.loadAnimation(20, 23);
+    
+    PlayerAnims.pickUp      = PlayerSprite.loadAnimation( 8, 11);
+    PlayerAnims.eatFood     = PlayerSprite.loadAnimation(24, 27);
+    
+    PlayerAnims.spearWU     = PlayerSprite.loadAnimation(48, 51);
+    PlayerAnims.spearWD     = PlayerSprite.loadAnimation(32, 35);
+    PlayerAnims.spearWL     = PlayerSprite.loadAnimation(36, 39);
+    PlayerAnims.spearWR     = PlayerSprite.loadAnimation(52, 55);
+    
+    PlayerAnims.spearSU     = PlayerSprite.loadAnimation(56, 59);
+    PlayerAnims.spearSD     = PlayerSprite.loadAnimation(40, 43);
+    PlayerAnims.spearSL     = PlayerSprite.loadAnimation(60, 63);
+    PlayerAnims.spearSR     = PlayerSprite.loadAnimation(44, 47);
+    
+    PlayerAnims.axeWU       = PlayerSprite.loadAnimation(80, 83);
+    PlayerAnims.axeWD       = PlayerSprite.loadAnimation(64, 67);
+    PlayerAnims.axeWL       = PlayerSprite.loadAnimation(68, 71);
+    PlayerAnims.axeWR       = PlayerSprite.loadAnimation(84, 87);
+    
+    PlayerAnims.axeSU       = PlayerSprite.loadAnimation(88, 90);
+    PlayerAnims.axeSD       = PlayerSprite.loadAnimation(72, 74);
+    PlayerAnims.axeSL       = PlayerSprite.loadAnimation(92, 94);
+    PlayerAnims.axeSR       = PlayerSprite.loadAnimation(76, 78);
+    
+    PlayerAnims.swim        = PlayerSprite.loadAnimation(96, 100);
+    PlayerAnims.drown       = PlayerSprite.loadAnimation(101, 103);
 };
 
 
@@ -111,6 +122,21 @@ Player.prototype.parseInput = function() {
     
     //If our current Action is interruptable:
     if (this.currentAction < this.ACTIONS.INTERRUPTABLEMARKER) {
+        //Check for item usage
+        if (this.inputVars[this.ACTIONS.ITEMUP]) {
+            this.currentAction = this.ACTIONS.ITEMUP;
+            return;
+        } else if (this.inputVars[this.ACTIONS.ITEMDOWN]) {
+            this.currentAction = this.ACTIONS.ITEMDOWN;
+            return;
+        } else if (this.inputVars[this.ACTIONS.ITEMLEFT]) {
+            this.currentAction = this.ACTIONS.ITEMLEFT;
+            return;
+        } else if (this.inputVars[this.ACTIONS.ITEMRIGHT]) {
+            this.currentAction = this.ACTIONS.ITEMRIGHT;
+            return;
+        }
+        
         //Test if we're not trying to move:
         if (!this.inputVars[this.ACTIONS.UP] && !this.inputVars[this.ACTIONS.DOWN] &&
                 !this.inputVars[this.ACTIONS.LEFT] && !this.inputVars[this.ACTIONS.RIGHT]) {
@@ -159,25 +185,19 @@ Player.prototype.parseInput = function() {
         if (this.equipPause <= 0) {
             if (this.inputVars[this.ACTIONS.CYCLEITEMLEFT] &&
                     !this.inputVars[this.ACTIONS.CYCLEITEMRIGHT]) {
-                --this.equipped;
-                this.equipPause = this.equipTime;
-                if (this.equipped < 0)
-                    this.equipped = this.EQUIPMENT.TOTALCOUNT - 1;
-            } else if (this.inputVars[this.ACTIONS.CYCLEITEMRIGHT] &&
-                    !this.inputVars[this.ACTIONS.CYCLEITEMLEFT]) {
                 ++this.equipped;
                 this.equipPause = this.equipTime;
                 if (this.equipped >= this.EQUIPMENT.TOTALCOUNT)
                     this.equipped = 0;
+            } else if (this.inputVars[this.ACTIONS.CYCLEITEMRIGHT] &&
+                    !this.inputVars[this.ACTIONS.CYCLEITEMLEFT]) {
+                --this.equipped;
+                this.equipPause = this.equipTime;
+                if (this.equipped < 0)
+                    this.equipped = this.EQUIPMENT.TOTALCOUNT - 1;
             }
         } else
             --this.equipPause;
-        
-        //Check for item usage 
-        if (this.inputVars[this.ACTIONS.ITEMLEFT])
-            this.currentAction = this.ACTIONS.ITEMLEFT;
-        else if (this.inputVars[this.ACTIONS.ITEMRIGHT])
-            this.currentAction = this.ACTIONS.ITEMRIGHT;
     }
 };
 
@@ -212,15 +232,13 @@ Player.prototype.parseAnimation = function() {
             //Check for Item Usage
             if (this.equipped == this.EQUIPMENT.FOOD) {
                 
-                if (this.currentAction == this.ACTIONS.ITEMLEFT ||
-                  this.currentAction == this.ACTIONS.ITEMRIGHT)
+                if (this.currentAction >= this.ACTIONS.INTERRUPTABLEMARKER)
                     this.animationIndex = PlayerAnims.eatFood;
                     
             } else if (this.equipped == this.EQUIPMENT.WOOD) {
                 
-                if (this.currentAction == this.ACTIONS.ITEMLEFT ||
-                  this.currentAction == this.ACTIONS.ITEMRIGHT)
-                    this.animationIndex == PlayerAnims.pickUP;
+                if (this.currentAction >= this.ACTIONS.INTERRUPTABLEMARKER)
+                    this.animationIndex = PlayerAnims.pickUp;
                      
             }
                 
@@ -237,7 +255,11 @@ Player.prototype.parseAnimation = function() {
                 this.animationIndex = PlayerAnims.axeWR;
             
             //Check for Item Usage
-            if (this.currentAction == this.ACTIONS.ITEMLEFT)
+            if (this.currentAction == this.ACTIONS.ITEMUP)
+                this.animationIndex = PlayerAnims.axeSU;
+            else if (this.currentAction == this.ACTIONS.ITEMDOWN)
+                this.animationIndex = PlayerAnims.axeSD;
+            else if (this.currentAction == this.ACTIONS.ITEMLEFT)
                 this.animationIndex = PlayerAnims.axeSL;
             else if (this.currentAction == this.ACTIONS.ITEMRIGHT)
                 this.animationIndex = PlayerAnims.axeSR;
@@ -255,7 +277,11 @@ Player.prototype.parseAnimation = function() {
                 this.animationIndex = PlayerAnims.spearWR;
             
             //Check for Item Usage
-            if (this.currentAction == this.ACTIONS.ITEMLEFT)
+            if (this.currentAction == this.ACTIONS.ITEMUP)
+                this.animationIndex = PlayerAnims.spearSU;
+            else if (this.currentAction == this.ACTIONS.ITEMDOWN)
+                this.animationIndex = PlayerAnims.spearSD;
+            else if (this.currentAction == this.ACTIONS.ITEMLEFT)
                 this.animationIndex = PlayerAnims.spearSL;
             else if (this.currentAction == this.ACTIONS.ITEMRIGHT)
                 this.animationIndex = PlayerAnims.spearSR;
@@ -281,13 +307,11 @@ Player.prototype.updateAnimation = function(prevAnim) {
                 this.imageIndex = 0;    //Start back at the start
                 
                 //And if this animation is supposed to only run once:
-                if (this.currentAction >= this.ACTIONS.INTERRUPTABLEMARKER) {
+                if ((this.currentAction >= this.ACTIONS.INTERRUPTABLEMARKER) &&
+                        !this.inputVars[this.currentAction]) {
                     //Return to walk left or walk right
-                    this.currentAction = (this.currentAction % 2) + 2;
-                    if (this.currentAction == this.ACTIONS.LEFT)
-                        this.animationIndex = PlayerAnims.walkL;
-                    else if (this.currentAction == this.ACTIONS.RIGHT)
-                        this.animationIndex = PlayerAnims.walkR;
+                    this.currentAction -= 6;
+                    this.animationIndex -= 6;
                 }
                 
             }

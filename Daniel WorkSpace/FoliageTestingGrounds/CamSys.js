@@ -44,7 +44,6 @@ Camera.prototype.moveCamera = function(x, y) {
 };
 
 Camera.prototype.stepForCameraX = function() {
-	console.log(this.x);
 	if (this.x + this.camera_speed < (WORLD_DIMENSION - DRAW_OFFSET_WIDTH))
 		this.x += this.camera_speed;
 };
@@ -93,7 +92,6 @@ Camera.prototype.camDraw = function(ifs) {
 	var startPos = {x:startX, y:startY};
 	var endPos = {x:endX, y:endY};
 	
-	console.log(endPos);
 	
 	ifs.obj_array[1].drawSection({x:0, y:0}, startPos, endPos);
 	
