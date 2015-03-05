@@ -58,5 +58,8 @@ mainGame.init = function() {
             //Use Item Right
             this.obj_array[PlayerIndex].inputVars[7] = status;
         }
+        if(e.keyCode == 18) {//left alt key
+        	this.obj_array[IslandIndex].isOverlay = !(this.obj_array[IslandIndex].isOverlay);
+        }
     };
 };

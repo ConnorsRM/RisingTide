@@ -239,7 +239,7 @@ TileEngine.prototype.drawSection = function(pos, startDraw, endDraw) {
             var Tile = this.tileMap[x][y].tile;
             if (Tile != -1)
                 Context.drawImage(this.tileDictionary[Tile], drawAt.x, drawAt.y, this.cellSize, this.cellSize);
-                if (this.isOverlay)
+                if (this.isOverlay) {
                 	var elevationStr = (Math.max(0, islandHeights[x][y] - Math.floor(this.sea_level))).toString();
                 	
                 	Context.font = "bold 12pt Courier";
@@ -247,7 +247,7 @@ TileEngine.prototype.drawSection = function(pos, startDraw, endDraw) {
                 	if(islandHeights[x][y] - this.sea_level < 1) {
                 		Context.fillStyle = 'red';
                 		if(islandHeights[x][y] - this.sea_level > 0)
-                			elevationStr = "<1"
+                			elevationStr = "<1";
                 	}
                 	else if (islandHeights[x][y] - this.sea_level < 2)
                 		Context.fillStyle = 'yellow';
@@ -255,6 +255,7 @@ TileEngine.prototype.drawSection = function(pos, startDraw, endDraw) {
                 		Context.fillStyle = 'black';
                 	
                 	Context.fillText(elevationStr, drawAt.x + this.cellSize/2.6, drawAt.y + this.cellSize/2.0);
+                }
 
         }
     }
