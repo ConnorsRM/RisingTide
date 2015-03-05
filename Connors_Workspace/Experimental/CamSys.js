@@ -3,7 +3,7 @@
 
 //Object Data Accumulation
 var DRAW_OFFSET_WIDTH = 400;
-var DRAW_OFFSET_HEIGHT = 400;
+var DRAW_OFFSET_HEIGHT = 300;
 var CANVAS_DIMENSION = 800;
 
 //World Dim is tile Width * num tiles
@@ -21,21 +21,29 @@ Camera.prototype.iniCam = function(camSpd) {
 //-----------------Camera Object and Support Functions-------------------//
 //Camera Object encapsulates camera data
 //such as position and scope
-function Camera(x, y, canvas_width, canvas_height) {
-	this.x = x;
-	this.y = y;
-	this.viewHeight = canvas_height;
-	this.viewWidth = canvas_width;
+function Camera(pos) {
+	this.x = pos.x;
+	this.y = pos.y;
+	this.viewHeight = DRAW_OFFSET_HEIGHT;
+	this.viewWidth = DRAW_OFFSET_WIDTH;
 	this.camera_speed = 0;
 }
 
 Camera.prototype.moveCamera = function(x, y) {
-	this.x = x;
-	this.y = y;
+	if((x - DRAW_OFFSET_WIDTH) < DRAW_OFFSET_WIDTH)
+		this.x = DRAW_OFFSET_WIDTH;
+	else if(x > WORLD_DIMENSION){} //this empty clause will be removed when I have more time to edit, it's a byproduct of the debug
+	else
+		this.x = x - DRAW_OFFSET_WIDTH;
+
+	if((y - DRAW_OFFSET_HEIGHT) < DRAW_OFFSET_HEIGHT)
+		this.y = DRAW_OFFSET_HEIGHT;
+	else if(y > WORLD_DIMENSION) {}
+	else
+		this.y = y - DRAW_OFFSET_HEIGHT;
 };
 
 Camera.prototype.stepForCameraX = function() {
-	console.log(this.x);
 	if (this.x + this.camera_speed < (WORLD_DIMENSION - DRAW_OFFSET_WIDTH))
 		this.x += this.camera_speed;
 };
@@ -48,12 +56,12 @@ Camera.prototype.stepForCameraY = function() {
 Camera.prototype.stepBackCameraX = function() {
 	if(this.x - this.camera_speed > DRAW_OFFSET_WIDTH)
 		this.x -= this.camera_speed;
-}
+};
 
 Camera.prototype.stepBackCameraY = function() {
 	if(this.y - this.camera_speed > DRAW_OFFSET_HEIGHT)
-		this.y -= this.camera_speed
-}
+		this.y -= this.camera_speed;
+};
 
 Camera.prototype.mutCamHeight = function(height) {
 	this.viewHeight = height;
@@ -65,7 +73,7 @@ Camera.prototype.mutCamWidth = function(width) {
 
 //----------------------Camera Draw Functions------------------------//
 
-Camera.prototype.camDraw = function(tileSys, player) {
+Camera.prototype.camDraw = function(ifs) {
 	//this should scale objects by width and height
 	//before drawing them to the frame.
 	//tileSys.drawSection( {x:0,y:0}, {x:0, y:0}, {x:this.viewWidth, y:this.viewHeight} );
@@ -74,19 +82,27 @@ Camera.prototype.camDraw = function(tileSys, player) {
 	//may read
 	
 	//never draw something that isn't defined so set 0 as min
+	
+	
 	var startX = Math.max(0, this.x - DRAW_OFFSET_WIDTH);
 	var startY = Math.max(0, this.y - DRAW_OFFSET_HEIGHT);
-	var endX = Math.min(WORLD_DIMENSION, startX + CANVAS_DIMENSION);
-	var endY = Math.min(WORLD_DIMENSION, startY + CANVAS_DIMENSION);
-	
+	var endX = Math.min(WORLD_DIMENSION -40, startX + CANVAS_DIMENSION);
+	var endY = Math.min(WORLD_DIMENSION -40, startY + CANVAS_DIMENSION);
 	
 	var startPos = {x:startX, y:startY};
 	var endPos = {x:endX, y:endY};
 	
-	tileSys.drawSection({x:0, y:0}, startPos, endPos);
 	
-	//now draw player
-	player.draw();
+	ifs.obj_array[1].drawSection({x:0, y:0}, startPos, endPos);
+	
+	for (var i = 2; i < ifs.obj_array.length; ++i) {
+
+		//var drawObj = translatedPosition(ifs.obj_array[i]);
+
+	 	ifs.obj_array[i].draw(this);
+	 	
+
+    }	
 	
 	//This is optional
 	return;
