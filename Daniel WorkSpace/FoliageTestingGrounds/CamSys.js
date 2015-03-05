@@ -84,16 +84,16 @@ Camera.prototype.camDraw = function(ifs) {
 	
 	//never draw something that isn't defined so set 0 as min
 	
-	//this.x = Math.min(Math.max(this.x, 0), WORLD_DIMENSION);
-    //this.y = Math.min(Math.max(this.y, 0), WORLD_DIMENSION);
 	
 	var startX = Math.max(0, this.x - DRAW_OFFSET_WIDTH);
 	var startY = Math.max(0, this.y - DRAW_OFFSET_HEIGHT);
-	var endX = Math.min(WORLD_DIMENSION, startX + CANVAS_DIMENSION);
-	var endY = Math.min(WORLD_DIMENSION, startY + CANVAS_DIMENSION);
+	var endX = Math.min(WORLD_DIMENSION -40, startX + CANVAS_DIMENSION);
+	var endY = Math.min(WORLD_DIMENSION -40, startY + CANVAS_DIMENSION);
 	
 	var startPos = {x:startX, y:startY};
 	var endPos = {x:endX, y:endY};
+	
+	console.log(endPos);
 	
 	ifs.obj_array[1].drawSection({x:0, y:0}, startPos, endPos);
 	

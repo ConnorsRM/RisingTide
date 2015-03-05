@@ -51,6 +51,8 @@ var Player = function (pos){
     
     //Equipment
     this.equipped = 0;
+    this.equipTime = Math.floor(FramesPerSecond * 0.1);
+    this.equipPause = 0;
     this.EQUIPMENT = {
         //Items that don't appear when walking:
         FOOD:   0,
@@ -63,7 +65,7 @@ var Player = function (pos){
     };
 	
 	//Drowning
-	this.drownMax = FramesPerSecond * 3;
+	this.drownMax = FramesPerSecond * 1;
 	this.drownCounter = this.drownMax;
 };
 
@@ -107,14 +109,18 @@ Player.prototype.die = function(ifs) {
 Player.prototype.parseInput = function() {
     //Checks for input and sets the internal variables accordingly
     
+    //If our current Action is interruptable:
     if (this.currentAction < this.ACTIONS.INTERRUPTABLEMARKER) {
-        //Test if we're not trying to move
+        //Test if we're not trying to move:
         if (!this.inputVars[this.ACTIONS.UP] && !this.inputVars[this.ACTIONS.DOWN] &&
                 !this.inputVars[this.ACTIONS.LEFT] && !this.inputVars[this.ACTIONS.RIGHT]) {
-            if (this.currentAction < 4)
-                this.frameIndex = 0;
+            //If so, keep the imageIndex at the idle position of 0
+            if (this.currentAction < 4) {
+                this.imageIndex = 0;
+                this.animationCounter = 0;
+            }
         } else {
-            //Vertical Movement
+            //Vertical Movement Input
             if (this.inputVars[this.ACTIONS.UP] &&
                     !this.inputVars[this.ACTIONS.DOWN]) {
                 this.y -= this.speed * this.speedMod;
@@ -131,7 +137,7 @@ Player.prototype.parseInput = function() {
                 this.currentAction = this.ACTIONS.DOWN;
             }
             
-            //Horizontal Movement
+            //Horizontal Movement Input
             if (this.inputVars[this.ACTIONS.LEFT] &&
                     !this.inputVars[this.ACTIONS.RIGHT]) {
                 this.x -= this.speed * this.speedMod;
@@ -148,6 +154,31 @@ Player.prototype.parseInput = function() {
                 this.currentAction = this.ACTIONS.RIGHT;
             }
         }
+            
+        //Check for item cycling
+        if (this.equipPause <= 0) {
+            if (this.inputVars[this.ACTIONS.CYCLEITEMLEFT] &&
+                    !this.inputVars[this.ACTIONS.CYCLEITEMRIGHT]) {
+                --this.equipped;
+                this.equipPause = this.equipTime;
+                if (this.equipped < 0)
+                    this.equipped = this.EQUIPMENT.TOTALCOUNT - 1;
+            } else if (this.inputVars[this.ACTIONS.CYCLEITEMRIGHT] &&
+                    !this.inputVars[this.ACTIONS.CYCLEITEMLEFT]) {
+                ++this.equipped;
+                this.equipPause = this.equipTime;
+                if (this.equipped >= this.EQUIPMENT.TOTALCOUNT)
+                    this.equipped = 0;
+            }
+        } else
+            --this.equipPause;
+        
+        //Check for item usage
+        if (this.inputVars[this.ACTIONS.ITEMLEFT])
+            this.currentAction = this.ACTIONS.ITEMLEFT;
+        else if (this.inputVars[this.ACTIONS.ITEMRIGHT])
+            this.currentAction = this.ACTIONS.ITEMRIGHT;
+        
     }
 };
 
@@ -167,8 +198,9 @@ Player.prototype.parseAnimation = function() {
         }
     } else {
         //Equipment Dependant Animations go here:
-        if (this.equipped < this.EQUIPMENT.FREEHANDSCOUNT) {
+        if (this.equipped < this.EQUIPMENT.FREEHANDSCOUNT) {    //No Visible Item Carried
             
+            //Movement
             if (this.currentAction == this.ACTIONS.DOWN)
                 this.animationIndex = PlayerAnims.walkD;
             else if (this.currentAction == this.ACTIONS.LEFT)
@@ -178,8 +210,24 @@ Player.prototype.parseAnimation = function() {
             else if (this.currentAction == this.ACTIONS.RIGHT)
                 this.animationIndex = PlayerAnims.walkR;
                 
-        } else if (this.equipped == this.EQUIPMENT.AXE) {
+            //Check for Item Usage
+            if (this.equipped == this.EQUIPMENT.FOOD) {
+                
+                if (this.currentAction == this.ACTIONS.ITEMLEFT ||
+                  this.currentAction == this.ACTIONS.ITEMRIGHT)
+                    this.animationIndex = PlayerAnims.eatFood;
+                    
+            } else if (this.equipped == this.EQUIPMENT.WOOD) {
+                
+                if (this.currentAction == this.ACTIONS.ITEMLEFT ||
+                  this.currentAction == this.ACTIONS.ITEMRIGHT)
+                    this.animationIndex == PlayerAnims.pickUP;
+                     
+            }
+                
+        } else if (this.equipped == this.EQUIPMENT.AXE) {   //Axe Equipped
             
+            //Movement
             if (this.currentAction == this.ACTIONS.DOWN)
                 this.animationIndex = PlayerAnims.axeWD;
             else if (this.currentAction == this.ACTIONS.LEFT)
@@ -188,9 +236,16 @@ Player.prototype.parseAnimation = function() {
                 this.animationIndex = PlayerAnims.axeWU;
             else if (this.currentAction == this.ACTIONS.RIGHT)
                 this.animationIndex = PlayerAnims.axeWR;
-                
-        } else if (this.equipped == this.EQUIPMENT.SPEAR) {
             
+            //Check for Item Usage
+            if (this.currentAction == this.ACTIONS.ITEMLEFT)
+                this.animationIndex = PlayerAnims.axeSL;
+            else if (this.currentAction == this.ACTIONS.ITEMRIGHT)
+                this.animationIndex = PlayerAnims.axeSR;
+                
+        } else if (this.equipped == this.EQUIPMENT.SPEAR) { //Spear Equipped
+            
+            //Movement
             if (this.currentAction == this.ACTIONS.DOWN)
                 this.animationIndex = PlayerAnims.spearWD;
             else if (this.currentAction == this.ACTIONS.LEFT)
@@ -199,28 +254,50 @@ Player.prototype.parseAnimation = function() {
                 this.animationIndex = PlayerAnims.spearWU;
             else if (this.currentAction == this.ACTIONS.RIGHT)
                 this.animationIndex = PlayerAnims.spearWR;
-                
+            
+            //Check for Item Usage
+            if (this.currentAction == this.ACTIONS.ITEMLEFT)
+                this.animationIndex = PlayerAnims.spearSL;
+            else if (this.currentAction == this.ACTIONS.ITEMRIGHT)
+                this.animationIndex = PlayerAnims.spearSR;
+                    
         }
     }
     
+    this.updateAnimation(previousAnim);
+};
+
+
+Player.prototype.updateAnimation = function(prevAnim) {
     //Manage Animation Indexing (only necessary if we maintained animations)
-    if (this.animationIndex == previousAnim) {
+    
+    if (this.animationIndex == prevAnim) {
+        
         this.animationCounter++;
         if (this.animationCounter >= this.animationFreq) {
             this.animationCounter = 0;
             this.imageIndex++;
+            //If the animation is over
             if(this.imageIndex >= this.spr.maxFrames) {
-                this.imageIndex = 0;
-                if (this.currentAction >= this.INTERRUPTABLEMARKER)
+                this.imageIndex = 0;    //Start back at the start
+                
+                //And if this animation is supposed to only run once:
+                if (this.currentAction >= this.ACTIONS.INTERRUPTABLEMARKER) {
+                    //Return to walk left or walk right
                     this.currentAction = (this.currentAction % 2) + 2;
                     if (this.currentAction == this.ACTIONS.LEFT)
                         this.animationIndex = PlayerAnims.walkL;
                     else if (this.currentAction == this.ACTIONS.RIGHT)
-                        this.animationIndex = PlayerAnims.walkR; 
+                        this.animationIndex = PlayerAnims.walkR;
+                }
+                
             }
         }
-    } else
+        
+    } else {
         this.imageIndex = 0;
+        this.animationCounter = 0;
+    }
 };
 
 
@@ -233,6 +310,7 @@ Player.prototype.draw = function(camera){
 	this.y - this.spr.frameWidth / 2 - camera.y + camera.viewHeight);
 
 };
+
 
 Player.prototype.update = function(ifs){
     

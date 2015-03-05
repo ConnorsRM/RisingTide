@@ -42,21 +42,21 @@ mainGame.init = function() {
             //Move Right
             this.obj_array[PlayerIndex].inputVars[3] = status;
         }
-        if (e.keyCode == 37) {  //Left Arrow Key
-            //Use Item Left
-            this.obj_array[PlayerIndex].inputVars[4] = status;
-        }
-        if (e.keyCode == 39) {  //Right Arrow Key
-            //Use Item Right
+        if (e.keyCode == 40) {  //Down Arrow Key
+            //Cycle Item Right
             this.obj_array[PlayerIndex].inputVars[4] = status;
         }
         if (e.keyCode == 38) {  //Up Arrow Key
-            //Cycle Item Right
+            //Cycle Item Left
             this.obj_array[PlayerIndex].inputVars[5] = status;
         }
-        if (e.keyCode == 40) {  //Down Arrow Key
-            //Cycle Item Right
+        if (e.keyCode == 37) {  //Left Arrow Key
+            //Use Item Left
             this.obj_array[PlayerIndex].inputVars[6] = status;
+        }
+        if (e.keyCode == 39) {  //Right Arrow Key
+            //Use Item Right
+            this.obj_array[PlayerIndex].inputVars[7] = status;
         }
     };
 };
