@@ -17,7 +17,6 @@ var water = new Image();
 var sand = new Image();
 var grass = new Image();
 
-
 //Input:
 //Keyboard Listeners
 addEventListener("keydown", function (e) {

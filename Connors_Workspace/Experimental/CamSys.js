@@ -92,18 +92,33 @@ Camera.prototype.camDraw = function(ifs) {
 	var startPos = {x:startX, y:startY};
 	var endPos = {x:endX, y:endY};
 	
-	ifs.obj_array[1].drawSection({x:0, y:0}, startPos, endPos);
+	ifs.obj_array[IslandIndex].drawSection({x:0, y:0}, startPos, endPos);
 	
-	for (var i = 3; i < ifs.obj_array.length; ++i) {
-
-		//var drawObj = translatedPosition(ifs.obj_array[i]);
-
-	 	ifs.obj_array[i].draw(this);
-	 	
-
-    }	
+	var sortObj_array = ifs.obj_array.slice(2)
+	//var test = ifs.obj_array;
 	
-	ifs.obj_array[PlayerIndex].draw(this);
-	//This is optional
-	return;
+	//console.log(test);
+	console.log(ifs.obj_array);
+	console.log(sortObj_array);
+	sortObj_array.sort(function(a, b){
+		
+		
+		if(a.x == undefined || b.x == undefined)
+			return 0;
+		
+		return (a.y - b.y);
+		
+		
+	});
+			
+	//console.log(sortObj_array);
+	
+	for(var i = 0; i < sortObj_array.length; ++i) {
+		sortObj_array[i].draw(this);
+	}
+	//sort by depth;
+
+	
+	
 };
+

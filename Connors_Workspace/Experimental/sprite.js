@@ -53,6 +53,7 @@ Sprite.prototype.draw = function (animIndex,animFrame,x, y) {
 		return;
 	}
 
+
     // get the row and col of the frame via the framesPerRow and Animations index.
     this.maxFrames = this.Animations[animIndex].length;
     
