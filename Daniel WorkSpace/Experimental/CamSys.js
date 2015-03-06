@@ -94,7 +94,7 @@ Camera.prototype.camDraw = function(ifs) {
 	
 	ifs.obj_array[IslandIndex].drawSection({x:0, y:0}, startPos, endPos);
 	
-	var sortObj_array = ifs.obj_array.slice(2)
+	var sortObj_array = ifs.obj_array.slice(2);
 	//var test = ifs.obj_array;
 	
 	//console.log(test);
