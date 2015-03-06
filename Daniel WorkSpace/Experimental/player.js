@@ -57,6 +57,9 @@ var Player = function (pos){
         SPEAR:  3,
         TOTALCOUNT: 4
     };
+    
+    //Inventory Count
+    this.logs = 2;
 	
 	//Drowning
 	this.drownMax = FramesPerSecond * 1.5;
@@ -208,15 +211,25 @@ Player.prototype.parseItemUse = function(ifs, targetPos) {
     if (this.equipped == this.EQUIPMENT.FOOD) {
         this.currentAction = this.ACTIONS.ITEMDOWN;
     } else if (this.equipped == this.EQUIPMENT.WOOD) {
+        if (this.logs > 0) {
+            --this.logs;
+            var cell = ifs.obj_array[IslandIndex].posToCell(targetPos);
+            ifs.obj_array[IslandIndex].posToCell(targetPos).elevation += 3;
+            var dPos = ifs.obj_array[IslandIndex].cellToPos(cell);
+        
+            var newDam = new Dam(dPos);
+            var newIndex = ifs.obj_array.push(newDam) - 1;
+            ifs.obj_array[newIndex].ifsIndex = newIndex;
+            ifs.obj_array[newIndex].elevation =
+                ifs.obj_array[IslandIndex].posToCell(targetPos).elevation;
+        } else {
+            this.currentAction -= 6;
+        }
+    } else if (this.equipped == this.EQUIPMENT.AXE) {
         var cell = ifs.obj_array[IslandIndex].posToCell(targetPos);
-        ifs.obj_array[IslandIndex].posToCell(targetPos).elevation += 1;
-        var dPos = ifs.obj_array[IslandIndex].cellToPos(cell);
-    
-        var newDam = new Dam(dPos);
-        var newIndex = ifs.obj_array.push(newDam) - 1;
-        ifs.obj_array[newIndex].ifsIndex = newIndex;
-        ifs.obj_array[newIndex].elevation =
-            ifs.obj_array[IslandIndex].posToCell(targetPos).elevation;
+        if (cell.entity instanceof Tree) {
+            cell.entity.remove();
+        }
     }
 };
 

@@ -21,7 +21,22 @@ mainGame.init = function() {
     CameraIndex = this.obj_array.push(new Camera(playerStartingPos)) - 1;
     IslandIndex = this.obj_array.push(new TileEngine(100, 100, 40)) - 1;
     PlayerIndex = this.obj_array.push(new Player(playerStartingPos)) - 1;
-    TreeIndex = this.obj_array.push(new Tree(this.obj_array[IslandIndex], {x:160, y:160})) - 1;
+    var xpos = 0;
+    var ypos = 0;
+    var xcell = Math.floor(Math.random() * 100);
+    var ycell = Math.floor(Math.random() * 100);
+    var tileSize = this.obj_array[IslandIndex].tileSize;
+    var cell = this.obj_array[IslandIndex].getCell(xcell, ycell);
+    for (var i = 0; i < 200; ++i) {
+        while ((cell.entity == null) && (cell.elevation > 0)) {
+            xcell = Math.floor(Math.random() * 100);
+            ycell = Math.floor(Math.random() * 100);
+            var cell = this.obj_array[IslandIndex].getCell(xcell, ycell);
+        }
+        xpos = xcell * tileSize + .5 * tileSize;
+        ypos = ycell * tileSize + .9 * tileSize;
+        this.obj_array.push(new Tree(this.obj_array[IslandIndex], {x:xpos, y:ypos})) - 1;
+    }
     
     //Initializing Internal Vars
     this.active = true;
