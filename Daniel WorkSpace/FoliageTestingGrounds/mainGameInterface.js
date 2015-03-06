@@ -7,6 +7,10 @@ var CameraIndex;
 var IslandIndex;
 var PlayerIndex;
 
+//2 second delay between damn builds
+var DAM_DELAY =  2000;
+var lastDamBuild = new Date().getTime();
+
 mainGame.init = function() {
     this.id = InterfaceStack.push(this);
     

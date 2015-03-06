@@ -76,43 +76,35 @@ Player.prototype.load = function() {
     
     //Set up Player Sprite
     ImageLoader.loadImage(PlayerSprite.image, "images/playersheet.png");
-    //Set up Sprite Animations:
-    
-    //Walking with no items
+    //Set up Sprite Animations
     PlayerAnims.walkU       = PlayerSprite.loadAnimation(16, 19);
     PlayerAnims.walkD       = PlayerSprite.loadAnimation( 0,  3);
     PlayerAnims.walkL       = PlayerSprite.loadAnimation( 4,  7);
     PlayerAnims.walkR       = PlayerSprite.loadAnimation(20, 23);
     
-    //Simple Items
-    PlayerAnims.eatFood     = PlayerSprite.loadAnimation(24, 27);
     PlayerAnims.pickUp      = PlayerSprite.loadAnimation( 8, 11);
+    PlayerAnims.eatFood     = PlayerSprite.loadAnimation(24, 27);
     
-    //Walking with a Spear
     PlayerAnims.spearWU     = PlayerSprite.loadAnimation(48, 51);
     PlayerAnims.spearWD     = PlayerSprite.loadAnimation(32, 35);
     PlayerAnims.spearWL     = PlayerSprite.loadAnimation(36, 39);
     PlayerAnims.spearWR     = PlayerSprite.loadAnimation(52, 55);
     
-    //Stabbing with Spear
     PlayerAnims.spearSU     = PlayerSprite.loadAnimation(56, 59);
     PlayerAnims.spearSD     = PlayerSprite.loadAnimation(40, 43);
     PlayerAnims.spearSL     = PlayerSprite.loadAnimation(60, 63);
     PlayerAnims.spearSR     = PlayerSprite.loadAnimation(44, 47);
     
-    //Walking with an Axe
     PlayerAnims.axeWU       = PlayerSprite.loadAnimation(80, 83);
     PlayerAnims.axeWD       = PlayerSprite.loadAnimation(64, 67);
     PlayerAnims.axeWL       = PlayerSprite.loadAnimation(68, 71);
     PlayerAnims.axeWR       = PlayerSprite.loadAnimation(84, 87);
     
-    //Swinging with Axe
     PlayerAnims.axeSU       = PlayerSprite.loadAnimation(88, 90);
     PlayerAnims.axeSD       = PlayerSprite.loadAnimation(72, 74);
     PlayerAnims.axeSL       = PlayerSprite.loadAnimation(92, 94);
     PlayerAnims.axeSR       = PlayerSprite.loadAnimation(76, 78);
     
-    //Drowning Related
     PlayerAnims.swim        = PlayerSprite.loadAnimation(96, 100);
     PlayerAnims.drown       = PlayerSprite.loadAnimation(101, 103);
 };
@@ -125,23 +117,34 @@ Player.prototype.die = function(ifs) {
 };
 
 
-Player.prototype.parseInput = function() {
+Player.prototype.parseInput = function(ifs) {
     //Checks for input and sets the internal variables accordingly
     
     //If our current Action is interruptable:
     if (this.currentAction < this.ACTIONS.INTERRUPTABLEMARKER) {
-        //Check for item usage
+        //Check for item usage: if so store target position
+        var itemUsePos = {x:-1, y:-1};
         if (this.inputVars[this.ACTIONS.ITEMUP]) {
             this.currentAction = this.ACTIONS.ITEMUP;
-            return;
+            itemUsePos.x = this.x;
+            itemUsePos.y = this.y - 40;
         } else if (this.inputVars[this.ACTIONS.ITEMDOWN]) {
             this.currentAction = this.ACTIONS.ITEMDOWN;
-            return;
+            itemUsePos.x = this.x;
+            itemUsePos.y = this.y + 40;
         } else if (this.inputVars[this.ACTIONS.ITEMLEFT]) {
             this.currentAction = this.ACTIONS.ITEMLEFT;
-            return;
+            itemUsePos.x = this.x - 40;
+            itemUsePos.y = this.y;
         } else if (this.inputVars[this.ACTIONS.ITEMRIGHT]) {
             this.currentAction = this.ACTIONS.ITEMRIGHT;
+            itemUsePos.x = this.x + 40;
+            itemUsePos.y = this.y;
+        }
+        
+        //If we used an item, deal with it
+        if (itemUsePos.x != -1) {
+            this.parseItemUse(ifs, itemUsePos);
             return;
         }
         
@@ -206,6 +209,23 @@ Player.prototype.parseInput = function() {
             }
         } else
             --this.equipPause;
+    }
+};
+
+
+Player.prototype.parseItemUse = function(ifs, targetPos) {
+    //Handles item usage by case where targetPos is the world
+    //  position that the action is being executed on:
+    if (this.equipped == this.EQUIPMENT.WOOD) {
+        var cell = ifs.obj_array[IslandIndex].posToCell(targetPos);
+        ifs.obj_array[IslandIndex].posToCell(targetPos).elevation += 1;
+        var dPos = ifs.obj_array[IslandIndex].cellToPos(cell);
+    
+        var newDam = new Dam(dPos);
+        var newIndex = ifs.obj_array.push(newDam) - 1;
+        ifs.obj_array[newIndex].ifsIndex = newIndex;
+        ifs.obj_array[newIndex].elevation =
+            ifs.obj_array[IslandIndex].posToCell(targetPos).elevation;
     }
 };
 
@@ -345,7 +365,7 @@ Player.prototype.draw = function(camera){
 
 Player.prototype.update = function(ifs){
     
-    this.parseInput();
+    this.parseInput(ifs);
     
     //Player Position Validation
     this.x = Math.min(Math.max(this.x, 0), WORLD_DIMENSION);
