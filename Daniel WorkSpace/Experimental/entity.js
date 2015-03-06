@@ -9,20 +9,14 @@ var TreeSprite = new Sprite(60, 80, 60, 80);
 
 function Entity(tileSys, sprite, pos) {
     var cell = tileSys.posToCell(pos);
-    this.x = null;
-    this.y = null;
-    this.spr = null;
-    this.center = null;
-    if (cell.entity == null) {
-    	this.x = pos.x;
-    	this.y = pos.y;
-    	this.spr = sprite;
-        cell.entity = this;
-    	this.center = {
-    	       x: this.spr.frameWidth / 2,
-    	       y: this.spr.frameHeight / 2
-    	 };
-    }
+	this.x = pos.x;
+	this.y = pos.y;
+	this.spr = sprite;
+    cell.entity = this;
+	this.center = {
+	       x: this.spr.frameWidth / 2,
+	       y: this.spr.frameHeight / 2
+	 };
 };
 
 
@@ -70,9 +64,11 @@ var Tree = function (tileSys, pos) {
 Tree.prototype = Object.create(Entity.prototype);
 
 
-Tree.prototype.remove = function() {
+Tree.prototype.remove = function(playerDestoryed) {
     if (mainGame != undefined) {
-        ++mainGame.obj_array[PlayerIndex].logs;
+        if (playerDestroyed) {
+            ++mainGame.obj_array[PlayerIndex].logs;
+        }
         var id = mainGame.obj_array.indexOf(this);
         mainGame.obj_array.splice(id, 1);
     }

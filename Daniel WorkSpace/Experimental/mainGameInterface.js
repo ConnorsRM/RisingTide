@@ -21,20 +21,21 @@ mainGame.init = function() {
     CameraIndex = this.obj_array.push(new Camera(playerStartingPos)) - 1;
     IslandIndex = this.obj_array.push(new TileEngine(100, 100, 40)) - 1;
     PlayerIndex = this.obj_array.push(new Player(playerStartingPos)) - 1;
-    var xpos = 0;
-    var ypos = 0;
-    var xcell = Math.floor(Math.random() * 100);
-    var ycell = Math.floor(Math.random() * 100);
-    var tileSize = this.obj_array[IslandIndex].tileSize;
-    var cell = this.obj_array[IslandIndex].getCell(xcell, ycell);
-    for (var i = 0; i < 200; ++i) {
-        while ((cell.entity == null) && (cell.elevation > 0)) {
+    var tileSize = this.obj_array[IslandIndex].cellSize;
+    for (var i = 0; i < 500; ++i) {
+        var xpos = 0;
+        var ypos = 0;
+        var xcell = Math.floor(Math.random() * 100);
+        var ycell = Math.floor(Math.random() * 100);
+        var cell = this.obj_array[IslandIndex].getCell({x:xcell, y:ycell});
+        console.log(String(xcell) + String(ycell));
+        while ((cell.entity != null) || (cell.elevation <= 0)) {
             xcell = Math.floor(Math.random() * 100);
             ycell = Math.floor(Math.random() * 100);
-            var cell = this.obj_array[IslandIndex].getCell(xcell, ycell);
+            cell = this.obj_array[IslandIndex].getCell({x:xcell, y:ycell});
         }
-        xpos = xcell * tileSize + .5 * tileSize;
-        ypos = ycell * tileSize + .9 * tileSize;
+        xpos = xcell * tileSize + 20;
+        ypos = ycell * tileSize + 35;
         this.obj_array.push(new Tree(this.obj_array[IslandIndex], {x:xpos, y:ypos})) - 1;
     }
     

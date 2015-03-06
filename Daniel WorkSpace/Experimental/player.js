@@ -228,7 +228,7 @@ Player.prototype.parseItemUse = function(ifs, targetPos) {
     } else if (this.equipped == this.EQUIPMENT.AXE) {
         var cell = ifs.obj_array[IslandIndex].posToCell(targetPos);
         if (cell.entity instanceof Tree) {
-            cell.entity.remove();
+            cell.entity.remove(true);
         }
     }
 };

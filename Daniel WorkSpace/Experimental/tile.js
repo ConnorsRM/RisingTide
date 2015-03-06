@@ -88,6 +88,9 @@ var TileEngine = function(columns, rows, cellSize) {
                     this.getCell(thisTile).tile = 0;
                     this.getCell(thisTile).flooded = true;
                     this.getCell(thisTile).danger = true;
+                    if (this.getCell(thisTile).entity != null) {
+                        this.getCell(thisTile).entity.remove(false);
+                    }
                     break;
                 case 1:
                     this.getCell(thisTile).tile = 1;
