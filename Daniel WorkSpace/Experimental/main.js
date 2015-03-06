@@ -47,6 +47,9 @@ function loadGame() {
     ImageLoader.loadImage(sand, "images/sand.png");
     ImageLoader.loadImage(grass, "images/grass.png");
 	ImageLoader.loadImage(DAM_SPRITE.image, "images/dam.png");
+	ImageLoader.loadImage(AXE_SPRITE.image, "images/axe.png");
+	ImageLoader.loadImage(SPEAR_SPRITE.image, "images/spear.png");
+    ImageLoader.loadImage(CHICKEN_SPRITE.image, "images/meat.png");
     
     //Set up to initialize the game
     ImageLoader.callWhenReady();

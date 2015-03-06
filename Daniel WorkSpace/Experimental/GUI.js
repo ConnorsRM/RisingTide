@@ -2,7 +2,14 @@
  * GUI.js yadda yadda
  */
 
+var AXE_SPRITE     = new Sprite(80, 80, 80, 80);
+var SPEAR_SPRITE   = new Sprite(80, 80, 80, 80);
+var CHICKEN_SPRITE = new Sprite(80, 80, 80, 80);
 
+function Item(type, sprite) {
+	this.type = type;
+	this.spr = sprite;
+}
 
 
 function GUI() {
@@ -21,6 +28,15 @@ function GUI() {
 	//XX TODO
 	
 	//need sprites for the GUI
+	var axeItem     = new Item("axe", AXE_SPRITE);
+	var spearItem   = new Item("spear", SPEAR_SPRITE);
+	var chickenItem = new Item("chicken", CHICKEN_SPRITE);
 	
-	
-}
+	this.items.push(axeItem);
+	this.items.push(spearItem);
+	this.items.push(chickenItem);
+};
+
+
+
+
