@@ -32,7 +32,7 @@ Sprite.prototype.loadAnimation = function (startFrame, endFrame) {
     for (var frameNumber = startFrame; frameNumber <= endFrame; frameNumber++) {
         animationSequence.push(frameNumber);
     }
-    return this.Animations.push(animationSequence)-1; //add the animation to the animations array somone figure out why this has to be "-1"
+    return this.Animations.push(animationSequence)-1; //add the animation to the animations array
 };
 
 /**

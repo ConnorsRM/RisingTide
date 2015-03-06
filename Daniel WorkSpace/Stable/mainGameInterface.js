@@ -10,7 +10,7 @@ var PlayerIndex;
 mainGame.init = function() {
     this.id = InterfaceStack.push(this);
     
-    SeaLevelRise = 0.01;
+    SeaLevelRise = 0.001;
     var playerStartingPos = {x: 400, y: 300};
     
     //Creating Objects
@@ -26,17 +26,39 @@ mainGame.init = function() {
     
     //Input Definitions
     this.inputHandler = function(e, status) {
-        if (e.keyCode == 87) {
-            this.obj_array[PlayerIndex].inputVars[DIRECTIONS.UP] = status;
-        } 
-        if (e.keyCode == 83) {
-            this.obj_array[PlayerIndex].inputVars[DIRECTIONS.DOWN] = status;
-        } 
-        if (e.keyCode == 65) {
-            this.obj_array[PlayerIndex].inputVars[DIRECTIONS.LEFT] = status;
-        } 
-        if (e.keyCode == 68) {
-            this.obj_array[PlayerIndex].inputVars[DIRECTIONS.RIGHT] = status;
+        if (e.keyCode == 87) {  //W
+            //Move Up
+            this.obj_array[PlayerIndex].inputVars[0] = status;
+        } else if (e.keyCode == 83) {  //S
+            //Move Down
+            this.obj_array[PlayerIndex].inputVars[1] = status;
+        } else if (e.keyCode == 65) {  //A
+            //Move Left
+            this.obj_array[PlayerIndex].inputVars[2] = status;
+        } else if (e.keyCode == 68) {  //D
+            //Move Right
+            this.obj_array[PlayerIndex].inputVars[3] = status;
+        } else if (e.keyCode == 81) {  //Q
+            //Cycle Item Left
+            this.obj_array[PlayerIndex].inputVars[4] = status;
+        } else if (e.keyCode == 69) {  //E
+            //Cycle Item Right
+            this.obj_array[PlayerIndex].inputVars[5] = status;
+        } else if (e.keyCode == 38) {  //Up Arrow Key
+            //Use Item Up
+            this.obj_array[PlayerIndex].inputVars[6] = status;
+        } else if (e.keyCode == 40) {  //Down Arrow Key
+            //Use Item Down
+            this.obj_array[PlayerIndex].inputVars[7] = status;
+        } else if (e.keyCode == 37) {  //Left Arrow Key
+            //Use Item Left
+            this.obj_array[PlayerIndex].inputVars[8] = status;
+        } else if (e.keyCode == 39) {  //Right Arrow Key
+            //Use Item Right
+            this.obj_array[PlayerIndex].inputVars[9] = status;
+        } else if(e.keyCode == 16) {   //Shift Key
+            //Display Evaluation Overlay
+        	this.obj_array[IslandIndex].isOverlay = status;
         }
     };
 };

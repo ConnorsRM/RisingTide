@@ -76,35 +76,43 @@ Player.prototype.load = function() {
     
     //Set up Player Sprite
     ImageLoader.loadImage(PlayerSprite.image, "images/playersheet.png");
-    //Set up Sprite Animations
+    //Set up Sprite Animations:
+    
+    //Walking with no items
     PlayerAnims.walkU       = PlayerSprite.loadAnimation(16, 19);
     PlayerAnims.walkD       = PlayerSprite.loadAnimation( 0,  3);
     PlayerAnims.walkL       = PlayerSprite.loadAnimation( 4,  7);
     PlayerAnims.walkR       = PlayerSprite.loadAnimation(20, 23);
     
-    PlayerAnims.pickUp      = PlayerSprite.loadAnimation( 8, 11);
+    //Simple Items
     PlayerAnims.eatFood     = PlayerSprite.loadAnimation(24, 27);
+    PlayerAnims.pickUp      = PlayerSprite.loadAnimation( 8, 11);
     
+    //Walking with a Spear
     PlayerAnims.spearWU     = PlayerSprite.loadAnimation(48, 51);
     PlayerAnims.spearWD     = PlayerSprite.loadAnimation(32, 35);
     PlayerAnims.spearWL     = PlayerSprite.loadAnimation(36, 39);
     PlayerAnims.spearWR     = PlayerSprite.loadAnimation(52, 55);
     
+    //Stabbing with Spear
     PlayerAnims.spearSU     = PlayerSprite.loadAnimation(56, 59);
     PlayerAnims.spearSD     = PlayerSprite.loadAnimation(40, 43);
     PlayerAnims.spearSL     = PlayerSprite.loadAnimation(60, 63);
     PlayerAnims.spearSR     = PlayerSprite.loadAnimation(44, 47);
     
+    //Walking with an Axe
     PlayerAnims.axeWU       = PlayerSprite.loadAnimation(80, 83);
     PlayerAnims.axeWD       = PlayerSprite.loadAnimation(64, 67);
     PlayerAnims.axeWL       = PlayerSprite.loadAnimation(68, 71);
     PlayerAnims.axeWR       = PlayerSprite.loadAnimation(84, 87);
     
+    //Swinging with Axe
     PlayerAnims.axeSU       = PlayerSprite.loadAnimation(88, 90);
     PlayerAnims.axeSD       = PlayerSprite.loadAnimation(72, 74);
     PlayerAnims.axeSL       = PlayerSprite.loadAnimation(92, 94);
     PlayerAnims.axeSR       = PlayerSprite.loadAnimation(76, 78);
     
+    //Drowning Related
     PlayerAnims.swim        = PlayerSprite.loadAnimation(96, 100);
     PlayerAnims.drown       = PlayerSprite.loadAnimation(101, 103);
 };
