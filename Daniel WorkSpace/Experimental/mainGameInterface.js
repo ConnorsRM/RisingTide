@@ -21,8 +21,7 @@ mainGame.init = function() {
     CameraIndex = this.obj_array.push(new Camera(playerStartingPos)) - 1;
     IslandIndex = this.obj_array.push(new TileEngine(100, 100, 40)) - 1;
     PlayerIndex = this.obj_array.push(new Player(playerStartingPos)) - 1;
-    TreeIndex = this.obj_array.push(new Entity(this.obj_array[IslandIndex],
-                                        TreeSprite, {x:160, y:160})) - 1;
+    TreeIndex = this.obj_array.push(new Tree(this.obj_array[IslandIndex], {x:160, y:160})) - 1;
     
     //Initializing Internal Vars
     this.active = true;
