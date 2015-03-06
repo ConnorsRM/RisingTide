@@ -7,6 +7,10 @@ var CameraIndex;
 var IslandIndex;
 var PlayerIndex;
 
+//2 second delay between damn builds
+var DAM_DELAY =  2000;
+var lastDamBuild = new Date().getTime();
+
 mainGame.init = function() {
     this.id = InterfaceStack.push(this);
     
@@ -59,6 +63,32 @@ mainGame.init = function() {
         } else if(e.keyCode == 16) {   //Shift Key
             //Display Evaluation Overlay
         	this.obj_array[IslandIndex].isOverlay = status;
-        }
+        } else if(e.keyCode == 88 ) {   // X Key
+			//delay for damn builds
+			var thisTime = new Date().getTime();
+			if( thisTime - lastDamBuild > DAM_DELAY){
+				
+				lastDamBuild = thisTime;
+				
+				//Dam Creation
+				//this can be cleaned up into a function, but for
+				//now.. it works
+			
+				var pPos = {x:this.obj_array[PlayerIndex].x,
+							y:this.obj_array[PlayerIndex].y};
+			
+				var cell = this.obj_array[IslandIndex].posToCell(pPos);
+				this.obj_array[IslandIndex].posToCell(pPos).elevation += 1;
+				var dPos = this.obj_array[IslandIndex].cellToPos(cell);
+			
+				var newDam = new Dam(dPos);
+				var newIndex = this.obj_array.push(newDam) - 1;
+				this.obj_array[newIndex].ifsIndex = newIndex;
+				this.obj_array[newIndex].elevation =
+					this.obj_array[IslandIndex].posToCell(pPos).elevation;
+			}
+			
+		}
+		
     };
 };

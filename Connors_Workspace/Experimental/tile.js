@@ -12,6 +12,7 @@ var SeaLevelRise;
 var cleanUp = false;
 var cleanUpCount = 0;
 var MAX_CLEAN_COUNT = 10;
+var CELL_SIZE = 40;
 
 var TileEngine = function(columns, rows, cellSize) {
     //Assumes cellSize is the same as the Tile image
@@ -240,16 +241,16 @@ TileEngine.prototype.drawSection = function(pos, startDraw, endDraw) {
             if (Tile != -1)
                 Context.drawImage(this.tileDictionary[Tile], drawAt.x, drawAt.y, this.cellSize, this.cellSize);
                 if (this.isOverlay) {
-                	var elevationStr = (Math.max(0, islandHeights[x][y] - Math.floor(this.sea_level))).toString();
+                	var elevationStr = (Math.max(0, this.tileMap[x][y].elevation - Math.floor(this.sea_level))).toString();
                 	
                 	Context.font = "bold 12pt Courier";
                 	
-                	if(islandHeights[x][y] - this.sea_level < 1) {
+                	if(this.tileMap[x][y].elevation - this.sea_level < 1) {
                 		Context.fillStyle = 'red';
-                		if(islandHeights[x][y] - this.sea_level > 0)
-                			elevationStr = "<1";
+                		if(this.tileMap[x][y].elevation - this.sea_level > 0)
+                			elevationStr = "1";
                 	}
-                	else if (islandHeights[x][y] - this.sea_level < 2)
+                	else if (this.tileMap[x][y].elevation - this.sea_level < 2)
                 		Context.fillStyle = 'yellow';
                 	else
                 		Context.fillStyle = 'black';

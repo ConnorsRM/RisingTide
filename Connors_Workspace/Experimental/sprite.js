@@ -43,6 +43,16 @@ Sprite.prototype.loadAnimation = function (startFrame, endFrame) {
  y - Y position to draw
  */
 Sprite.prototype.draw = function (animIndex,animFrame,x, y) {
+	//if no animations are definied, just draw
+	if(this.Animations.length == 0) {
+		Context.drawImage(this.image,
+						  x,
+						  y,
+						  this.frameWidth,
+						  this.frameHeight);
+		return;
+	}
+
     // get the row and col of the frame via the framesPerRow and Animations index.
     this.maxFrames = this.Animations[animIndex].length;
     

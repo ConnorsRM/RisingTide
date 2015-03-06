@@ -17,6 +17,7 @@ var water = new Image();
 var sand = new Image();
 var grass = new Image();
 
+
 //Input:
 //Keyboard Listeners
 addEventListener("keydown", function (e) {
@@ -45,6 +46,7 @@ function loadGame() {
     ImageLoader.loadImage(water, "images/water.png");
     ImageLoader.loadImage(sand, "images/sand.png");
     ImageLoader.loadImage(grass, "images/grass.png");
+	ImageLoader.loadImage(DAM_SPRITE.image, "images/dam.png");
     
     //Set up to initialize the game
     ImageLoader.callWhenReady();

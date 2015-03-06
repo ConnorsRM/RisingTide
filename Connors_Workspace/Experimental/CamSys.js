@@ -92,10 +92,9 @@ Camera.prototype.camDraw = function(ifs) {
 	var startPos = {x:startX, y:startY};
 	var endPos = {x:endX, y:endY};
 	
-	
 	ifs.obj_array[1].drawSection({x:0, y:0}, startPos, endPos);
 	
-	for (var i = 2; i < ifs.obj_array.length; ++i) {
+	for (var i = 3; i < ifs.obj_array.length; ++i) {
 
 		//var drawObj = translatedPosition(ifs.obj_array[i]);
 
@@ -104,6 +103,7 @@ Camera.prototype.camDraw = function(ifs) {
 
     }	
 	
+	ifs.obj_array[PlayerIndex].draw(this);
 	//This is optional
 	return;
 };
