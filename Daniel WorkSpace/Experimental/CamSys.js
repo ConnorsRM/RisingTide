@@ -94,15 +94,15 @@ Camera.prototype.camDraw = function(ifs) {
 	
 	ifs.obj_array[IslandIndex].drawSection({x:0, y:0}, startPos, endPos);
 	
+	//copy what we'll be drawing, it's shallow
 	var sortObj_array = ifs.obj_array.slice(2);
 	//var test = ifs.obj_array;
-	
-	//console.log(test);
-	console.log(ifs.obj_array);
-	console.log(sortObj_array);
+
+	//sort drawn array of objects by checking the depth of each object
 	sortObj_array.sort(function(a, b){
 		
-		
+		//this should never be encountered,
+		//but if it is, assume equal plain
 		if(a.x == undefined || b.x == undefined)
 			return 0;
 		
@@ -111,7 +111,6 @@ Camera.prototype.camDraw = function(ifs) {
 		
 	});
 			
-	//console.log(sortObj_array);
 	
 	for(var i = 0; i < sortObj_array.length; ++i) {
 		sortObj_array[i].draw(this);
