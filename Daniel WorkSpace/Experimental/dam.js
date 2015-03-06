@@ -11,10 +11,14 @@ function Dam(pos) {
 	
 };
 
+Dam.prototype.destroy = function(ifs){
+	ifs.obj_array.splice(this.ifsIndex, 1);
+}
+
 Dam.prototype.update = function(ifs){
 	this.ifsIndex = ifs.obj_array.indexOf(this);
 	if(ifs.obj_array[IslandIndex].sea_level > this.elevation ) {
-		var test = ifs.obj_array.splice(this.ifsIndex, 1);
+		this.destroy(ifs);
 	}
 };
 
