@@ -28,17 +28,6 @@ addEventListener("keyup", function (e) {
 }, false);
 
 
-//Sprites and Animations
-var playerSprite;
-//PlayerSprite Animations
-var walkDown;
-var walkLeft;
-var walkUp;
-var walkRight;
-var stabRight;
-var stabLeft;
-
-
 function loadGame() {
     //All loading of game resources should be done in this function
     //  which should be called before all other functions.
@@ -50,25 +39,13 @@ function loadGame() {
     //Set Up The Initial Interface
     mainGame.init();
     
-    //Initialize Sprites
-    mainGame.obj_array[PlayerIndex].spr = new Sprite(1190, 400, 70, 42);
-    
     //Set up imageLoader
     ImageLoader = new imgLoader(initGame);
+    mainGame.obj_array[PlayerIndex].load();
     ImageLoader.loadImage(water, "images/water.png");
     ImageLoader.loadImage(sand, "images/sand.png");
     ImageLoader.loadImage(grass, "images/grass.png");
-    ImageLoader.loadImage(mainGame.obj_array[PlayerIndex].spr.image, "images/finalsprite.png");
-    
-    var playerSprite = mainGame.obj_array[PlayerIndex].spr;
-    
-    //Set up playerSprite Animations
-    walkDown = playerSprite.loadAnimation(0, 3);
-    walkLeft = playerSprite.loadAnimation(4, 7);
-    walkUp = playerSprite.loadAnimation(17, 20);
-    walkRight = playerSprite.loadAnimation(21, 24);
-    stabRight = playerSprite.loadAnimation(28,31);
-    stabLeft = playerSprite.loadAnimation(42,45);
+	ImageLoader.loadImage(DAM_SPRITE.image, "images/dam.png");
     
     //Set up to initialize the game
     ImageLoader.callWhenReady();
@@ -104,6 +81,7 @@ function update() {
 function draw() {
     //This function is called every game step. It steps through
     //  all of the objects in obj_array and calls their draw function.
+    Context.clearRect(0, 0, Canvas.width, Canvas.height);
     
     for (var i = 0; i < InterfaceStack.length; ++i) {
         InterfaceStack[i].draw();

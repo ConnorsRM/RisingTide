@@ -32,7 +32,7 @@ Sprite.prototype.loadAnimation = function (startFrame, endFrame) {
     for (var frameNumber = startFrame; frameNumber <= endFrame; frameNumber++) {
         animationSequence.push(frameNumber);
     }
-    return this.Animations.push(animationSequence)-1; //add the animation to the animations array somone figure out why this has to be "-1"
+    return this.Animations.push(animationSequence)-1; //add the animation to the animations array
 };
 
 /**
@@ -43,6 +43,17 @@ Sprite.prototype.loadAnimation = function (startFrame, endFrame) {
  y - Y position to draw
  */
 Sprite.prototype.draw = function (animIndex,animFrame,x, y) {
+	//if no animations are definied, just draw
+	if(this.Animations.length == 0) {
+		Context.drawImage(this.image,
+						  x,
+						  y,
+						  this.frameWidth,
+						  this.frameHeight);
+		return;
+	}
+
+
     // get the row and col of the frame via the framesPerRow and Animations index.
     this.maxFrames = this.Animations[animIndex].length;
     
@@ -57,12 +68,4 @@ Sprite.prototype.draw = function (animIndex,animFrame,x, y) {
             x, y,
             this.frameWidth, this.frameHeight);
             
-	
 };
-
-
-
-
-
-
-

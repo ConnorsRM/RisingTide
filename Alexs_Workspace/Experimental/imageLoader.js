@@ -7,7 +7,6 @@
 //  for the game and then call a function once ready.
 
 
-
 var imgLoader = function(afterDoneCall) {
     this.imagesLoaded = 0;
     this.imagesToLoad = 0;

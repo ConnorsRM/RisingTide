@@ -10,6 +10,8 @@
 
 var SeaLevelRise;
 var cleanUp = false;
+var cleanUpCount = 0;
+var MAX_CLEAN_COUNT = 10;
 
 var TileEngine = function(columns, rows, cellSize) {
     //Assumes cellSize is the same as the Tile image
@@ -25,6 +27,11 @@ var TileEngine = function(columns, rows, cellSize) {
     this.rows = rows;
     //Denotes the amount of columns and rows in the
     //  tileMap.
+    
+    //isOverlay is a boolean that
+    //dictates if the tile elevations are drawn at
+    //tile center
+    this.isOverlay = false;
     
     this.cellSize = cellSize;
     //Denotes the expected size (width and height) of 
@@ -232,6 +239,23 @@ TileEngine.prototype.drawSection = function(pos, startDraw, endDraw) {
             var Tile = this.tileMap[x][y].tile;
             if (Tile != -1)
                 Context.drawImage(this.tileDictionary[Tile], drawAt.x, drawAt.y, this.cellSize, this.cellSize);
+                if (this.isOverlay) {
+                	var elevationStr = (Math.max(0, islandHeights[x][y] - Math.floor(this.sea_level))).toString();
+                	
+                	Context.font = "bold 12pt Courier";
+                	
+                	if(islandHeights[x][y] - this.sea_level < 1) {
+                		Context.fillStyle = 'red';
+                		if(islandHeights[x][y] - this.sea_level > 0)
+                			elevationStr = "<1";
+                	}
+                	else if (islandHeights[x][y] - this.sea_level < 2)
+                		Context.fillStyle = 'yellow';
+                	else
+                		Context.fillStyle = 'black';
+                	
+                	Context.fillText(elevationStr, drawAt.x + this.cellSize/2.6, drawAt.y + this.cellSize/1.8);
+                }
 
         }
     }
@@ -243,11 +267,20 @@ TileEngine.prototype.update = function() {
     
     this.sea_level += SeaLevelRise;
     
+    //console.log(cleanUp);
+    
     //Check if the sea_level has actually risen before updating tiles
     //Math.floor(this.sea_level) > Math.floor(this.sea_level - SeaLevelRise)
     if (Math.floor(this.sea_level) > Math.floor(this.sea_level - SeaLevelRise) || cleanUp) {
     	
-    	cleanUp = !cleanUp;
+    	if(cleanUpCount == MAX_CLEAN_COUNT - 1) {
+    		cleanUp = false;
+    		cleanUpCount = 0;
+    	}
+    	else{
+    		cleanUpCount += 1;
+    		cleanUp = true;
+    	}
     	
         for (var x = 0; x < 100; ++x) {
             for (var y = 0; y < 100; ++y) {
@@ -259,9 +292,8 @@ TileEngine.prototype.update = function() {
                     this.propagateDanger(thisTile);
                 }
                 
-                else if ((this.getCell(thisTile).elevation - this.sea_level >= 0.5) ||
-                         (this.getCell(thisTile).elevation - this.sea_level <= 1.5)) {
-                    if(this.getCell(thisTile).danger == true)
+                else if (this.getCell(thisTile).elevation - this.sea_level <= 1.2) {
+                    //if(this.getCell(thisTile).danger == true)
                         this.getCell(thisTile).tile = 1;  
                 }
             }
