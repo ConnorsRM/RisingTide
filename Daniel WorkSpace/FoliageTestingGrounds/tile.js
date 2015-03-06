@@ -60,6 +60,7 @@ var TileEngine = function(columns, rows, cellSize) {
                 x: col,
                 y: row,
                 tile: -1,
+                entity: null,
                 elevation: islandHeights[col][row],
                 danger : false,
                 fooded : false

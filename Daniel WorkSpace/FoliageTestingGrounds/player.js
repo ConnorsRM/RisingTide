@@ -25,13 +25,6 @@ var Player = function (pos){
 	//Movement
     this.speed = 6;
     this.speedMod = 1;
-    this.direction = 1;
-	this.DIRECTIONS = {
-        UP:     0,
-        DOWN:   1,
-        LEFT:   2,
-        RIGHT:  3
-    };
     
     //Input
     this.inputVars = [];
@@ -161,14 +154,12 @@ Player.prototype.parseInput = function(ifs) {
             if (this.inputVars[this.ACTIONS.UP] &&
                     !this.inputVars[this.ACTIONS.DOWN]) {
                 this.y -= this.speed * this.speedMod;
-                this.direction = this.DIRECTIONS.UP;
                 if (this.currentAction != this.ACTIONS.UP)
                     this.frameIndex = 0;
                 this.currentAction = this.ACTIONS.UP;
             } else if (this.inputVars[this.ACTIONS.DOWN] &&
                     !this.inputVars[this.ACTIONS.UP]) {
                 this.y += this.speed * this.speedMod;
-                this.direction = this.DIRECTIONS.DOWN;
                 if (this.currentAction != this.ACTIONS.DOWN)
                     this.frameIndex = 0;
                 this.currentAction = this.ACTIONS.DOWN;
@@ -178,14 +169,12 @@ Player.prototype.parseInput = function(ifs) {
             if (this.inputVars[this.ACTIONS.LEFT] &&
                     !this.inputVars[this.ACTIONS.RIGHT]) {
                 this.x -= this.speed * this.speedMod;
-                this.direction = this.DIRECTIONS.LEFT;
                 if (this.currentAction != this.ACTIONS.LEFT)
                     this.frameIndex = 0;
                 this.currentAction = this.ACTIONS.LEFT;
             } else if (this.inputVars[this.ACTIONS.RIGHT] &&
                     !this.inputVars[this.ACTIONS.LEFT]) {
                 this.x += this.speed * this.speedMod;
-                this.direction = this.DIRECTIONS.RIGHT;
                 if (this.currentAction != this.ACTIONS.RIGHT)
                     this.frameIndex = 0;
                 this.currentAction = this.ACTIONS.RIGHT;
@@ -363,7 +352,7 @@ Player.prototype.draw = function(camera){
     
 	this.spr.draw(this.animationIndex, this.imageIndex,
 	this.x - this.spr.frameWidth / 2 - camera.x + camera.viewWidth, 
-	this.y - this.spr.frameWidth / 2 - camera.y + camera.viewHeight);
+	this.y - this.spr.frameHeight - camera.y + camera.viewHeight + 4);
 
 };
 
