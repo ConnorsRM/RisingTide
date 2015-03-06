@@ -196,16 +196,16 @@ Player.prototype.parseInput = function(ifs) {
         if (this.equipPause <= 0) {
             if (this.inputVars[this.ACTIONS.CYCLEITEMLEFT] &&
                     !this.inputVars[this.ACTIONS.CYCLEITEMRIGHT]) {
-                ++this.equipped;
-                this.equipPause = this.equipTime;
-                if (this.equipped >= this.EQUIPMENT.TOTALCOUNT)
-                    this.equipped = 0;
-            } else if (this.inputVars[this.ACTIONS.CYCLEITEMRIGHT] &&
-                    !this.inputVars[this.ACTIONS.CYCLEITEMLEFT]) {
                 --this.equipped;
                 this.equipPause = this.equipTime;
                 if (this.equipped < 0)
                     this.equipped = this.EQUIPMENT.TOTALCOUNT - 1;
+            } else if (this.inputVars[this.ACTIONS.CYCLEITEMRIGHT] &&
+                    !this.inputVars[this.ACTIONS.CYCLEITEMLEFT]) {
+                ++this.equipped;
+                this.equipPause = this.equipTime;
+                if (this.equipped >= this.EQUIPMENT.TOTALCOUNT)
+                    this.equipped = 0;
             }
         } else
             --this.equipPause;
@@ -216,7 +216,9 @@ Player.prototype.parseInput = function(ifs) {
 Player.prototype.parseItemUse = function(ifs, targetPos) {
     //Handles item usage by case where targetPos is the world
     //  position that the action is being executed on:
-    if (this.equipped == this.EQUIPMENT.WOOD) {
+    if (this.equipped == this.EQUIPMENT.FOOD) {
+        this.currentAction = this.ACTIONS.ITEMDOWN;
+    } else if (this.equipped == this.EQUIPMENT.WOOD) {
         var cell = ifs.obj_array[IslandIndex].posToCell(targetPos);
         ifs.obj_array[IslandIndex].posToCell(targetPos).elevation += 1;
         var dPos = ifs.obj_array[IslandIndex].cellToPos(cell);
@@ -340,6 +342,9 @@ Player.prototype.updateAnimation = function(prevAnim) {
                     //Return to walk left or walk right
                     this.currentAction -= 6;
                     this.animationIndex -= 6;
+                    if (this.animationIndex < 0) {
+                        this.animationIndex = 1;
+                    }
                 }
                 
             }
