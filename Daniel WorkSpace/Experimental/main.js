@@ -42,6 +42,7 @@ function loadGame() {
     //Set up imageLoader
     ImageLoader = new imgLoader(initGame);
     mainGame.obj_array[PlayerIndex].load();
+    ImageLoader.loadImage(TreeSprite.image, "images/palmtree1.png");
     ImageLoader.loadImage(water, "images/water.png");
     ImageLoader.loadImage(sand, "images/sand.png");
     ImageLoader.loadImage(grass, "images/grass.png");

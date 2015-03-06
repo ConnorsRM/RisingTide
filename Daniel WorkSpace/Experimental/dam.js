@@ -9,7 +9,7 @@ function Dam(pos) {
 	this.elevation = undefined;
 	this.spr = DAM_SPRITE;
 	
-}
+};
 
 Dam.prototype.update = function(ifs){
 	this.ifsIndex = ifs.obj_array.indexOf(this);
