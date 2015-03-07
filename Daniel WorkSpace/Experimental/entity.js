@@ -64,12 +64,13 @@ var Tree = function (tileSys, pos) {
 Tree.prototype = Object.create(Entity.prototype);
 
 
-Tree.prototype.remove = function(playerDestoryed) {
+Tree.prototype.remove = function(playerDestroyed) {
     if (mainGame != undefined) {
         if (playerDestroyed) {
             ++mainGame.obj_array[PlayerIndex].logs;
         }
         var id = mainGame.obj_array.indexOf(this);
         mainGame.obj_array.splice(id, 1);
+        mainGame.obj_array[IslandIndex].posToCell({x:this.x, y:this.y}).entity = null;
     }
 };
