@@ -50,6 +50,8 @@ function loadGame() {
 	ImageLoader.loadImage(AXE_SPRITE.image, "images/axe.png");
 	ImageLoader.loadImage(SPEAR_SPRITE.image, "images/spear.png");
     ImageLoader.loadImage(CHICKEN_SPRITE.image, "images/meat.png");
+	ImageLoader.loadImage(LOG_SPRITE.image, "images/log.png");
+	ImageLoader.loadImage(SEL_SPRITE.image, "images/itemBorder.png");
     
     //Set up to initialize the game
     ImageLoader.callWhenReady();
