@@ -42,7 +42,6 @@ GUI.prototype.update = function(ifs){
 };
 
 GUI.prototype.draw = function(camera){
-	for (var thisItem : this.items)
 };
 
 
