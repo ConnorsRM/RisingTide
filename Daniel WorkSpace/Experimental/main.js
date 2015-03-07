@@ -53,6 +53,9 @@ function loadGame() {
 	ImageLoader.loadImage(LOG_SPRITE.image, "images/log.png");
 	ImageLoader.loadImage(SEL_SPRITE.image, "images/itemBorder.png");
     
+    //Load Sounds
+    loadSounds();
+    
     //Set up to initialize the game
     ImageLoader.callWhenReady();
 };

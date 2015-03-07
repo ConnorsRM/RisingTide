@@ -53,7 +53,7 @@ GUI.prototype.prevItem = function() {
 		this.selected_item = this.items.length - 1;
 	}
 	else {
-		this.selected_item -= 1
+		this.selected_item -= 1;
 	}
 };
 

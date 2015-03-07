@@ -60,14 +60,35 @@ Entity.prototype.update = function() {
 var Tree = function (tileSys, pos) {
     Entity.call(this, tileSys, TreeSprite, pos);
     this.setCenter(this.center.x, this.spr.frameHeight);
+    this.health = 5.0;
 };
 Tree.prototype = Object.create(Entity.prototype);
+
+
+Tree.prototype.update = function(ifs) {
+    //Simple creates a delay for health reduction so removal by
+    //  axe happens closer to the end of an animation
+    var floorHealth = Math.floor(this.health);
+    if (this.health != floorHealth) {
+        this.health -= 0.2;
+        if (this.health < floorHealth)
+            if (floorHealth > 0) {
+                this.health = floorHealth;
+                var i = Math.floor(SoundMap.ChopSize * Math.random());
+                Sounds[SoundMap.Chop + i].play();
+            } else {
+                this.remove(true);
+            }
+    }
+};
 
 
 Tree.prototype.remove = function(playerDestroyed) {
     if (mainGame != undefined) {
         if (playerDestroyed) {
             ++mainGame.obj_array[PlayerIndex].logs;
+            var i = Math.floor(SoundMap.ChopSize * Math.random());
+            Sounds[SoundMap.Chop + i].play();
         }
         var id = mainGame.obj_array.indexOf(this);
         mainGame.obj_array.splice(id, 1);

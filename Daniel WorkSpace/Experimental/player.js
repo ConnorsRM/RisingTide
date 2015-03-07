@@ -116,34 +116,35 @@ Player.prototype.die = function(ifs) {
 Player.prototype.parseInput = function(ifs) {
     //Checks for input and sets the internal variables accordingly
     
-    //If our current Action is interruptable:
+    //Check for item usage: if so store target position
+    var itemUsePos = {x:-1, y:-1};
+    if (this.inputVars[this.ACTIONS.ITEMUP]) {
+        this.currentAction = this.ACTIONS.ITEMUP;
+        itemUsePos.x = this.x;
+        itemUsePos.y = this.y - 40;
+    } else if (this.inputVars[this.ACTIONS.ITEMDOWN]) {
+        this.currentAction = this.ACTIONS.ITEMDOWN;
+        itemUsePos.x = this.x;
+        itemUsePos.y = this.y + 40;
+    } else if (this.inputVars[this.ACTIONS.ITEMLEFT]) {
+        this.currentAction = this.ACTIONS.ITEMLEFT;
+        itemUsePos.x = this.x - 40;
+        itemUsePos.y = this.y;
+    } else if (this.inputVars[this.ACTIONS.ITEMRIGHT]) {
+        this.currentAction = this.ACTIONS.ITEMRIGHT;
+        itemUsePos.x = this.x + 40;
+        itemUsePos.y = this.y;
+    }
+    
+    //If we are about it finish an item animation
+    if ((itemUsePos.x != -1) && (this.animationCounter == 0) && 
+            (this.imageIndex == 0)) {
+        this.parseItemUse(ifs, itemUsePos);
+        return;
+    }
+    
+    //If our current Action is not interruptable:
     if (this.currentAction < this.ACTIONS.INTERRUPTABLEMARKER) {
-        //Check for item usage: if so store target position
-        var itemUsePos = {x:-1, y:-1};
-        if (this.inputVars[this.ACTIONS.ITEMUP]) {
-            this.currentAction = this.ACTIONS.ITEMUP;
-            itemUsePos.x = this.x;
-            itemUsePos.y = this.y - 40;
-        } else if (this.inputVars[this.ACTIONS.ITEMDOWN]) {
-            this.currentAction = this.ACTIONS.ITEMDOWN;
-            itemUsePos.x = this.x;
-            itemUsePos.y = this.y + 40;
-        } else if (this.inputVars[this.ACTIONS.ITEMLEFT]) {
-            this.currentAction = this.ACTIONS.ITEMLEFT;
-            itemUsePos.x = this.x - 40;
-            itemUsePos.y = this.y;
-        } else if (this.inputVars[this.ACTIONS.ITEMRIGHT]) {
-            this.currentAction = this.ACTIONS.ITEMRIGHT;
-            itemUsePos.x = this.x + 40;
-            itemUsePos.y = this.y;
-        }
-        
-        //If we used an item, deal with it
-        if (itemUsePos.x != -1) {
-            this.parseItemUse(ifs, itemUsePos);
-            return;
-        }
-        
         //Test if we're not trying to move:
         if (!this.inputVars[this.ACTIONS.UP] && !this.inputVars[this.ACTIONS.DOWN] &&
                 !this.inputVars[this.ACTIONS.LEFT] && !this.inputVars[this.ACTIONS.RIGHT]) {
@@ -228,7 +229,9 @@ Player.prototype.parseItemUse = function(ifs, targetPos) {
     } else if (this.equipped == this.EQUIPMENT.AXE) {
         var cell = ifs.obj_array[IslandIndex].posToCell(targetPos);
         if (cell.entity instanceof Tree) {
-            cell.entity.remove(true);
+            cell.entity.health -= .01;
+            if (cell.entity.health <= 0)
+                cell.entity.remove(true);
         }
     }
 };
