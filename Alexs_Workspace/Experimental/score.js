@@ -1,14 +1,14 @@
-var Score = function(){
+var score = function(){
 	this.score = 0; //current score
 	this.maxScore = 0; //saved maximum score
 };
 
-Score.prototype.displayScore = function(){
+score.prototype.displayScore= function(timeAlive,damsMade,timeDrowning,timeHungry){
 	//adds up and displays the score after the game ends
-        this.score += player.timeAlive/250;
-        this.score += player.damsMade;
-        this.score -= player.timeDrowning/100;
-        this.score -= player.timeHungry/100; //timeHungry must be added to player once hunger is implemented fully
+        this.score += timeAlive/250;
+        this.score += damsMade;
+        this.score -= timeDrowning/100;
+        this.score -= timeHungry/100; //timeHungry must be added to player once hunger is implemented fully
 	Context.fillStyle = "Red";
 	Context.font = "30px Arial";
         Context.textAlign = "center";

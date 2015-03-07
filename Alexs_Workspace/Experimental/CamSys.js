@@ -92,19 +92,32 @@ Camera.prototype.camDraw = function(ifs) {
 	var startPos = {x:startX, y:startY};
 	var endPos = {x:endX, y:endY};
 	
-	ifs.obj_array[1].drawSection({x:0, y:0}, startPos, endPos);
+	ifs.obj_array[IslandIndex].drawSection({x:0, y:0}, startPos, endPos);
 	
-	for (var i = 3; i < ifs.obj_array.length; ++i) {
+	//copy what we'll be drawing, it's shallow
+	var sortObj_array = ifs.obj_array.slice(2);
+	//var test = ifs.obj_array;
 
-		//var drawObj = translatedPosition(ifs.obj_array[i]);
-
-	 	ifs.obj_array[i].draw(this);
-	 	
-
-    }	
+	//sort drawn array of objects by checking the depth of each object
+	sortObj_array.sort(function(a, b){
+		
+		//this should never be encountered,
+		//but if it is, assume equal plain
+		if(a.x == undefined || b.x == undefined)
+			return 0;
+		
+		return (a.y - b.y);
+		
+		
+	});
+			
 	
-	ifs.obj_array[PlayerIndex].draw(this);
-	//This is optional
-	return;
+	for(var i = 0; i < sortObj_array.length; ++i) {
+		sortObj_array[i].draw(this);
+	}
+	//sort by depth;
+
+	
+	
 };
 

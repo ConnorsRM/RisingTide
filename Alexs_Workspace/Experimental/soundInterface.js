@@ -1,3 +1,7 @@
+var soundInterface = function(){
+    
+}
+
 function loadSounds() { //loads all sounds for the game
     var waterRise = new Audio("ambientSounds/waterRising1.wav");
     var waterRise2 = new Audio("ambientSounds/waterRising2.wav");
@@ -10,14 +14,13 @@ function loadSounds() { //loads all sounds for the game
     var chop6 = new Audio("itemSounds/axe/chop6.wav");
     var walk = new Audio("playerSounds/walk.wav");
     var eat = new Audio("playerSounds/eat.mp3")
+    
+                walk.addEventListener('ended', function () {
+                this.currentTime = 0;
+                this.play();
+            }, false);
 
 }
 
-//plays the desired sound
-function playSound(sound) {
-    sound.Play();
-}
 
-function stopSound(sound){
-    sound.stop();
-}
+
