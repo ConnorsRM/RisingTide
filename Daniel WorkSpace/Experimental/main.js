@@ -47,11 +47,16 @@ function loadGame() {
     ImageLoader.loadImage(sand, "images/sand.png");
     ImageLoader.loadImage(grass, "images/grass.png");
 	ImageLoader.loadImage(DAM_SPRITE.image, "images/dam.png");
+	
+	//GUI images
 	ImageLoader.loadImage(AXE_SPRITE.image, "images/axe.png");
 	ImageLoader.loadImage(SPEAR_SPRITE.image, "images/spear.png");
     ImageLoader.loadImage(CHICKEN_SPRITE.image, "images/meat.png");
 	ImageLoader.loadImage(LOG_SPRITE.image, "images/log.png");
 	ImageLoader.loadImage(SEL_SPRITE.image, "images/itemBorder.png");
+	
+	//Animal Images
+	ImageLoader.loadImage(SQRL_SPRITE.image, "images/sqrl.png");
     
     //Load Sounds
     loadSounds();

@@ -20,8 +20,12 @@ mainGame.init = function() {
     //Creating Objects
     CameraIndex = this.obj_array.push(new Camera(playerStartingPos)) - 1;
     IslandIndex = this.obj_array.push(new TileEngine(100, 100, 40)) - 1;
-    PlayerIndex = this.obj_array.push(new Player(playerStartingPos)) - 1;
 	GUIIndex    = this.obj_array.push(new GUI()) - 1;
+    PlayerIndex = this.obj_array.push(new Player(playerStartingPos)) - 1;
+	
+	//Sqrl debug
+	this.obj_array.push(new Sqrl(this.obj_array[IslandIndex], {x:200, y:200}));
+	
     var tileSize = this.obj_array[IslandIndex].cellSize;
     for (var i = 0; i < 500; ++i) {
         var xpos = 0;
