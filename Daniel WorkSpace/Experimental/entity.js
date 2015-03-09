@@ -137,9 +137,13 @@ var Direction = {
 };
 
 Sqrl.prototype.destroy = function(ifs) {
+
 	//get index and remove from obj array
 	var ifsIndex = ifs.obj_array.indexOf(this);
 	ifs.obj_array.splice(ifsIndex, 1);
+	//and sqrl array
+	ifsIndex = ifs.sqrl_array.indexOf(this);
+	ifs.sqrl_array.splice(ifsIndex, 1);
 }
 
 Sqrl.prototype.isSubmerged = function(ifs) {

@@ -32,6 +32,10 @@ var Interface = function() {
     
     //An array of objects in this interface
     this.obj_array = [];
+	
+	//an object of prey Objects
+	//will allow check for kill without examining useless things
+	this.sqrl_array = [];
 };
 
 

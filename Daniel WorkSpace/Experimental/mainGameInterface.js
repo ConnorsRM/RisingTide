@@ -25,7 +25,9 @@ mainGame.init = function() {
     PlayerIndex = this.obj_array.push(new Player(playerStartingPos)) - 1;
 	
 	//Sqrl debug
-	this.obj_array.push(new Sqrl(this.obj_array[IslandIndex], {x:200, y:200}));
+	var newSqrl = new Sqrl(this.obj_array[IslandIndex], {x:200, y:200})
+	this.obj_array.push(newSqrl);
+	this.sqrl_array.push(newSqrl);
 	
     var tileSize = this.obj_array[IslandIndex].cellSize;
     for (var i = 0; i < 500; ++i) {

@@ -9,6 +9,7 @@ var PlayerSprite = new Sprite(1120, 294, 70, 42);
 //Single Holder for Player Animation Indices
 var PlayerAnims = {};
 
+var FOOD_VAL = 20;
 
 var Player = function (pos){
     //sprite things
@@ -60,6 +61,7 @@ var Player = function (pos){
     
     //Inventory Count
     this.logs = 2;
+	this.food = 2;
 	
 	//Drowning
 	this.drownMax = FramesPerSecond * 1.5;
@@ -211,6 +213,15 @@ Player.prototype.parseItemUse = function(ifs, targetPos) {
     //  position that the action is being executed on:
     if (this.equipped == this.EQUIPMENT.FOOD) {
         this.currentAction = this.ACTIONS.ITEMDOWN;
+		
+		//if we have meat
+		if(this.food != 0) {
+		//eat it and gain hunger
+			this.food -= 1;
+			ifs.obj_array[HungerIndex].hungry = Math.min(
+											   ifs.obj_array[HungerIndex].maxHungry,
+											   ifs.obj_array[HungerIndex].hungry += FOOD_VAL)
+		}
     } else if (this.equipped == this.EQUIPMENT.WOOD) {
         if (this.logs > 0) {
             --this.logs;
@@ -233,7 +244,28 @@ Player.prototype.parseItemUse = function(ifs, targetPos) {
             if (cell.entity.health <= 0)
                 cell.entity.remove(true);
         }
-    }
+    } else if (this.equipped == this.EQUIPMENT.SPEAR) {
+		//look in sqrl array and see if we're killing it
+		
+		var cell = ifs.obj_array[IslandIndex].posToCell(targetPos);
+		var pPos = {x:ifs.obj_array[PlayerIndex].x, y:ifs.obj_array[PlayerIndex].y};
+		var pCell = ifs.obj_array[IslandIndex].posToCell(pPos);
+		console.log(pCell);
+		
+		for(var sqrlIndex = 0; sqrlIndex < ifs.sqrl_array.length; ++sqrlIndex) {
+			var sPos = {x:ifs.sqrl_array[sqrlIndex].x, y:ifs.sqrl_array[sqrlIndex].y};
+			var sCell = ifs.obj_array[IslandIndex].posToCell(sPos);
+			
+			console.log(sCell);
+			
+			if((sCell.x == cell.x && sCell.y == cell.y)
+			   || ( sCell.x == pCell.x && sCell.y == pCell.y )) {
+				//add code to give food TODO
+				ifs.sqrl_array[sqrlIndex].destroy(ifs);
+				
+			}
+		}
+	}
 };
 
 
