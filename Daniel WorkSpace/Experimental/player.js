@@ -250,19 +250,17 @@ Player.prototype.parseItemUse = function(ifs, targetPos) {
 		var cell = ifs.obj_array[IslandIndex].posToCell(targetPos);
 		var pPos = {x:ifs.obj_array[PlayerIndex].x, y:ifs.obj_array[PlayerIndex].y};
 		var pCell = ifs.obj_array[IslandIndex].posToCell(pPos);
-		console.log(pCell);
+		
 		
 		for(var sqrlIndex = 0; sqrlIndex < ifs.sqrl_array.length; ++sqrlIndex) {
 			var sPos = {x:ifs.sqrl_array[sqrlIndex].x, y:ifs.sqrl_array[sqrlIndex].y};
 			var sCell = ifs.obj_array[IslandIndex].posToCell(sPos);
 			
-			console.log(sCell);
-			
 			if((sCell.x == cell.x && sCell.y == cell.y)
 			   || ( sCell.x == pCell.x && sCell.y == pCell.y )) {
 				//add code to give food TODO
 				ifs.sqrl_array[sqrlIndex].destroy(ifs);
-				
+				this.food += 2;
 			}
 		}
 	}
