@@ -136,7 +136,25 @@ var Direction = {
 	WEST  : 3
 };
 
+Sqrl.prototype.destroy = function(ifs) {
+	//get index and remove from obj array
+	var ifsIndex = ifs.obj_array.indexOf(this);
+	ifs.obj_array.splice(ifsIndex, 1);
+}
+
+Sqrl.prototype.isSubmerged = function(ifs) {
+	return ifs.obj_array[IslandIndex].posToCell({x:this.x,
+													 y:this.y}).flooded;
+}
+
 Sqrl.prototype.update = function(ifs) {
+
+	//if submerged, kill
+	var ifsIndex = ifs.obj_array.indexOf(this);
+	if(this.isSubmerged(ifs)) {
+		this.destroy(ifs);
+		return;
+	}
 
 	//sense and update state
 	this.state = this.stateCheck(ifs);

@@ -95,7 +95,7 @@ Camera.prototype.camDraw = function(ifs) {
 	ifs.obj_array[IslandIndex].drawSection({x:0, y:0}, startPos, endPos);
 	
 	//copy what we'll be drawing, it's shallow
-	var sortObj_array = ifs.obj_array.slice(3);
+	var sortObj_array = ifs.obj_array.slice(4);
 	//var test = ifs.obj_array;
 
 	//sort drawn array of objects by checking the depth of each object
@@ -118,6 +118,7 @@ Camera.prototype.camDraw = function(ifs) {
 	
 	//finally draw GUI
 	ifs.obj_array[GUIIndex].draw(this);
+	ifs.obj_array[HungerIndex].draw(this);
 
 	
 	

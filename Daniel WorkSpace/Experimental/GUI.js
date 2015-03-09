@@ -62,7 +62,7 @@ GUI.prototype.update = function(ifs){
 };
 
 GUI.prototype.draw = function(camera){
-	var drawX = 50;
+	var drawX =5;
 	var drawY = 50;
 	
 	for(var index = 0; index < this.items.length; ++index) {
@@ -74,7 +74,6 @@ GUI.prototype.draw = function(camera){
 		
 		drawY += GUI_DRAW_OFFSET;
 		
-		//console.log("Fudge");
 	}
 };
 

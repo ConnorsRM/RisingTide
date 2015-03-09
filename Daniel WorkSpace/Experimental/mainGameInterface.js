@@ -21,6 +21,7 @@ mainGame.init = function() {
     CameraIndex = this.obj_array.push(new Camera(playerStartingPos)) - 1;
     IslandIndex = this.obj_array.push(new TileEngine(100, 100, 40)) - 1;
 	GUIIndex    = this.obj_array.push(new GUI()) - 1;
+	HungerIndex = this.obj_array.push(new Hunger(100, 8)) - 1;
     PlayerIndex = this.obj_array.push(new Player(playerStartingPos)) - 1;
 	
 	//Sqrl debug
