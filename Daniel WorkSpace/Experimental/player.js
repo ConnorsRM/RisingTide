@@ -11,22 +11,22 @@ var PlayerAnims = {};
 
 var FOOD_VAL = 20;
 
-var Player = function (pos){
+var Player = function (pos) {
     //sprite things
     this.spr = PlayerSprite;
     this.imageIndex = 0;
     this.animationIndex = 0;
     this.animationFreq = 3;
     this.animationCounter = 0;
-    
-	//position
-	this.x = pos.x;
-	this.y = pos.y;
-	
-	//Movement
+
+    //position
+    this.x = pos.x;
+    this.y = pos.y;
+
+    //Movement
     this.speed = 6;
     this.speedMod = 1;
-    
+
     //Input
     this.inputVars = [];
     this.currentAction = -1;
@@ -43,88 +43,88 @@ var Player = function (pos){
         //Populates inputVars with false for each ACTION
         this.inputVars.push(false);
     }
-    
+
     //Equipment
     this.equipped = 0;
     this.equipTime = Math.floor(FramesPerSecond * 0.3);
     this.equipPause = 0;
     this.EQUIPMENT = {
         //Items that don't appear when walking:
-        FOOD:   0,
-        WOOD:   1,
+        FOOD: 0,
+        WOOD: 1,
         FREEHANDSCOUNT: 2,
         //Items that appear when walking:
-        AXE:    2,
-        SPEAR:  3,
+        AXE: 2,
+        SPEAR: 3,
         TOTALCOUNT: 4
     };
-    
+
     //Inventory Count
     this.logs = 2;
-	this.food = 2;
-	
-	//Drowning
-	this.drownMax = FramesPerSecond * 1.5;
-	this.drownCounter = this.drownMax;
-	
-	//score items
-	this.startTime = new Date().getTime();
-	this.damsMade = 0;
-	this.timeDrowning = 0;
-	this.scoreMod = 1.0; //this will changed based on hunger
-	this.score = 0;
+    this.food = 2;
+
+    //Drowning
+    this.drownMax = FramesPerSecond * 1.5;
+    this.drownCounter = this.drownMax;
+
+    //score items
+    this.startTime = new Date().getTime();
+    this.damsMade = 0;
+    this.timeDrowning = 0;
+    this.scoreMod = 1.0; //this will changed based on hunger
+    this.score = 0;
 };
 
 
-Player.prototype.load = function() {
+Player.prototype.load = function () {
     //A Simple function that takes care of player animation and initialization.
-    
+
     //Set up Player Sprite
     ImageLoader.loadImage(PlayerSprite.image, "images/playersheet.png");
     //Set up Sprite Animations
-    PlayerAnims.walkU       = PlayerSprite.loadAnimation(16, 19);
-    PlayerAnims.walkD       = PlayerSprite.loadAnimation( 0,  3);
-    PlayerAnims.walkL       = PlayerSprite.loadAnimation( 4,  7);
-    PlayerAnims.walkR       = PlayerSprite.loadAnimation(20, 23);
-    
-    PlayerAnims.pickUp      = PlayerSprite.loadAnimation( 8, 11);
-    PlayerAnims.eatFood     = PlayerSprite.loadAnimation(24, 27);
-    
-    PlayerAnims.spearWU     = PlayerSprite.loadAnimation(48, 51);
-    PlayerAnims.spearWD     = PlayerSprite.loadAnimation(32, 35);
-    PlayerAnims.spearWL     = PlayerSprite.loadAnimation(36, 39);
-    PlayerAnims.spearWR     = PlayerSprite.loadAnimation(52, 55);
-    
-    PlayerAnims.spearSU     = PlayerSprite.loadAnimation(56, 59);
-    PlayerAnims.spearSD     = PlayerSprite.loadAnimation(40, 43);
-    PlayerAnims.spearSL     = PlayerSprite.loadAnimation(60, 63);
-    PlayerAnims.spearSR     = PlayerSprite.loadAnimation(44, 47);
-    
-    PlayerAnims.axeWU       = PlayerSprite.loadAnimation(80, 83);
-    PlayerAnims.axeWD       = PlayerSprite.loadAnimation(64, 67);
-    PlayerAnims.axeWL       = PlayerSprite.loadAnimation(68, 71);
-    PlayerAnims.axeWR       = PlayerSprite.loadAnimation(84, 87);
-    
-    PlayerAnims.axeSU       = PlayerSprite.loadAnimation(88, 90);
-    PlayerAnims.axeSD       = PlayerSprite.loadAnimation(72, 74);
-    PlayerAnims.axeSL       = PlayerSprite.loadAnimation(92, 94);
-    PlayerAnims.axeSR       = PlayerSprite.loadAnimation(76, 78);
-    
-    PlayerAnims.swim        = PlayerSprite.loadAnimation(96, 100);
-    PlayerAnims.drown       = PlayerSprite.loadAnimation(101, 103);
+    PlayerAnims.walkU = PlayerSprite.loadAnimation(16, 19);
+    PlayerAnims.walkD = PlayerSprite.loadAnimation(0, 3);
+    PlayerAnims.walkL = PlayerSprite.loadAnimation(4, 7);
+    PlayerAnims.walkR = PlayerSprite.loadAnimation(20, 23);
+
+    PlayerAnims.pickUp = PlayerSprite.loadAnimation(8, 11);
+    PlayerAnims.eatFood = PlayerSprite.loadAnimation(24, 27);
+
+    PlayerAnims.spearWU = PlayerSprite.loadAnimation(48, 51);
+    PlayerAnims.spearWD = PlayerSprite.loadAnimation(32, 35);
+    PlayerAnims.spearWL = PlayerSprite.loadAnimation(36, 39);
+    PlayerAnims.spearWR = PlayerSprite.loadAnimation(52, 55);
+
+    PlayerAnims.spearSU = PlayerSprite.loadAnimation(56, 59);
+    PlayerAnims.spearSD = PlayerSprite.loadAnimation(40, 43);
+    PlayerAnims.spearSL = PlayerSprite.loadAnimation(60, 63);
+    PlayerAnims.spearSR = PlayerSprite.loadAnimation(44, 47);
+
+    PlayerAnims.axeWU = PlayerSprite.loadAnimation(80, 83);
+    PlayerAnims.axeWD = PlayerSprite.loadAnimation(64, 67);
+    PlayerAnims.axeWL = PlayerSprite.loadAnimation(68, 71);
+    PlayerAnims.axeWR = PlayerSprite.loadAnimation(84, 87);
+
+    PlayerAnims.axeSU = PlayerSprite.loadAnimation(88, 90);
+    PlayerAnims.axeSD = PlayerSprite.loadAnimation(72, 74);
+    PlayerAnims.axeSL = PlayerSprite.loadAnimation(92, 94);
+    PlayerAnims.axeSR = PlayerSprite.loadAnimation(76, 78);
+
+    PlayerAnims.swim = PlayerSprite.loadAnimation(96, 100);
+    PlayerAnims.drown = PlayerSprite.loadAnimation(101, 103);
 };
 
 
-Player.prototype.die = function(ifs) {
-	gameOver = true;
+Player.prototype.die = function (ifs) {
+    gameOver = true;
 };
 
 
-Player.prototype.parseInput = function(ifs) {
+Player.prototype.parseInput = function (ifs) {
     //Checks for input and sets the internal variables accordingly
-    
+
     //Check for item usage: if so store target position
-    var itemUsePos = {x:-1, y:-1};
+    var itemUsePos = {x: -1, y: -1};
     if (this.inputVars[this.ACTIONS.ITEMUP]) {
         this.currentAction = this.ACTIONS.ITEMUP;
         itemUsePos.x = this.x;
@@ -142,14 +142,14 @@ Player.prototype.parseInput = function(ifs) {
         itemUsePos.x = this.x + 40;
         itemUsePos.y = this.y;
     }
-    
+
     //If we are about it finish an item animation
-    if ((itemUsePos.x != -1) && (this.animationCounter == 0) && 
+    if ((itemUsePos.x != -1) && (this.animationCounter == 0) &&
             (this.imageIndex == 0)) {
         this.parseItemUse(ifs, itemUsePos);
         return;
     }
-    
+
     //If our current Action is not interruptable:
     if (this.currentAction < this.ACTIONS.INTERRUPTABLEMARKER) {
         //Test if we're not trying to move:
@@ -157,10 +157,12 @@ Player.prototype.parseInput = function(ifs) {
                 !this.inputVars[this.ACTIONS.LEFT] && !this.inputVars[this.ACTIONS.RIGHT]) {
             //If so, keep the imageIndex at the idle position of 0
             if (this.currentAction < 4) {
+                Sounds[SoundMap.Walk].pause();
                 this.imageIndex = 0;
                 this.animationCounter = 0;
             }
         } else {
+            Sounds[SoundMap.Walk].play();
             //Vertical Movement Input
             if (this.inputVars[this.ACTIONS.UP] &&
                     !this.inputVars[this.ACTIONS.DOWN]) {
@@ -175,7 +177,7 @@ Player.prototype.parseInput = function(ifs) {
                     this.frameIndex = 0;
                 this.currentAction = this.ACTIONS.DOWN;
             }
-            
+
             //Horizontal Movement Input
             if (this.inputVars[this.ACTIONS.LEFT] &&
                     !this.inputVars[this.ACTIONS.RIGHT]) {
@@ -191,17 +193,19 @@ Player.prototype.parseInput = function(ifs) {
                 this.currentAction = this.ACTIONS.RIGHT;
             }
         }
-            
+
         //Check for item cycling
         if (this.equipPause <= 0) {
             if (this.inputVars[this.ACTIONS.CYCLEITEMLEFT] &&
                     !this.inputVars[this.ACTIONS.CYCLEITEMRIGHT]) {
+                Sounds[SoundMap.Equip].play();
                 --this.equipped;
                 this.equipPause = this.equipTime;
                 if (this.equipped < 0)
                     this.equipped = this.EQUIPMENT.TOTALCOUNT - 1;
             } else if (this.inputVars[this.ACTIONS.CYCLEITEMRIGHT] &&
                     !this.inputVars[this.ACTIONS.CYCLEITEMLEFT]) {
+                Sounds[SoundMap.Equip].play();
                 ++this.equipped;
                 this.equipPause = this.equipTime;
                 if (this.equipped >= this.EQUIPMENT.TOTALCOUNT)
@@ -213,34 +217,38 @@ Player.prototype.parseInput = function(ifs) {
 };
 
 
-Player.prototype.parseItemUse = function(ifs, targetPos) {
+Player.prototype.parseItemUse = function (ifs, targetPos) {
+    Sounds[SoundMap.Walk].pause();
+
     //Handles item usage by case where targetPos is the world
     //  position that the action is being executed on:
     if (this.equipped == this.EQUIPMENT.FOOD) {
         this.currentAction = this.ACTIONS.ITEMDOWN;
-		
-		//if we have meat
-		if(this.food != 0) {
-		//eat it and gain hunger
-			this.food -= 1;
-			ifs.obj_array[HungerIndex].hungry = Math.min(
-											   ifs.obj_array[HungerIndex].maxHungry,
-											   ifs.obj_array[HungerIndex].hungry += FOOD_VAL)
-		}
+
+        //if we have meat
+        if (this.food != 0) {
+            //eat it and gain hunger
+            this.food -= 1;
+            Sounds[SoundMap.Eat].play();
+            ifs.obj_array[HungerIndex].hungry = Math.min(
+                    ifs.obj_array[HungerIndex].maxHungry,
+                    ifs.obj_array[HungerIndex].hungry += FOOD_VAL)
+        }
     } else if (this.equipped == this.EQUIPMENT.WOOD) {
         if (this.logs > 0) {
             --this.logs;
+            Sounds[SoundMap.Dam].play();
             var cell = ifs.obj_array[IslandIndex].posToCell(targetPos);
             ifs.obj_array[IslandIndex].posToCell(targetPos).elevation += 3;
             var dPos = ifs.obj_array[IslandIndex].cellToPos(cell);
-        
+
             var newDam = new Dam(dPos);
             var newIndex = ifs.obj_array.push(newDam) - 1;
             ifs.obj_array[newIndex].ifsIndex = newIndex;
             ifs.obj_array[newIndex].elevation =
-                ifs.obj_array[IslandIndex].posToCell(targetPos).elevation;
-				
-			this.damsMade += 1;
+                    ifs.obj_array[IslandIndex].posToCell(targetPos).elevation;
+
+            this.damsMade += 1;
         } else {
             this.currentAction -= 6;
         }
@@ -252,35 +260,36 @@ Player.prototype.parseItemUse = function(ifs, targetPos) {
                 cell.entity.remove(true);
         }
     } else if (this.equipped == this.EQUIPMENT.SPEAR) {
-		//look in sqrl array and see if we're killing it
-		
-		var cell = ifs.obj_array[IslandIndex].posToCell(targetPos);
-		var pPos = {x:ifs.obj_array[PlayerIndex].x, y:ifs.obj_array[PlayerIndex].y};
-		var pCell = ifs.obj_array[IslandIndex].posToCell(pPos);
-		
-		
-		for(var sqrlIndex = 0; sqrlIndex < ifs.sqrl_array.length; ++sqrlIndex) {
-			var sPos = {x:ifs.sqrl_array[sqrlIndex].x, y:ifs.sqrl_array[sqrlIndex].y};
-			var sCell = ifs.obj_array[IslandIndex].posToCell(sPos);
-			
-			if((sCell.x == cell.x && sCell.y == cell.y)
-			   || ( sCell.x == pCell.x && sCell.y == pCell.y )) {
-				//add code to give food TODO
-				ifs.sqrl_array[sqrlIndex].destroy(ifs);
-				this.food += 2;
-			}
-		}
-	}
+        //look in sqrl array and see if we're killing it
+
+        var cell = ifs.obj_array[IslandIndex].posToCell(targetPos);
+        var pPos = {x: ifs.obj_array[PlayerIndex].x, y: ifs.obj_array[PlayerIndex].y};
+        var pCell = ifs.obj_array[IslandIndex].posToCell(pPos);
+
+
+        for (var sqrlIndex = 0; sqrlIndex < ifs.sqrl_array.length; ++sqrlIndex) {
+            var sPos = {x: ifs.sqrl_array[sqrlIndex].x, y: ifs.sqrl_array[sqrlIndex].y};
+            var sCell = ifs.obj_array[IslandIndex].posToCell(sPos);
+
+            if ((sCell.x == cell.x && sCell.y == cell.y)
+                    || (sCell.x == pCell.x && sCell.y == pCell.y)) {
+                //add code to give food TODO
+                ifs.sqrl_array[sqrlIndex].destroy(ifs);
+                Sounds[SoundMap.sDeath].play();
+                this.food += 2;
+            }
+        }
+    }
 };
 
 
-Player.prototype.parseAnimation = function() {
+Player.prototype.parseAnimation = function () {
     //Code to figure out what frame of what animation we are interested
     //  in drawing.
-    
+
     //Store Previous Animation
     var previousAnim = this.animationIndex;
-    
+
     //First Check if we are swimming / drowning
     if (this.drownCounter < this.drownMax) {
         this.animationIndex = PlayerAnims.swim;
@@ -290,7 +299,7 @@ Player.prototype.parseAnimation = function() {
     } else {
         //Equipment Dependant Animations go here:
         if (this.equipped < this.EQUIPMENT.FREEHANDSCOUNT) {    //No Visible Item Carried
-            
+
             //Movement
             if (this.currentAction == this.ACTIONS.DOWN)
                 this.animationIndex = PlayerAnims.walkD;
@@ -300,22 +309,23 @@ Player.prototype.parseAnimation = function() {
                 this.animationIndex = PlayerAnims.walkU;
             else if (this.currentAction == this.ACTIONS.RIGHT)
                 this.animationIndex = PlayerAnims.walkR;
-                
+
             //Check for Item Usage
             if (this.equipped == this.EQUIPMENT.FOOD) {
-                
+
                 if (this.currentAction >= this.ACTIONS.INTERRUPTABLEMARKER)
                     this.animationIndex = PlayerAnims.eatFood;
-                    
+
+
             } else if (this.equipped == this.EQUIPMENT.WOOD) {
-                
+
                 if (this.currentAction >= this.ACTIONS.INTERRUPTABLEMARKER)
                     this.animationIndex = PlayerAnims.pickUp;
-                     
+
             }
-                
+
         } else if (this.equipped == this.EQUIPMENT.AXE) {   //Axe Equipped
-            
+
             //Movement
             if (this.currentAction == this.ACTIONS.DOWN)
                 this.animationIndex = PlayerAnims.axeWD;
@@ -325,7 +335,7 @@ Player.prototype.parseAnimation = function() {
                 this.animationIndex = PlayerAnims.axeWU;
             else if (this.currentAction == this.ACTIONS.RIGHT)
                 this.animationIndex = PlayerAnims.axeWR;
-            
+
             //Check for Item Usage
             if (this.currentAction == this.ACTIONS.ITEMUP)
                 this.animationIndex = PlayerAnims.axeSU;
@@ -335,9 +345,9 @@ Player.prototype.parseAnimation = function() {
                 this.animationIndex = PlayerAnims.axeSL;
             else if (this.currentAction == this.ACTIONS.ITEMRIGHT)
                 this.animationIndex = PlayerAnims.axeSR;
-                
+
         } else if (this.equipped == this.EQUIPMENT.SPEAR) { //Spear Equipped
-            
+
             //Movement
             if (this.currentAction == this.ACTIONS.DOWN)
                 this.animationIndex = PlayerAnims.spearWD;
@@ -347,7 +357,7 @@ Player.prototype.parseAnimation = function() {
                 this.animationIndex = PlayerAnims.spearWU;
             else if (this.currentAction == this.ACTIONS.RIGHT)
                 this.animationIndex = PlayerAnims.spearWR;
-            
+
             //Check for Item Usage
             if (this.currentAction == this.ACTIONS.ITEMUP)
                 this.animationIndex = PlayerAnims.spearSU;
@@ -357,27 +367,27 @@ Player.prototype.parseAnimation = function() {
                 this.animationIndex = PlayerAnims.spearSL;
             else if (this.currentAction == this.ACTIONS.ITEMRIGHT)
                 this.animationIndex = PlayerAnims.spearSR;
-                    
+
         }
     }
-    
+
     this.updateAnimation(previousAnim);
 };
 
 
-Player.prototype.updateAnimation = function(prevAnim) {
+Player.prototype.updateAnimation = function (prevAnim) {
     //Manage Animation Indexing (only necessary if we maintained animations)
-    
+
     if (this.animationIndex == prevAnim) {
-        
+
         this.animationCounter++;
         if (this.animationCounter >= this.animationFreq) {
             this.animationCounter = 0;
             this.imageIndex++;
             //If the animation is over
-            if(this.imageIndex >= this.spr.maxFrames) {
+            if (this.imageIndex >= this.spr.maxFrames) {
                 this.imageIndex = 0;    //Start back at the start
-                
+
                 //And if this animation is supposed to only run once:
                 if ((this.currentAction >= this.ACTIONS.INTERRUPTABLEMARKER) &&
                         !this.inputVars[this.currentAction]) {
@@ -388,10 +398,10 @@ Player.prototype.updateAnimation = function(prevAnim) {
                         this.animationIndex = 1;
                     }
                 }
-                
+
             }
         }
-        
+
     } else {
         this.imageIndex = 0;
         this.animationCounter = 0;
@@ -399,44 +409,44 @@ Player.prototype.updateAnimation = function(prevAnim) {
 };
 
 
-Player.prototype.draw = function(camera){
-    
+Player.prototype.draw = function (camera) {
+
     this.parseAnimation();
-    
-	this.spr.draw(this.animationIndex, this.imageIndex,
-	this.x - this.spr.frameWidth / 2 - camera.x + camera.viewWidth, 
-	this.y - this.spr.frameHeight - camera.y + camera.viewHeight + 4);
+
+    this.spr.draw(this.animationIndex, this.imageIndex,
+            this.x - this.spr.frameWidth / 2 - camera.x + camera.viewWidth,
+            this.y - this.spr.frameHeight - camera.y + camera.viewHeight + 4);
 
 };
 
 
-Player.prototype.update = function(ifs){
+Player.prototype.update = function (ifs) {
 
-	//score update, only tracks time survived
-	//every 15 seconds award 100* scoremod points
-	this.scoreMod = ifs.obj_array[HungerIndex].hungry /
-						ifs.obj_array[HungerIndex].maxHungry;
-	
-	var currentTime = new Date().getTime();
-	if(currentTime - this.startTime > 15000) {
-			console.log(this.score);
-			this.score += (100 * this.scoreMod);
-			this.startTime = currentTime;
-	}
-    
+    //score update, only tracks time survived
+    //every 15 seconds award 100* scoremod points
+    this.scoreMod = ifs.obj_array[HungerIndex].hungry /
+            ifs.obj_array[HungerIndex].maxHungry;
+
+    var currentTime = new Date().getTime();
+    if (currentTime - this.startTime > 15000) {
+        console.log(this.score);
+        this.score += (100 * this.scoreMod);
+        this.startTime = currentTime;
+    }
+
     this.parseInput(ifs);
-    
+
     //Player Position Validation
     this.x = Math.min(Math.max(this.x, 0), WORLD_DIMENSION);
     this.y = Math.min(Math.max(this.y, 0), WORLD_DIMENSION);
-    
+
     //Set Camera to this Position
     ifs.obj_array[CameraIndex].moveCamera(this.x + DRAW_OFFSET_WIDTH, this.y + DRAW_OFFSET_HEIGHT);
-    
+
     //Check For Drowning
-    if (ifs.obj_array[IslandIndex].posToCell({x:this.x, y:this.y}).tile == 0) {
+    if (ifs.obj_array[IslandIndex].posToCell({x: this.x, y: this.y}).tile == 0) {
         --this.drownCounter;
-		this.timeDrowning++;
+        this.timeDrowning++;
         this.speedMod -= 1.0 / this.drownMax;
         if (this.drownCounter <= 0) {
             this.die(ifs);
@@ -445,7 +455,7 @@ Player.prototype.update = function(ifs){
         this.drownCounter = this.drownMax;
         this.speedMod = 1;
     }
-    
+
 };
 
 

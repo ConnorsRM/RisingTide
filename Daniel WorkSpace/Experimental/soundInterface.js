@@ -19,6 +19,9 @@ function loadSounds() { //loads all sounds for the game
     Sounds.push(new Audio("sounds/waterRising2.wav"));
     Sounds.push(new Audio("sounds/waterRising3.wav"));
     
+    //Equip
+    SoundMap.Equip = Sounds.push(new Audio("sounds/equip.wav"))-1;
+    
     //Axe Chop
     SoundMap.ChopSize = 6;
     SoundMap.Chop = Sounds.push(new Audio("sounds/chop1.wav")) - 1;
@@ -28,11 +31,17 @@ function loadSounds() { //loads all sounds for the game
     Sounds.push(new Audio("sounds/chop5.wav"));
     Sounds.push(new Audio("sounds/chop6.wav"));
     
+    //dam
+    SoundMap.Dam = Sounds.push(new Audio("sounds/dam.wav"))-1;
+    
     //Walk
     SoundMap.Walk = Sounds.push(new Audio("sounds/walk.wav")) - 1;
     
     //Eat
-    SoundMap.Eat = Sounds.push(new Audio("sounds/eat.mp3")) - 1;
+    SoundMap.Eat = Sounds.push(new Audio("sounds/eat.wav")) - 1;
+    
+    //Squirrel Death
+    SoundMap.sDeath = Sounds.push(new Audio("sounds/squirrelDeath.wav"))-1;
     
     Sounds[SoundMap.Walk].addEventListener('ended', function () {
         this.currentTime = 0;

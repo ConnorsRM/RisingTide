@@ -281,6 +281,9 @@ TileEngine.prototype.update = function() {
     	else{
     		cleanUpCount += 1;
     		cleanUp = true;
+                var i = Math.floor(SoundMap.WaterRisingSize * Math.random());
+                Sounds[SoundMap.WaterRising + i].play();
+
     	}
     	
         for (var x = 0; x < 100; ++x) {
