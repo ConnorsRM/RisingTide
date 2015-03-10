@@ -66,6 +66,13 @@ var Player = function (pos){
 	//Drowning
 	this.drownMax = FramesPerSecond * 1.5;
 	this.drownCounter = this.drownMax;
+	
+	//score items
+	this.startTime = new Date().getTime();
+	this.damsMade = 0;
+	this.timeDrowning = 0;
+	this.scoreMod = 1.0; //this will changed based on hunger
+	this.score = 0;
 };
 
 
@@ -109,9 +116,7 @@ Player.prototype.load = function() {
 
 
 Player.prototype.die = function(ifs) {
-    //Should be called when the player expires
-    Player.prototype.update = function() {};
-    Player.prototype.draw = function() {};
+	gameOver = true;
 };
 
 
@@ -234,6 +239,8 @@ Player.prototype.parseItemUse = function(ifs, targetPos) {
             ifs.obj_array[newIndex].ifsIndex = newIndex;
             ifs.obj_array[newIndex].elevation =
                 ifs.obj_array[IslandIndex].posToCell(targetPos).elevation;
+				
+			this.damsMade += 1;
         } else {
             this.currentAction -= 6;
         }
@@ -404,6 +411,18 @@ Player.prototype.draw = function(camera){
 
 
 Player.prototype.update = function(ifs){
+
+	//score update, only tracks time survived
+	//every 15 seconds award 100* scoremod points
+	this.scoreMod = ifs.obj_array[HungerIndex].hungry /
+						ifs.obj_array[HungerIndex].maxHungry;
+	
+	var currentTime = new Date().getTime();
+	if(currentTime - this.startTime > 15000) {
+			console.log(this.score);
+			this.score += (100 * this.scoreMod);
+			this.startTime = currentTime;
+	}
     
     this.parseInput(ifs);
     
@@ -417,6 +436,7 @@ Player.prototype.update = function(ifs){
     //Check For Drowning
     if (ifs.obj_array[IslandIndex].posToCell({x:this.x, y:this.y}).tile == 0) {
         --this.drownCounter;
+		this.timeDrowning++;
         this.speedMod -= 1.0 / this.drownMax;
         if (this.drownCounter <= 0) {
             this.die(ifs);

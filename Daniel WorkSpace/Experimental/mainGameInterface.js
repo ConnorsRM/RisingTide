@@ -1,6 +1,7 @@
 //Interface Set Up for the main Game
 
 var mainGame = new Interface();
+var updateID;
 
 //Stores PlayerIndex
 var CameraIndex;
@@ -13,6 +14,10 @@ var lastDamBuild = new Date().getTime();
 
 mainGame.init = function() {
     this.id = InterfaceStack.push(this);
+	
+	//this is for the case of reinitialization
+	this.obj_array = [];
+	this.sqrl_array = [];
     
     SeaLevelRise = 0.001;
     var playerStartingPos = {x: 400, y: 300};
@@ -88,6 +93,8 @@ mainGame.init = function() {
         } else if(e.keyCode == 16) {   //Shift Key
             //Display Evaluation Overlay
         	this.obj_array[IslandIndex].isOverlay = status;
-        }
+        } else if(e.keyCode == 32 && gameOver == true) {
+			//reset game
+		}
     };
 };
