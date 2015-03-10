@@ -27,7 +27,13 @@ function Camera(pos) {
 	this.viewHeight = DRAW_OFFSET_HEIGHT;
 	this.viewWidth = DRAW_OFFSET_WIDTH;
 	this.camera_speed = 0;
-}
+};
+
+
+Camera.prototype.remove = function() {
+    
+};
+
 
 Camera.prototype.moveCamera = function(x, y) {
 	if((x - DRAW_OFFSET_WIDTH) < DRAW_OFFSET_WIDTH)

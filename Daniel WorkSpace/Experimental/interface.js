@@ -64,6 +64,7 @@ Interface.prototype.remove = function() {
         --InterfaceStack[i].id;
         InterfaceStack[i - 1] = InterfaceStack[i];
     }
+    InterfaceStack.pop();
 };
 
 
@@ -71,6 +72,7 @@ Interface.prototype.reset = function() {
     //This function is designed to set the Interface back to its initial 
     //  state without memory gimmicks. 
     this.clear();
+    this.remove();
     this.init();
 };
 

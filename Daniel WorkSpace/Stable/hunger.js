@@ -9,11 +9,6 @@ var Hunger = function(x, y){
 	this.maxHungry = 100;
 };
 
-Hunger.prototype.remove = function() {
-    
-};
-
-
 Hunger.prototype.draw = function(camera){
 	//function that will show the text and bars for hunger
 	var percent = (this.hungry * 1.0)/(this.maxHungry * 1.0);
@@ -21,7 +16,7 @@ Hunger.prototype.draw = function(camera){
 	//The text of hunger
 	Context.fillStyle = "Black";
 	Context.font = "18px sans-serif";
-	Context.fillText("Hunger:", 20, 20);
+	Context.fillText("Hunger", 20, 20);
 	
 	//background of the hunger bar
 	Context.fillStyle = "Black";

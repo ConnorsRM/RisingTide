@@ -104,6 +104,16 @@ var TileEngine = function(columns, rows, cellSize) {
     
 };
 
+
+TileEngine.prototype.remove = function() {
+    for (var r = 0; r < this.rows; ++r) {
+        for (var c = 0; c < this.columns; ++c) {
+            this.tileMap[r][c].entity = null;
+        }
+    }
+};
+
+
 //propagateDanger will accept a tile {x, y} as argument
 //and appropriately flag any exisitng adjacent tiles 
 //as being in danger.
@@ -141,7 +151,7 @@ TileEngine.prototype.propagateDanger = function(tile) {
 };
 
 
-TileEngine.prototype.loadTile = function(image){
+TileEngine.prototype.loadTile = function(image) {
     //Adds an image to the tileDictionary for use by the 
     //  TileEngine. Returns the integer the image was 
     //  assigned, which will be the next unused integer.

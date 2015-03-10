@@ -60,6 +60,7 @@ var TileEngine = function(columns, rows, cellSize) {
                 x: col,
                 y: row,
                 tile: -1,
+                entity: null,
                 elevation: islandHeights[col][row],
                 danger : false,
                 fooded : false
@@ -280,6 +281,9 @@ TileEngine.prototype.update = function() {
     	else{
     		cleanUpCount += 1;
     		cleanUp = true;
+                var i = Math.floor(SoundMap.WaterRisingSize * Math.random());
+                Sounds[SoundMap.WaterRising + i].play();
+
     	}
     	
         for (var x = 0; x < 100; ++x) {
@@ -289,6 +293,9 @@ TileEngine.prototype.update = function() {
                        (this.getCell(thisTile).danger)) {
                     this.getCell(thisTile).flooded = true;
                     this.getCell(thisTile).tile = 0;
+                    if (this.getCell(thisTile).entity != null) {
+                        this.getCell(thisTile).entity.remove(false);
+                    }
                     this.propagateDanger(thisTile);
                 }
                 

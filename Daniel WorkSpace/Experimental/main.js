@@ -71,11 +71,6 @@ function initGame() {
     //This function should be called to reset the game to it's initial
     //  status.
     
-    //Init Island Tile Images
-    mainGame.obj_array[IslandIndex].loadTile(water);
-    mainGame.obj_array[IslandIndex].loadTile(sand);
-    mainGame.obj_array[IslandIndex].loadTile(grass);
-    
     //Starts Game Loop
     updateID = setInterval(update, 1000 / FramesPerSecond);
 	console.log(updateID);

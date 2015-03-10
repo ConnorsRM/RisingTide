@@ -92,18 +92,35 @@ Camera.prototype.camDraw = function(ifs) {
 	var startPos = {x:startX, y:startY};
 	var endPos = {x:endX, y:endY};
 	
+	ifs.obj_array[IslandIndex].drawSection({x:0, y:0}, startPos, endPos);
 	
-	ifs.obj_array[1].drawSection({x:0, y:0}, startPos, endPos);
+	//copy what we'll be drawing, it's shallow
+	var sortObj_array = ifs.obj_array.slice(4);
+	//var test = ifs.obj_array;
+
+	//sort drawn array of objects by checking the depth of each object
+	sortObj_array.sort(function(a, b){
+		
+		//this should never be encountered,
+		//but if it is, assume equal plain
+		if(a.x == undefined || b.x == undefined)
+			return 0;
+		
+		return (a.y - b.y);
+		
+		
+	});
+			
 	
-	for (var i = 2; i < ifs.obj_array.length; ++i) {
-
-		//var drawObj = translatedPosition(ifs.obj_array[i]);
-
-	 	ifs.obj_array[i].draw(this);
-	 	
-
-    }	
+	for(var i = 0; i < sortObj_array.length; ++i) {
+		sortObj_array[i].draw(this);
+	}
 	
-	//This is optional
-	return;
+	//finally draw GUI
+	ifs.obj_array[GUIIndex].draw(this);
+	ifs.obj_array[HungerIndex].draw(this);
+
+	
+	
 };
+
