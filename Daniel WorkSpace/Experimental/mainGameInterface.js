@@ -29,10 +29,14 @@ mainGame.init = function() {
 	HungerIndex = this.obj_array.push(new Hunger(100, 8)) - 1;
     PlayerIndex = this.obj_array.push(new Player(playerStartingPos)) - 1;
 	
-	//Sqrl debug
-	var newSqrl = new Sqrl(this.obj_array[IslandIndex], {x:200, y:200})
-	this.obj_array.push(newSqrl);
-	this.sqrl_array.push(newSqrl);
+	//Sqrl initial population
+	for (var index = 0; index < MAX_SQRL_COUNT; ++index ){
+		var newX = Math.floor((Math.random() * (WORLD_DIMENSION - 300))  + 300);
+		var newY = Math.floor((Math.random() * (WORLD_DIMENSION - 300))  + 300);
+		var newSqrl = new Sqrl(this.obj_array[IslandIndex], {x:newX, y:newY});
+		this.obj_array.push(newSqrl);
+		this.sqrl_array.push(newSqrl);
+	}
 	
     var tileSize = this.obj_array[IslandIndex].cellSize;
     for (var i = 0; i < 500; ++i) {
@@ -94,7 +98,7 @@ mainGame.init = function() {
             //Display Evaluation Overlay
         	this.obj_array[IslandIndex].isOverlay = status;
         } else if(e.keyCode == 32 && gameOver == true) {
-			//reset game
+			//reset game code here
 		}
     };
 };

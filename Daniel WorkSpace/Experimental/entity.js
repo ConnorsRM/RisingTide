@@ -7,6 +7,8 @@
 //Some Entity Sprites
 var TreeSprite  = new Sprite(60, 80, 60, 80);
 var SQRL_SPRITE = new Sprite(30, 30, 30, 30);
+var MAX_SQRL_COUNT = 20;
+var Squirrel_Count = MAX_SQRL_COUNT;
 
 function Entity(tileSys, sprite, pos) {
     var cell = tileSys.posToCell(pos);
@@ -144,6 +146,18 @@ Sqrl.prototype.destroy = function(ifs) {
 	//and sqrl array
 	ifsIndex = ifs.sqrl_array.indexOf(this);
 	ifs.sqrl_array.splice(ifsIndex, 1);
+	--Squirrel_Count;
+	
+	
+	//replace squirrel but only if less than 3
+	//TODO add check for spawning on valid terrain
+	if(Squirrel_Count < 5) {
+		var newX = Math.floor((Math.random() * (WORLD_DIMENSION - 300))  + 300);
+		var newY = Math.floor((Math.random() * (WORLD_DIMENSION - 300))  + 300);
+		var newSqrl = new Sqrl(ifs.obj_array[IslandIndex], {x:newX, y:newY});
+		ifs.obj_array.push(newSqrl);
+		ifs.sqrl_array.push(newSqrl);
+	}
 }
 
 Sqrl.prototype.isSubmerged = function(ifs) {
