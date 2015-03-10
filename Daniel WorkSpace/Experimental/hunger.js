@@ -22,7 +22,7 @@ Hunger.prototype.draw = function(camera){
 	Context.fillStyle = "Black";
 	Context.font = "18px sans-serif";
 	Context.fillText("Hunger:", 20, 20);
-	
+		
 	//background of the hunger bar
 	Context.fillStyle = "Black";
 	Context.fillRect(this.x, this.y, this.width, this.height);

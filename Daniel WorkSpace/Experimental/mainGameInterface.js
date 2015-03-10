@@ -15,7 +15,7 @@ var lastDamBuild = new Date().getTime();
 
 mainGame.init = function() {
     this.id = InterfaceStack.push(this);
-	
+
 	//this is for the case of reinitialization
 	this.obj_array = [];
 	this.sqrl_array = [];
