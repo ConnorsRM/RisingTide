@@ -126,7 +126,7 @@ Player.prototype.parseInput = function (ifs) {
 
     //If our current Action is not interruptable:
     if (this.canInterrupt) {
-        
+
         //Check for item usage: if so store target position
         var itemUsePos = {x: -1, y: -1};
         if (this.inputVars[this.ACTIONS.ITEMUP]) {
@@ -146,7 +146,7 @@ Player.prototype.parseInput = function (ifs) {
             itemUsePos.x = this.x + 40;
             itemUsePos.y = this.y;
         }
-        
+
         //If we are about it finish an item animation
         if (itemUsePos.x != -1) {
             this.parseItemUse(ifs, itemUsePos);
@@ -222,7 +222,7 @@ Player.prototype.parseItemUse = function (ifs, targetPos) {
     //  position that the action is being executed on:
     Sounds[SoundMap.Walk].pause();
     this.canInterrupt = false;
-    
+
     if (this.equipped == this.EQUIPMENT.FOOD) {
         //if we have meat
         if (this.food != 0) {
@@ -267,7 +267,8 @@ Player.prototype.parseItemUse = function (ifs, targetPos) {
         var cell = ifs.obj_array[IslandIndex].posToCell(targetPos);
         var pPos = {x: ifs.obj_array[PlayerIndex].x, y: ifs.obj_array[PlayerIndex].y};
         var pCell = ifs.obj_array[IslandIndex].posToCell(pPos);
-
+        var i = Math.floor(SoundMap.SpearSize * Math.random());
+        Sounds[SoundMap.Spear + i].play();
 
         for (var sqrlIndex = 0; sqrlIndex < ifs.sqrl_array.length; ++sqrlIndex) {
             var sPos = {x: ifs.sqrl_array[sqrlIndex].x, y: ifs.sqrl_array[sqrlIndex].y};

@@ -31,6 +31,15 @@ function loadSounds() { //loads all sounds for the game
     Sounds.push(new Audio("sounds/chop5.wav"));
     Sounds.push(new Audio("sounds/chop6.wav"));
     
+    //Spear Thrust
+    SoundMap.SpearSize = 6;
+    SoundMap.Spear = Sounds.push(new Audio("sounds/spear.wav")) - 1;
+    Sounds.push(new Audio("sounds/spear2.wav"));
+    Sounds.push(new Audio("sounds/spear3.wav"));
+    Sounds.push(new Audio("sounds/spear4.wav"));
+    Sounds.push(new Audio("sounds/spear5.wav"));
+    Sounds.push(new Audio("sounds/spear6.wav"));
+    
     //dam
     SoundMap.Dam = Sounds.push(new Audio("sounds/dam.wav"))-1;
     
