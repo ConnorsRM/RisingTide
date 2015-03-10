@@ -33,12 +33,13 @@ var Player = function (pos){
     this.ACTIONS = {
         UP: 0, DOWN: 1, LEFT: 2, RIGHT: 3,
         CYCLEITEMLEFT: 4, CYCLEITEMRIGHT: 5,
-        //Actions Below this line are uninterruptible
-        INTERRUPTABLEMARKER: 6,
+        //Below are all Item Uses:
+        ITEMUSE: 6,
         ITEMUP: 6, ITEMDOWN: 7,
         ITEMLEFT: 8, ITEMRIGHT: 9,
         TOTALCOUNT: 10
     };
+    this.canInterrupt = true;
     for (var i = 0; i < this.ACTIONS.TOTALCOUNT; ++i) {
         //Populates inputVars with false for each ACTION
         this.inputVars.push(false);
@@ -60,8 +61,11 @@ var Player = function (pos){
     };
     
     //Inventory Count
-    this.logs = 2;
+    this.logs = 5;
 	this.food = 2;
+	
+	//Damming
+	this.logsPerDam = 3;
 	
 	//Drowning
 	this.drownMax = FramesPerSecond * 1.5;
@@ -123,35 +127,34 @@ Player.prototype.die = function(ifs) {
 Player.prototype.parseInput = function(ifs) {
     //Checks for input and sets the internal variables accordingly
     
-    //Check for item usage: if so store target position
-    var itemUsePos = {x:-1, y:-1};
-    if (this.inputVars[this.ACTIONS.ITEMUP]) {
-        this.currentAction = this.ACTIONS.ITEMUP;
-        itemUsePos.x = this.x;
-        itemUsePos.y = this.y - 40;
-    } else if (this.inputVars[this.ACTIONS.ITEMDOWN]) {
-        this.currentAction = this.ACTIONS.ITEMDOWN;
-        itemUsePos.x = this.x;
-        itemUsePos.y = this.y + 40;
-    } else if (this.inputVars[this.ACTIONS.ITEMLEFT]) {
-        this.currentAction = this.ACTIONS.ITEMLEFT;
-        itemUsePos.x = this.x - 40;
-        itemUsePos.y = this.y;
-    } else if (this.inputVars[this.ACTIONS.ITEMRIGHT]) {
-        this.currentAction = this.ACTIONS.ITEMRIGHT;
-        itemUsePos.x = this.x + 40;
-        itemUsePos.y = this.y;
-    }
-    
-    //If we are about it finish an item animation
-    if ((itemUsePos.x != -1) && (this.animationCounter == 0) && 
-            (this.imageIndex == 0)) {
-        this.parseItemUse(ifs, itemUsePos);
-        return;
-    }
-    
     //If our current Action is not interruptable:
-    if (this.currentAction < this.ACTIONS.INTERRUPTABLEMARKER) {
+    if (this.canInterrupt) {
+        //Check for item usage: if so store target position
+        var itemUsePos = {x:-1, y:-1};
+        if (this.inputVars[this.ACTIONS.ITEMUP]) {
+            this.currentAction = this.ACTIONS.ITEMUP;
+            itemUsePos.x = this.x;
+            itemUsePos.y = this.y - 40;
+        } else if (this.inputVars[this.ACTIONS.ITEMDOWN]) {
+            this.currentAction = this.ACTIONS.ITEMDOWN;
+            itemUsePos.x = this.x;
+            itemUsePos.y = this.y + 40;
+        } else if (this.inputVars[this.ACTIONS.ITEMLEFT]) {
+            this.currentAction = this.ACTIONS.ITEMLEFT;
+            itemUsePos.x = this.x - 40;
+            itemUsePos.y = this.y;
+        } else if (this.inputVars[this.ACTIONS.ITEMRIGHT]) {
+            this.currentAction = this.ACTIONS.ITEMRIGHT;
+            itemUsePos.x = this.x + 40;
+            itemUsePos.y = this.y;
+        }
+    
+        if (itemUsePos.x != -1) {
+            this.canInterrupt = false;
+            this.parseItemUse(ifs, itemUsePos);
+            return;
+        }
+    
         //Test if we're not trying to move:
         if (!this.inputVars[this.ACTIONS.UP] && !this.inputVars[this.ACTIONS.DOWN] &&
                 !this.inputVars[this.ACTIONS.LEFT] && !this.inputVars[this.ACTIONS.RIGHT]) {
@@ -217,19 +220,21 @@ Player.prototype.parseItemUse = function(ifs, targetPos) {
     //Handles item usage by case where targetPos is the world
     //  position that the action is being executed on:
     if (this.equipped == this.EQUIPMENT.FOOD) {
-        this.currentAction = this.ACTIONS.ITEMDOWN;
-		
 		//if we have meat
-		if(this.food != 0) {
+		if(this.food > 0) {
 		//eat it and gain hunger
+		    this.currentAction = this.ACTIONS.ITEMDOWN;
 			this.food -= 1;
 			ifs.obj_array[HungerIndex].hungry = Math.min(
 											   ifs.obj_array[HungerIndex].maxHungry,
-											   ifs.obj_array[HungerIndex].hungry += FOOD_VAL)
+											   ifs.obj_array[HungerIndex].hungry += FOOD_VAL);
+		} else {
+		    //this.inputVars[this.currentAction] = false;
+		    this.currentAction = this.ACTIONS.DOWN;
 		}
     } else if (this.equipped == this.EQUIPMENT.WOOD) {
-        if (this.logs > 0) {
-            --this.logs;
+        if (this.logs >= this.logsPerDam) {
+            this.logs -= this.logsPerDam;
             var cell = ifs.obj_array[IslandIndex].posToCell(targetPos);
             ifs.obj_array[IslandIndex].posToCell(targetPos).elevation += 3;
             var dPos = ifs.obj_array[IslandIndex].cellToPos(cell);
@@ -242,6 +247,7 @@ Player.prototype.parseItemUse = function(ifs, targetPos) {
 				
 			this.damsMade += 1;
         } else {
+            this.inputVars[this.currentAction] = false;
             this.currentAction -= 6;
         }
     } else if (this.equipped == this.EQUIPMENT.AXE) {
@@ -265,7 +271,7 @@ Player.prototype.parseItemUse = function(ifs, targetPos) {
 			
 			if((sCell.x == cell.x && sCell.y == cell.y)
 			   || ( sCell.x == pCell.x && sCell.y == pCell.y )) {
-				//add code to give food TODO
+				//add code to give food
 				ifs.sqrl_array[sqrlIndex].destroy(ifs);
 				this.food += 2;
 			}
@@ -304,12 +310,12 @@ Player.prototype.parseAnimation = function() {
             //Check for Item Usage
             if (this.equipped == this.EQUIPMENT.FOOD) {
                 
-                if (this.currentAction >= this.ACTIONS.INTERRUPTABLEMARKER)
+                if (this.currentAction >= this.ACTIONS.ITEMUSE)
                     this.animationIndex = PlayerAnims.eatFood;
                     
             } else if (this.equipped == this.EQUIPMENT.WOOD) {
                 
-                if (this.currentAction >= this.ACTIONS.INTERRUPTABLEMARKER)
+                if (this.currentAction >= this.ACTIONS.ITEMUSE)
                     this.animationIndex = PlayerAnims.pickUp;
                      
             }
@@ -377,15 +383,15 @@ Player.prototype.updateAnimation = function(prevAnim) {
             //If the animation is over
             if(this.imageIndex >= this.spr.maxFrames) {
                 this.imageIndex = 0;    //Start back at the start
-                
+                this.canInterrupt = true;
                 //And if this animation is supposed to only run once:
-                if ((this.currentAction >= this.ACTIONS.INTERRUPTABLEMARKER) &&
+                if ((this.currentAction >= this.ACTIONS.ITEMUSE) &&
                         !this.inputVars[this.currentAction]) {
                     //Return to walk left or walk right
                     this.currentAction -= 6;
-                    this.animationIndex -= 6;
+                    this.animationIndex -= 4;
                     if (this.animationIndex < 0) {
-                        this.animationIndex = 1;
+                        this.animationIndex = 0;
                     }
                 }
                 

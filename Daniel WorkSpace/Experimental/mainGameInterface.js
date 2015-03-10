@@ -39,7 +39,7 @@ mainGame.init = function() {
 	}
 	
     var tileSize = this.obj_array[IslandIndex].cellSize;
-    for (var i = 0; i < 500; ++i) {
+    for (var i = 0; i < 150; ++i) {
         var xpos = 0;
         var ypos = 0;
         var xcell = Math.floor(Math.random() * 100);
