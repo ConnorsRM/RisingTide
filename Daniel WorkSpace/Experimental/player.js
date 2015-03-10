@@ -33,8 +33,8 @@ var Player = function (pos) {
     this.ACTIONS = {
         UP: 0, DOWN: 1, LEFT: 2, RIGHT: 3,
         CYCLEITEMLEFT: 4, CYCLEITEMRIGHT: 5,
-        //Actions Below this line are uninterruptible
-        INTERRUPTABLEMARKER: 6,
+        //Actions Below this line are actions
+        ITEMUSE: 6,
         ITEMUP: 6, ITEMDOWN: 7,
         ITEMLEFT: 8, ITEMRIGHT: 9,
         TOTALCOUNT: 10
@@ -125,7 +125,7 @@ Player.prototype.parseInput = function (ifs) {
     //Checks for input and sets the internal variables accordingly
 
     //If our current Action is not interruptable:
-    if (this.currentAction < this.ACTIONS.INTERRUPTABLEMARKER) {
+    if (this.canInterrupt) {
         
         //Check for item usage: if so store target position
         var itemUsePos = {x: -1, y: -1};
@@ -315,13 +315,13 @@ Player.prototype.parseAnimation = function () {
             //Check for Item Usage
             if (this.equipped == this.EQUIPMENT.FOOD) {
 
-                if (this.currentAction >= this.ACTIONS.INTERRUPTABLEMARKER)
+                if (this.currentAction >= this.ACTIONS.ITEMUSE)
                     this.animationIndex = PlayerAnims.eatFood;
 
 
             } else if (this.equipped == this.EQUIPMENT.WOOD) {
 
-                if (this.currentAction >= this.ACTIONS.INTERRUPTABLEMARKER)
+                if (this.currentAction >= this.ACTIONS.ITEMUSE)
                     this.animationIndex = PlayerAnims.pickUp;
 
             }
@@ -391,7 +391,7 @@ Player.prototype.updateAnimation = function (prevAnim) {
                 this.imageIndex = 0;    //Start back at the start
                 this.canInterrupt = true;
                 //And if this animation is supposed to only run once:
-                if ((this.currentAction >= this.ACTIONS.INTERRUPTABLEMARKER) &&
+                if ((this.currentAction >= this.ACTIONS.ITEMUSE) &&
                         !this.inputVars[this.currentAction]) {
                     //Return to walk left or walk right
                     this.currentAction -= 6;
