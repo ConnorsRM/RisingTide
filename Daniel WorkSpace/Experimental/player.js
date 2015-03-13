@@ -69,7 +69,7 @@ var Player = function (pos) {
     this.drownCounter = this.drownMax;
 
     //score items
-    this.startTime = new Date().getTime();
+    this.startTme = new Date().getTime();
     this.damsMade = 0;
     this.timeDrowning = 0;
     this.scoreMod = 1.0; //this will changed based on hunger
@@ -77,7 +77,7 @@ var Player = function (pos) {
 };
 
 
-Player.prototype.load = function () {
+PlayerLoad = function () {
     //A Simple function that takes care of player animation and initialization.
 
     //Set up Player Sprite
