@@ -107,7 +107,8 @@ mainGame.init = function() {
 			//reset game code here
 			gameOver = false;
 			this.activate();
-			this.reset();
+			InterfaceStack[0].visible = true;
+			this.remove();
 		} else if (e.keyCode == 80) {   //P Key
 		    //Pause Game
 		    if (status && PauseSpamSlayer) {
