@@ -67,13 +67,6 @@ var Player = function (pos) {
     //Drowning
     this.drownMax = FramesPerSecond * 1.5;
     this.drownCounter = this.drownMax;
-
-    //score items
-    this.startTme = new Date().getTime();
-    this.damsMade = 0;
-    this.timeDrowning = 0;
-    this.scoreMod = 1.0; //this will changed based on hunger
-    this.score = 0;
 };
 
 
@@ -168,6 +161,7 @@ Player.prototype.parseInput = function (ifs) {
             }
         } else {
             Sounds[SoundMap.Walk].play();
+            var oldPos = {x: this.x, y: this.y};
             //Vertical Movement Input
             if (this.inputVars[this.ACTIONS.UP] &&
                     !this.inputVars[this.ACTIONS.DOWN]) {
@@ -198,6 +192,16 @@ Player.prototype.parseInput = function (ifs) {
                 this.currentAction = this.ACTIONS.RIGHT;
             }
         }
+        //Check for Dam or Tree Collision
+        var inThisCell = ifs.obj_array[IslandIndex].posToCell({x: this.x, y: this.y});
+        if (inThisCell.entity != null) {
+            //TODO
+            if ((inThisCell.entity instanceof Tree) || (inThisCell.entity == 1)) {
+                this.x = oldPos.x;
+                this.y = oldPos.y;
+            } 
+        }
+        
 
         //Check for item cycling
         if (this.equipPause <= 0) {
@@ -246,16 +250,17 @@ Player.prototype.parseItemUse = function (ifs, targetPos) {
             this.logs -= 5;
             Sounds[SoundMap.Dam].play();
             var cell = ifs.obj_array[IslandIndex].posToCell(targetPos);
-            ifs.obj_array[IslandIndex].posToCell(targetPos).elevation += 10;
+            cell.elevation += 5;
+            cell.entity = 1;
             var dPos = ifs.obj_array[IslandIndex].cellToPos(cell);
-
+            
             var newDam = new Dam(dPos);
             var newIndex = ifs.obj_array.push(newDam) - 1;
             ifs.obj_array[newIndex].ifsIndex = newIndex;
             ifs.obj_array[newIndex].elevation =
                     ifs.obj_array[IslandIndex].posToCell(targetPos).elevation;
 
-            this.damsMade += 1;
+            Score.addToScore(10);
         } else {
             this.currentAction -= 6;
         }
@@ -430,8 +435,8 @@ Player.prototype.update = function (ifs) {
 	
     //score update, only tracks time survived
     //every 15 seconds award 100* scoremod points
-    this.scoreMod = ifs.obj_array[HungerIndex].hungry /
-            ifs.obj_array[HungerIndex].maxHungry;
+    Score.score += ifs.obj_array[HungerIndex].hungry /
+            ifs.obj_array[HungerIndex].maxHungry / FramesPerSecond;
 
     var currentTime = new Date().getTime();
     if (currentTime - this.startTime > 15000) {

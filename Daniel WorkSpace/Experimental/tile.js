@@ -290,6 +290,7 @@ TileEngine.prototype.update = function() {
     //Check if the sea_level has actually risen before updating tiles
     //Math.floor(this.sea_level) > Math.floor(this.sea_level - SeaLevelRise)
     if (Math.floor(this.sea_level) > Math.floor(this.sea_level - SeaLevelRise) || cleanUp) {
+        HUNGERRATE += .001;
     	
     	if(cleanUpCount == MAX_CLEAN_COUNT - 1) {
     		cleanUp = false;

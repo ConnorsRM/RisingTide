@@ -3,12 +3,7 @@ var score = function(){
 	this.maxScore = 0; //saved maximum score
 };
 
-score.prototype.displayScore= function(timeAlive,damsMade,timeDrowning){
-	//adds up and displays the score after the game ends
-        this.score += timeAlive;
-        this.score += damsMade;
-        this.score -= timeDrowning/100;
-	
+score.prototype.displayScore= function(){
 	Context.font = "bold 30pt Arial";//"30pt Arial";
 	Context.fillStyle = 'red';
     Context.textAlign = "center";
@@ -19,3 +14,6 @@ score.prototype.displayScore= function(timeAlive,damsMade,timeDrowning){
 };
 
 
+score.prototype.addToScore = function(bonus) {
+    this.score += bonus;
+};

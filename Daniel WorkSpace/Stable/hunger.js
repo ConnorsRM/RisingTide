@@ -1,3 +1,5 @@
+var HUNGERRATE = 0.03;
+
 var Hunger = function(x, y){
 	//allows the hunger bar to be placed anywhere
 	//given stats for the hunger is 100/100 at starting point
@@ -51,7 +53,7 @@ Hunger.prototype.update = function(ifs){
 		this.displayHunger();
 	}else{
 		//slowly depletes the health bar
-		this.hungry -= 0.04;
+		this.hungry -= HUNGERRATE;
 		this.percent = this.hungry/this.maxHungry;
 		//this.displayHunger();
 	}

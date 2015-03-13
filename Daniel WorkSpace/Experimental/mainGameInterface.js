@@ -13,6 +13,9 @@ var PlayerIndex;
 var DAM_DELAY =  2000;
 var lastDamBuild = new Date().getTime();
 
+//Tree Generation Places
+var CoolPlaces = [[36, 10], [72, 15], [86, 10], [87, 21], [89, 60], [87, 79], [72, 89], [60, 81], [48, 85], [19, 77], [11, 57], [27, 21], [49, 22], [85, 43], [86, 56], [57, 69], [11, 41], [9, 91], [23, 91], [33, 91], [34, 71], [79, 64], [49, 72]];
+
 mainGame.init = function() {
     this.id = InterfaceStack.push(this);
 
@@ -20,8 +23,8 @@ mainGame.init = function() {
 	this.obj_array = [];
 	this.sqrl_array = [];
     
-    SeaLevelRise = 0.001;
-    var playerStartingPos = {x: 400, y: 300};
+    SeaLevelRise = 0.00125;
+    var playerStartingPos = {x: 400, y: 500};
     
     //Creating Objects
     CameraIndex = this.obj_array.push(new Camera(playerStartingPos)) - 1;
@@ -53,16 +56,26 @@ mainGame.init = function() {
     for (var i = 0; i < TreeTotal;) {
         var xpos = 0;
         var ypos = 0;
-        var xorigin = ClumpRadius + 2 + Math.floor(Math.random() * (98 - (ClumpRadius * 2)));
-        var yorigin = ClumpRadius + 2 + Math.floor(Math.random() * (98 - (ClumpRadius * 2)));
+        var xorigin = 0;
+        var yorigin = 0;
+        if (CoolPlaces.length == 0) {
+            xorigin = ClumpRadius + 2 + Math.floor(Math.random() * (98 - (ClumpRadius * 2)));
+            yorigin = ClumpRadius + 2 + Math.floor(Math.random() * (98 - (ClumpRadius * 2)));
+        } else {
+            var p = Math.floor(Math.random() * CoolPlaces.length);
+            var origin = CoolPlaces[p];
+            CoolPlaces.splice(p, 1);
+            xorigin = origin[0];
+            yorigin = origin[1];
+        }
         var xcell = xorigin;
         var ycell = yorigin;
         var cell = this.obj_array[IslandIndex].getCell({x:xcell, y:ycell});
         var ClumpSize = MinClumpSize + Math.floor(Math.random() * (MaxClumpSize - MinClumpSize)) + 1;
         for (var j = 0; (i < TreeTotal) && (j < ClumpSize); ++i) {
             if (i == 0) {
-                xorigin = 8;
-                yorigin = 14;
+                xorigin = 7;
+                yorigin = 19;
             }
             do {
                 xcell = xorigin + Math.floor(Math.random() * (ClumpRadius * 2)) - ClumpRadius;
@@ -140,5 +153,6 @@ mainGame.init = function() {
 		    var cellToPrint = this.obj_array[IslandIndex].posToCell({x:this.obj_array[PlayerIndex].x, y:this.obj_array[PlayerIndex].y}); 
 		    console.log("(" + String(cellToPrint.x) + ", " + String(cellToPrint.y) + ")");
 		}
+		
     };
 };

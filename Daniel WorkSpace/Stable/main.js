@@ -10,6 +10,7 @@ var Canvas;
 var Context;
 var FramesPerSecond = 30;
 var gameOver = false;
+var Score = new score;
 
 //Image Loader
 var ImageLoader;
@@ -84,12 +85,7 @@ function update() {
     //  function.
 	
 	if(gameOver) {	
-		var totScore = new score();
-		var timeAlive    = mainGame.obj_array[PlayerIndex].score;
-		var damsMade     = mainGame.obj_array[PlayerIndex].damsMade;
-		var timeDrowning = mainGame.obj_array[PlayerIndex].timeDrowning;
-
-		totScore.displayScore(timeAlive, damsMade, timeDrowning);
+		Score.displayScore();
 		return;
 	}
 	

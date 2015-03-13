@@ -108,6 +108,10 @@ GUI.prototype.draw = function(camera){
 		drawY += GUI_DRAW_OFFSET;
 		
 	}
+	
+	Context.fillStyle = "Black";
+    Context.font = "18px sans-serif";
+    Context.fillText("Score: " + Score.score.toFixed(0).toString(), 650, 20);
 };
 
 
