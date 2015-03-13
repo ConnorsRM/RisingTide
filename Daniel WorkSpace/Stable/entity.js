@@ -159,16 +159,6 @@ Sqrl.prototype.destroy = function(ifs) {
 	ifs.sqrl_array.splice(ifsIndex, 1);
 	--Squirrel_Count;
 	
-	
-	//replace squirrel but only if less than 3
-	//TODO add check for spawning on valid terrain
-	if(Squirrel_Count < 5) {
-		var newX = Math.floor((Math.random() * (WORLD_DIMENSION - 300))  + 300);
-		var newY = Math.floor((Math.random() * (WORLD_DIMENSION - 300))  + 300);
-		var newSqrl = new Sqrl(ifs.obj_array[IslandIndex], {x:newX, y:newY});
-		ifs.obj_array.push(newSqrl);
-		ifs.sqrl_array.push(newSqrl);
-	}
 };
 
 Sqrl.prototype.isSubmerged = function(ifs) {
