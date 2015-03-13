@@ -58,6 +58,8 @@ var TileEngine = function(columns, rows, cellSize) {
     //  cell returned. Thus, the max number for the first
     //  index = this.columns - 1, and the max number for
     //  the second index = this.rows - 1.
+
+	
     for (var col = 0; col < this.columns; ++col) {
         var tileColumn = [];
         for (var row = 0; row < this.rows; ++row) {

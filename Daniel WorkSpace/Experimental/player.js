@@ -427,7 +427,7 @@ Player.prototype.draw = function (camera) {
 
 
 Player.prototype.update = function (ifs) {
-
+	
     //score update, only tracks time survived
     //every 15 seconds award 100* scoremod points
     this.scoreMod = ifs.obj_array[HungerIndex].hungry /

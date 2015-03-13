@@ -29,6 +29,7 @@ mainGame.init = function() {
 	GUIIndex    = this.obj_array.push(new GUI()) - 1;
 	HungerIndex = this.obj_array.push(new Hunger(100, 8)) - 1;
     PlayerIndex = this.obj_array.push(new Player(playerStartingPos)) - 1;
+
 	
 	//Init Island Tile Images
     mainGame.obj_array[IslandIndex].loadTile(water);
