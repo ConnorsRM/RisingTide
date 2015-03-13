@@ -27,7 +27,13 @@ function Camera(pos) {
 	this.viewHeight = DRAW_OFFSET_HEIGHT;
 	this.viewWidth = DRAW_OFFSET_WIDTH;
 	this.camera_speed = 0;
-}
+};
+
+
+Camera.prototype.remove = function() {
+    
+};
+
 
 Camera.prototype.moveCamera = function(x, y) {
 	if((x - DRAW_OFFSET_WIDTH) < DRAW_OFFSET_WIDTH)
@@ -83,7 +89,6 @@ Camera.prototype.camDraw = function(ifs) {
 	
 	//never draw something that isn't defined so set 0 as min
 	
-	
 	var startX = Math.max(0, this.x - DRAW_OFFSET_WIDTH);
 	var startY = Math.max(0, this.y - DRAW_OFFSET_HEIGHT);
 	var endX = Math.min(WORLD_DIMENSION -40, startX + CANVAS_DIMENSION);
@@ -95,7 +100,7 @@ Camera.prototype.camDraw = function(ifs) {
 	ifs.obj_array[IslandIndex].drawSection({x:0, y:0}, startPos, endPos);
 	
 	//copy what we'll be drawing, it's shallow
-	var sortObj_array = ifs.obj_array.slice(2);
+	var sortObj_array = ifs.obj_array.slice(4);
 	//var test = ifs.obj_array;
 
 	//sort drawn array of objects by checking the depth of each object
@@ -115,7 +120,10 @@ Camera.prototype.camDraw = function(ifs) {
 	for(var i = 0; i < sortObj_array.length; ++i) {
 		sortObj_array[i].draw(this);
 	}
-	//sort by depth;
+	
+	//finally draw GUI
+	ifs.obj_array[GUIIndex].draw(this);
+	ifs.obj_array[HungerIndex].draw(this);
 
 	
 	

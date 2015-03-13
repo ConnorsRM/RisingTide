@@ -1,6 +1,8 @@
 //Interface Set Up for the main Game
 
 var mainGame = new Interface();
+var updateID;
+var PauseSpamSlayer = true;
 
 //Stores PlayerIndex
 var CameraIndex;
@@ -13,6 +15,10 @@ var lastDamBuild = new Date().getTime();
 
 mainGame.init = function() {
     this.id = InterfaceStack.push(this);
+
+	//this is for the case of reinitialization
+	this.obj_array = [];
+	this.sqrl_array = [];
     
     SeaLevelRise = 0.001;
     var playerStartingPos = {x: 400, y: 300};
@@ -20,9 +26,26 @@ mainGame.init = function() {
     //Creating Objects
     CameraIndex = this.obj_array.push(new Camera(playerStartingPos)) - 1;
     IslandIndex = this.obj_array.push(new TileEngine(100, 100, 40)) - 1;
+	GUIIndex    = this.obj_array.push(new GUI()) - 1;
+	HungerIndex = this.obj_array.push(new Hunger(100, 8)) - 1;
     PlayerIndex = this.obj_array.push(new Player(playerStartingPos)) - 1;
+	
+	//Init Island Tile Images
+    mainGame.obj_array[IslandIndex].loadTile(water);
+    mainGame.obj_array[IslandIndex].loadTile(sand);
+    mainGame.obj_array[IslandIndex].loadTile(grass);
+	
+	//Sqrl initial population
+	for (var index = 0; index < MAX_SQRL_COUNT; ++index ){
+		var newX = Math.floor((Math.random() * (WORLD_DIMENSION - 300))  + 300);
+		var newY = Math.floor((Math.random() * (WORLD_DIMENSION - 300))  + 300);
+		var newSqrl = new Sqrl(this.obj_array[IslandIndex], {x:newX, y:newY});
+		this.obj_array.push(newSqrl);
+		this.sqrl_array.push(newSqrl);
+	}
+	
     var tileSize = this.obj_array[IslandIndex].cellSize;
-    for (var i = 0; i < 500; ++i) {
+    for (var i = 0; i < 150; ++i) {
         var xpos = 0;
         var ypos = 0;
         var xcell = Math.floor(Math.random() * 100);
@@ -77,9 +100,28 @@ mainGame.init = function() {
         } else if (e.keyCode == 39) {  //Right Arrow Key
             //Use Item Right
             this.obj_array[PlayerIndex].inputVars[9] = status;
-        } else if(e.keyCode == 16) {   //Shift Key
+        } else if (e.keyCode == 16) {   //Shift Key
             //Display Evaluation Overlay
         	this.obj_array[IslandIndex].isOverlay = status;
-        }
+        } else if (e.keyCode == 32 && gameOver == true) {
+			//reset game code here
+			gameOver = false;
+			this.activate();
+			this.reset();
+		} else if (e.keyCode == 80) {   //P Key
+		    //Pause Game
+                    sPause = false;
+		    if (status && PauseSpamSlayer) {
+		      if (this.active)
+    		      this.deactivate();
+    	      else
+	              this.activate();
+			  
+				
+              PauseSpamSlayer = false;
+	       } else if (!(status))
+	           PauseSpamSlayer = true;
+		   
+		}
     };
 };
