@@ -75,7 +75,6 @@ function initGame() {
     
     //Starts Game Loop
     updateID = setInterval(update, 1000 / FramesPerSecond);
-	console.log(updateID);
 };
 
 

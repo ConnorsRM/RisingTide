@@ -29,6 +29,7 @@ mainGame.init = function() {
 	GUIIndex    = this.obj_array.push(new GUI()) - 1;
 	HungerIndex = this.obj_array.push(new Hunger(100, 8)) - 1;
     PlayerIndex = this.obj_array.push(new Player(playerStartingPos)) - 1;
+
 	
 	//Init Island Tile Images
     mainGame.obj_array[IslandIndex].loadTile(water);
@@ -45,21 +46,34 @@ mainGame.init = function() {
 	}
 	
     var tileSize = this.obj_array[IslandIndex].cellSize;
-    for (var i = 0; i < 150; ++i) {
+    var TreeTotal = 200;
+    var MinClumpSize = 10;   //In Trees
+    var MaxClumpSize = 14;  //In Trees
+    var ClumpRadius = 4;    //In Tiles
+    for (var i = 0; i < TreeTotal;) {
         var xpos = 0;
         var ypos = 0;
-        var xcell = Math.floor(Math.random() * 100);
-        var ycell = Math.floor(Math.random() * 100);
+        var xorigin = ClumpRadius + Math.floor(Math.random() * (100 - (ClumpRadius * 2)));
+        var yorigin = ClumpRadius + 2 + Math.floor(Math.random() * (98 - (ClumpRadius * 2)));
+        var xcell = xorigin;
+        var ycell = yorigin;
         var cell = this.obj_array[IslandIndex].getCell({x:xcell, y:ycell});
-        console.log(String(xcell) + String(ycell));
-        while ((cell.entity != null) || (cell.elevation <= 0)) {
-            xcell = Math.floor(Math.random() * 100);
-            ycell = Math.floor(Math.random() * 100);
-            cell = this.obj_array[IslandIndex].getCell({x:xcell, y:ycell});
+        var ClumpSize = MinClumpSize + Math.floor(Math.random() * (MaxClumpSize - MinClumpSize)) + 1;
+        for (var j = 0; (i < TreeTotal) && (j < ClumpSize); ++i) {
+            if (i == 0) {
+                xorigin = 8;
+                yorigin = 14;
+            }
+            do {
+                xcell = xorigin + Math.floor(Math.random() * (ClumpRadius * 2)) - ClumpRadius;
+                ycell = yorigin + Math.floor(Math.random() * (ClumpRadius * 2)) - ClumpRadius;
+                cell = this.obj_array[IslandIndex].getCell({x:xcell, y:ycell});
+            } while ((cell.entity != null) || (cell.elevation <= 0)); 
+            xpos = xcell * tileSize + 20;
+            ypos = ycell * tileSize + 35;
+            this.obj_array.push(new Tree(this.obj_array[IslandIndex], {x:xpos, y:ypos})) - 1;
+            ++j;
         }
-        xpos = xcell * tileSize + 20;
-        ypos = ycell * tileSize + 35;
-        this.obj_array.push(new Tree(this.obj_array[IslandIndex], {x:xpos, y:ypos})) - 1;
     }
     
     //Initializing Internal Vars
@@ -122,6 +136,9 @@ mainGame.init = function() {
 	       } else if (!(status))
 	           PauseSpamSlayer = true;
 		   
+		} else if (e.keyCode == 79) {
+		    var cellToPrint = this.obj_array[IslandIndex].posToCell({x:this.obj_array[PlayerIndex].x, y:this.obj_array[PlayerIndex].y}); 
+		    console.log("(" + String(cellToPrint.x) + ", " + String(cellToPrint.y) + ")");
 		}
     };
 };

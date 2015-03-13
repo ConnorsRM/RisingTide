@@ -61,7 +61,7 @@ var Player = function (pos) {
     };
 
     //Inventory Count
-    this.logs = 2;
+    this.logs = 5;
     this.food = 2;
 
     //Drowning
@@ -242,11 +242,11 @@ Player.prototype.parseItemUse = function (ifs, targetPos) {
             this.currentAction = this.ACTIONS.DOWN;
         }
     } else if (this.equipped == this.EQUIPMENT.WOOD) {
-        if (this.logs > 0) {
-            --this.logs;
+        if (this.logs > 3) {
+            this.logs -= 5;
             Sounds[SoundMap.Dam].play();
             var cell = ifs.obj_array[IslandIndex].posToCell(targetPos);
-            ifs.obj_array[IslandIndex].posToCell(targetPos).elevation += 3;
+            ifs.obj_array[IslandIndex].posToCell(targetPos).elevation += 10;
             var dPos = ifs.obj_array[IslandIndex].cellToPos(cell);
 
             var newDam = new Dam(dPos);

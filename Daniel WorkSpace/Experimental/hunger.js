@@ -51,7 +51,7 @@ Hunger.prototype.update = function(ifs){
 		this.displayHunger();
 	}else{
 		//slowly depletes the health bar
-		this.hungry -= 0.03;
+		this.hungry -= 0.04;
 		this.percent = this.hungry/this.maxHungry;
 		//this.displayHunger();
 	}
