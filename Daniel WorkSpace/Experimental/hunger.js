@@ -9,6 +9,7 @@ var Hunger = function(x, y){
 	this.height = 10;
 	this.hungry = 100;
 	this.maxHungry = 100;
+	this.flash = false;
 };
 
 Hunger.prototype.remove = function() {
@@ -30,7 +31,10 @@ Hunger.prototype.draw = function(camera){
 	Context.fillRect(this.x, this.y, this.width, this.height);
 	
 	//part of the hunger bar that will decrease/increase over time
-	Context.fillStyle = "Red";
+	if (this.flash)
+	   Context.fillStyle = "White"; 
+	else
+	   Context.fillStyle = "Red";
 	Context.fillRect(this.x, this.y, (this.width*percent), this.height);
 };
 
@@ -42,6 +46,8 @@ Hunger.prototype.update = function(ifs){
 		this.hunger += 10;
 	}
 	*/
+	
+   this.flash = (this.hungry <= 10) && (Math.floor(this.hungry * 5) % 2 == 1);
 	
 	if(this.hungry <= 0){
 		//if player's health reaches 0, he dead
