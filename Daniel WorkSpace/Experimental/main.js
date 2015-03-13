@@ -55,6 +55,7 @@ function loadGame() {
     ImageLoader.loadImage(CHICKEN_SPRITE.image, "images/meat.png");
 	ImageLoader.loadImage(LOG_SPRITE.image, "images/log.png");
 	ImageLoader.loadImage(SEL_SPRITE.image, "images/itemBorder.png");
+	ImageLoader.loadImage(TUT_SRN.image,    "images/tutscn.png");
 	
 	//Animal Images
 	ImageLoader.loadImage(SQRL_SPRITE.image, "images/sqrl.png");

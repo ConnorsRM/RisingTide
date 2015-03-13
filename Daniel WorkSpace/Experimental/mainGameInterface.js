@@ -115,10 +115,12 @@ mainGame.init = function() {
     		      this.deactivate();
     	      else
 	              this.activate();
-              //Draw Tutorial Here:
+			  
+				
               PauseSpamSlayer = false;
 	       } else if (!(status))
 	           PauseSpamSlayer = true;
+		   
 		}
     };
 };

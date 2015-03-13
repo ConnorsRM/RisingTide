@@ -89,7 +89,6 @@ Camera.prototype.camDraw = function(ifs) {
 	
 	//never draw something that isn't defined so set 0 as min
 	
-	
 	var startX = Math.max(0, this.x - DRAW_OFFSET_WIDTH);
 	var startY = Math.max(0, this.y - DRAW_OFFSET_HEIGHT);
 	var endX = Math.min(WORLD_DIMENSION -40, startX + CANVAS_DIMENSION);
