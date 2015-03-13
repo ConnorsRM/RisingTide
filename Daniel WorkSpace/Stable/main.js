@@ -55,6 +55,7 @@ function loadGame() {
     ImageLoader.loadImage(CHICKEN_SPRITE.image, "images/meat.png");
 	ImageLoader.loadImage(LOG_SPRITE.image, "images/log.png");
 	ImageLoader.loadImage(SEL_SPRITE.image, "images/itemBorder.png");
+	ImageLoader.loadImage(TUT_SRN.image,    "images/tutscn.png");
 	
 	//Animal Images
 	ImageLoader.loadImage(SQRL_SPRITE.image, "images/sqrl.png");
@@ -70,11 +71,6 @@ function loadGame() {
 function initGame() {
     //This function should be called to reset the game to it's initial
     //  status.
-    
-    //Init Island Tile Images
-    mainGame.obj_array[IslandIndex].loadTile(water);
-    mainGame.obj_array[IslandIndex].loadTile(sand);
-    mainGame.obj_array[IslandIndex].loadTile(grass);
     
     //Starts Game Loop
     updateID = setInterval(update, 1000 / FramesPerSecond);

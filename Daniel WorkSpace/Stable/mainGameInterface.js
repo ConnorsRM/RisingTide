@@ -2,6 +2,7 @@
 
 var mainGame = new Interface();
 var updateID;
+var PauseSpamSlayer = true;
 
 //Stores PlayerIndex
 var CameraIndex;
@@ -14,7 +15,7 @@ var lastDamBuild = new Date().getTime();
 
 mainGame.init = function() {
     this.id = InterfaceStack.push(this);
-	
+
 	//this is for the case of reinitialization
 	this.obj_array = [];
 	this.sqrl_array = [];
@@ -28,6 +29,11 @@ mainGame.init = function() {
 	GUIIndex    = this.obj_array.push(new GUI()) - 1;
 	HungerIndex = this.obj_array.push(new Hunger(100, 8)) - 1;
     PlayerIndex = this.obj_array.push(new Player(playerStartingPos)) - 1;
+	
+	//Init Island Tile Images
+    mainGame.obj_array[IslandIndex].loadTile(water);
+    mainGame.obj_array[IslandIndex].loadTile(sand);
+    mainGame.obj_array[IslandIndex].loadTile(grass);
 	
 	//Sqrl initial population
 	for (var index = 0; index < MAX_SQRL_COUNT; ++index ){
@@ -94,11 +100,27 @@ mainGame.init = function() {
         } else if (e.keyCode == 39) {  //Right Arrow Key
             //Use Item Right
             this.obj_array[PlayerIndex].inputVars[9] = status;
-        } else if(e.keyCode == 16) {   //Shift Key
+        } else if (e.keyCode == 16) {   //Shift Key
             //Display Evaluation Overlay
         	this.obj_array[IslandIndex].isOverlay = status;
-        } else if(e.keyCode == 32 && gameOver == true) {
+        } else if (e.keyCode == 32 && gameOver == true) {
 			//reset game code here
+			gameOver = false;
+			this.activate();
+			this.reset();
+		} else if (e.keyCode == 80) {   //P Key
+		    //Pause Game
+		    if (status && PauseSpamSlayer) {
+		      if (this.active)
+    		      this.deactivate();
+    	      else
+	              this.activate();
+			  
+				
+              PauseSpamSlayer = false;
+	       } else if (!(status))
+	           PauseSpamSlayer = true;
+		   
 		}
     };
 };

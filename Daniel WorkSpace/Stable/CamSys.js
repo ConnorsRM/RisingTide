@@ -27,7 +27,13 @@ function Camera(pos) {
 	this.viewHeight = DRAW_OFFSET_HEIGHT;
 	this.viewWidth = DRAW_OFFSET_WIDTH;
 	this.camera_speed = 0;
-}
+};
+
+
+Camera.prototype.remove = function() {
+    
+};
+
 
 Camera.prototype.moveCamera = function(x, y) {
 	if((x - DRAW_OFFSET_WIDTH) < DRAW_OFFSET_WIDTH)
@@ -82,7 +88,6 @@ Camera.prototype.camDraw = function(ifs) {
 	//may read
 	
 	//never draw something that isn't defined so set 0 as min
-	
 	
 	var startX = Math.max(0, this.x - DRAW_OFFSET_WIDTH);
 	var startY = Math.max(0, this.y - DRAW_OFFSET_HEIGHT);

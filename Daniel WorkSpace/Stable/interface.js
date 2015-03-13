@@ -5,6 +5,9 @@
 
 //A Stack-Based FSM for maintaining GUIs.
 
+//tutorial screen sprite
+var TUT_SRN = new Sprite(800, 600, 800, 600);
+
 var InterfaceStack = [];
 
 var Interface = function() {
@@ -64,6 +67,7 @@ Interface.prototype.remove = function() {
         --InterfaceStack[i].id;
         InterfaceStack[i - 1] = InterfaceStack[i];
     }
+    InterfaceStack.pop();
 };
 
 
@@ -71,6 +75,7 @@ Interface.prototype.reset = function() {
     //This function is designed to set the Interface back to its initial 
     //  state without memory gimmicks. 
     this.clear();
+    this.remove();
     this.init();
 };
 
@@ -126,6 +131,12 @@ Interface.prototype.update = function() {
 Interface.prototype.draw = function() {
     //Draws all of the objects in the obj_array by calling their draw()
     //  function.
+	
+	//don't judge me
+	if(this.active == false) {
+		TUT_SRN.draw(0,0,0,0);
+	}
+	else
     if (this.visible == true) {
         if (this.obj_array[0].camDraw) {
             this.obj_array[0].camDraw(this);

@@ -28,6 +28,11 @@ Entity.prototype.load = function () {
 };
 
 
+Entity.prototype.remove = function() {
+    this.spr = null;
+};
+
+
 Entity.prototype.setCenter = function(x, y) {
     this.center.x = x;
     this.center.y = y;
@@ -125,6 +130,12 @@ function Sqrl(tileSys, pos) {
 	
 };
 
+
+Sqrl.prototype.remove = function() {
+    this.spr = null;
+};
+
+
 //enumeration for state
 var State = {
 	WANDER : 0,
@@ -158,12 +169,12 @@ Sqrl.prototype.destroy = function(ifs) {
 		ifs.obj_array.push(newSqrl);
 		ifs.sqrl_array.push(newSqrl);
 	}
-}
+};
 
 Sqrl.prototype.isSubmerged = function(ifs) {
 	return ifs.obj_array[IslandIndex].posToCell({x:this.x,
 													 y:this.y}).flooded;
-}
+};
 
 Sqrl.prototype.update = function(ifs) {
 
@@ -188,7 +199,7 @@ Sqrl.prototype.update = function(ifs) {
 			break;
 	}
 	
-}
+};
 
 Sqrl.prototype.stateCheck = function(ifs) {
 
@@ -208,7 +219,7 @@ Sqrl.prototype.stateCheck = function(ifs) {
 	}
 	
 	return State.WANDER;
-}
+};
 
 Sqrl.prototype.updateFlee = function(ifs) {
 	//simple stuff
@@ -241,13 +252,13 @@ Sqrl.prototype.updateFlee = function(ifs) {
 	
 	//TODO: use count to pause for catching
 	
-}
+};
 
 Sqrl.prototype.updateWander = function(ifs) {
 	//if it's time to pick a new direction
 	if(this.moveCount >= this.MAXMOVE) {
 		//determine direction
-		this.dir = Math.floor((Math.random() * 4))
+		this.dir = Math.floor((Math.random() * 4));
 		this.moveCount = 0;
 		this.lastMove = new Date().getTime();
 	}
@@ -286,7 +297,7 @@ Sqrl.prototype.updateWander = function(ifs) {
 		this.x = newPos.x;
 		this.y = newPos.y;
 	}
-}
+};
 
 Sqrl.prototype.draw = function(camera) {
 	//adjust
@@ -297,5 +308,5 @@ Sqrl.prototype.draw = function(camera) {
 	this.spr.draw(0, 0,
 		this.x - (this.spr.frameWidth/2) - camera.x + camera.viewWidth, 
 		this.y - (this.spr.frameHeight/2) - camera.y + camera.viewHeight);	
-}
+};
 

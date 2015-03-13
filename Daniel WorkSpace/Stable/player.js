@@ -116,6 +116,11 @@ Player.prototype.load = function () {
 };
 
 
+Player.prototype.remove = function() {
+    this.spr = null;
+};
+
+
 Player.prototype.die = function (ifs) {
     gameOver = true;
 };
@@ -414,8 +419,6 @@ Player.prototype.updateAnimation = function (prevAnim) {
 
 Player.prototype.draw = function (camera) {
 
-    this.parseAnimation();
-
     this.spr.draw(this.animationIndex, this.imageIndex,
             this.x - this.spr.frameWidth / 2 - camera.x + camera.viewWidth,
             this.y - this.spr.frameHeight - camera.y + camera.viewHeight + 4);
@@ -440,8 +443,8 @@ Player.prototype.update = function (ifs) {
     this.parseInput(ifs);
 
     //Player Position Validation
-    this.x = Math.min(Math.max(this.x, 0), WORLD_DIMENSION);
-    this.y = Math.min(Math.max(this.y, 0), WORLD_DIMENSION);
+    this.x = Math.min(Math.max(this.x, 1), WORLD_DIMENSION - 1);
+    this.y = Math.min(Math.max(this.y, 1), WORLD_DIMENSION - 1);
 
     //Set Camera to this Position
     ifs.obj_array[CameraIndex].moveCamera(this.x + DRAW_OFFSET_WIDTH, this.y + DRAW_OFFSET_HEIGHT);
@@ -458,6 +461,8 @@ Player.prototype.update = function (ifs) {
         this.drownCounter = this.drownMax;
         this.speedMod = 1;
     }
+    
+    this.parseAnimation();
 
 };
 

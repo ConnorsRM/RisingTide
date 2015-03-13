@@ -43,6 +43,12 @@ function GUI() {
 	this.FoodCount = 0;
 };
 
+
+GUI.prototype.remove = function() {
+    
+};
+
+
 GUI.prototype.nextItem = function() {
 	if (this.selected_item == this.items.length - 1) {
 		this.selected_item = 0;
