@@ -246,8 +246,8 @@ Player.prototype.parseItemUse = function (ifs, targetPos) {
             this.currentAction = this.ACTIONS.DOWN;
         }
     } else if (this.equipped == this.EQUIPMENT.WOOD) {
-        if (this.logs > 4) {
-            this.logs -= 4;
+        if (this.logs > 3) {
+            this.logs -= 5;
             Sounds[SoundMap.Dam].play();
             var cell = ifs.obj_array[IslandIndex].posToCell(targetPos);
             cell.elevation += 5;
