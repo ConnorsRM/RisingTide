@@ -111,7 +111,7 @@ GUI.prototype.draw = function(camera){
 	
 	Context.fillStyle = "Black";
     Context.font = "18px sans-serif";
-    Context.fillText("Score: " + Score.score.toFixed(0).toString(), 650, 20);
+    Context.fillText("Score: " + totScore.score.toFixed(0).toString(), 650, 20);
 };
 
 

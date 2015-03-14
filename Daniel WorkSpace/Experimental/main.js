@@ -19,6 +19,12 @@ var water = new Image();
 var sand = new Image();
 var grass = new Image();
 
+//score
+var sJournal = new Journal();
+var sPause = false;
+var entryNum = 0;
+totScore = new score();
+
 //Input:
 //Keyboard Listeners
 addEventListener("keydown", function (e) {

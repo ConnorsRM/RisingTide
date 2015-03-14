@@ -97,7 +97,6 @@ Tree.prototype.remove = function(playerDestroyed) {
             ++mainGame.obj_array[PlayerIndex].logs;
             var i = Math.floor(SoundMap.ChopSize * Math.random());
             Sounds[SoundMap.Chop + i].play();
-            Score.addToScore(3);
         }
         var id = mainGame.obj_array.indexOf(this);
         mainGame.obj_array.splice(id, 1);
