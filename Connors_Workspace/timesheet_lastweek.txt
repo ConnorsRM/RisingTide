@@ -1,0 +1,8 @@
+This weeks Work:
+-Created a GUI that draws game details on the screen and tracks active items through sprite draws.
+-Integrated GUI into the game engine
+-Created Squirrel entity and gave state machine and reflex agent artifical intelligence. 
+-Added squirrel collision detection, hunting, and rewards system for killed squirrels
+-Added game over screen with score calculation
+-Added tutorial screen and integrated into pause system.
+-Corrected squirrel spawning to have upper limit as island diminishes.
