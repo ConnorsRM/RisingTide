@@ -58,7 +58,7 @@ mainGame.init = function() {
         var ypos = 0;
         var xorigin = 0;
         var yorigin = 0;
-        if (CoolPlaces.length == 0) {
+        if ((CoolPlaces.length == 0) || (i >= TreeTotal / 2)) {
             xorigin = ClumpRadius + 2 + Math.floor(Math.random() * (98 - (ClumpRadius * 2)));
             yorigin = ClumpRadius + 2 + Math.floor(Math.random() * (98 - (ClumpRadius * 2)));
         } else {
@@ -130,7 +130,7 @@ mainGame.init = function() {
         } else if (e.keyCode == 16) {   //Shift Key
             //Display Evaluation Overlay
         	this.obj_array[IslandIndex].isOverlay = status;
-        } else if (e.keyCode == 32 && gameOver == true) {
+        } else if (e.keyCode == 32 && gameOver == true && !status) {
 			//reset game code here
 			gameOver = false;
 			this.activate();

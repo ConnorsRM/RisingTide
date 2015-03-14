@@ -58,7 +58,7 @@ mainGame.init = function() {
         var ypos = 0;
         var xorigin = 0;
         var yorigin = 0;
-        if (CoolPlaces.length == 0) {
+        if ((CoolPlaces.length == 0) || (i >= TreeTotal / 2)) {
             xorigin = ClumpRadius + 2 + Math.floor(Math.random() * (98 - (ClumpRadius * 2)));
             yorigin = ClumpRadius + 2 + Math.floor(Math.random() * (98 - (ClumpRadius * 2)));
         } else {

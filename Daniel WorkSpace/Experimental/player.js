@@ -48,7 +48,7 @@ var Player = function (pos) {
     }
 
     //Equipment
-    this.equipped = 0;
+    this.equipped = 2;
     this.equipTime = Math.floor(FramesPerSecond * 0.3);
     this.equipPause = 0;
     this.EQUIPMENT = {
@@ -203,7 +203,6 @@ Player.prototype.parseInput = function (ifs) {
         //Check for Dam or Tree Collision
         var inThisCell = ifs.obj_array[IslandIndex].posToCell({x: this.x, y: this.y});
         if (inThisCell.entity != null) {
-            //TODO
             if ((inThisCell.entity instanceof Tree) || (inThisCell.entity == 1)) {
                 this.x = oldPos.x;
                 this.y = oldPos.y;
