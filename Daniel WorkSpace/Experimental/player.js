@@ -6,6 +6,7 @@
 
 //Single Holder for Player Image Data
 var PlayerSprite = new Sprite(1120, 294, 70, 42);
+var TargetSprite = new Sprite(40, 40, 40, 40);
 //Single Holder for Player Animation Indices
 var PlayerAnims = {};
 
@@ -26,6 +27,7 @@ var Player = function (pos) {
     //Movement
     this.speed = 6;
     this.speedMod = 1;
+    this.direction = 1;
 
     //Input
     this.inputVars = [];
@@ -75,6 +77,7 @@ PlayerLoad = function () {
 
     //Set up Player Sprite
     ImageLoader.loadImage(PlayerSprite.image, "images/playersheet.png");
+    ImageLoader.loadImage(TargetSprite.image, "images/groundborder1.png");
     //Set up Sprite Animations
     PlayerAnims.walkU = PlayerSprite.loadAnimation(16, 19);
     PlayerAnims.walkD = PlayerSprite.loadAnimation(0, 3);
@@ -162,6 +165,7 @@ Player.prototype.parseInput = function (ifs) {
         } else {
             Sounds[SoundMap.Walk].play();
             var oldPos = {x: this.x, y: this.y};
+            var oldDir = this.direction;
             //Vertical Movement Input
             if (this.inputVars[this.ACTIONS.UP] &&
                     !this.inputVars[this.ACTIONS.DOWN]) {
@@ -169,12 +173,14 @@ Player.prototype.parseInput = function (ifs) {
                 if (this.currentAction != this.ACTIONS.UP)
                     this.frameIndex = 0;
                 this.currentAction = this.ACTIONS.UP;
+                this.direction = this.ACTIONS.UP;
             } else if (this.inputVars[this.ACTIONS.DOWN] &&
                     !this.inputVars[this.ACTIONS.UP]) {
                 this.y += this.speed * this.speedMod;
                 if (this.currentAction != this.ACTIONS.DOWN)
                     this.frameIndex = 0;
                 this.currentAction = this.ACTIONS.DOWN;
+                this.direction = this.ACTIONS.DOWN;
             }
 
             //Horizontal Movement Input
@@ -184,12 +190,14 @@ Player.prototype.parseInput = function (ifs) {
                 if (this.currentAction != this.ACTIONS.LEFT)
                     this.frameIndex = 0;
                 this.currentAction = this.ACTIONS.LEFT;
+                this.currentAction = this.ACTIONS.LEFT;
             } else if (this.inputVars[this.ACTIONS.RIGHT] &&
                     !this.inputVars[this.ACTIONS.LEFT]) {
                 this.x += this.speed * this.speedMod;
                 if (this.currentAction != this.ACTIONS.RIGHT)
                     this.frameIndex = 0;
                 this.currentAction = this.ACTIONS.RIGHT;
+                this.direction = this.ACTIONS.RIGHT;
             }
         }
         //Check for Dam or Tree Collision
@@ -199,6 +207,7 @@ Player.prototype.parseInput = function (ifs) {
             if ((inThisCell.entity instanceof Tree) || (inThisCell.entity == 1)) {
                 this.x = oldPos.x;
                 this.y = oldPos.y;
+                this.direction = oldDir;
             } 
         }
         
@@ -383,8 +392,36 @@ Player.prototype.parseAnimation = function () {
 
         }
     }
-
+    
     this.updateAnimation(previousAnim);
+};
+
+
+Player.prototype.drawTarget = function(camera, direction) {
+    var cell = InterfaceStack[1].obj_array[IslandIndex].posToCell({x:this.x, y:this.y});
+    var x = cell.x;
+    var y = cell.y;
+    switch (direction) {
+        case 0:
+            y -= 1;
+            break;
+        case 1:
+            y += 1;
+            break;
+        case 2:
+            x -= 1;
+            break;
+        case 3:
+            x += 1;
+            break;
+    }
+    
+    x *= 40;
+    y *= 40;
+    
+    TargetSprite.draw(0, 0,
+            x - camera.x + camera.viewWidth,
+            y - camera.y + camera.viewHeight);
 };
 
 
@@ -423,6 +460,10 @@ Player.prototype.updateAnimation = function (prevAnim) {
 
 
 Player.prototype.draw = function (camera) {
+
+    if ((this.currentAction >= this.ACTIONS.ITEMUSE) && (this.equipped != this.EQUIPMENT.FOOD)) {
+        this.drawTarget(camera, this.currentAction - this.ACTIONS.ITEMUSE);
+    }
 
     this.spr.draw(this.animationIndex, this.imageIndex,
             this.x - this.spr.frameWidth / 2 - camera.x + camera.viewWidth,

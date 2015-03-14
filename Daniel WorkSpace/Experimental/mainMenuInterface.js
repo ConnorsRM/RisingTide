@@ -16,12 +16,13 @@ mainMenu.init = function() {
     //Input Definitions
     this.inputHandler = function(e, status) {
         if ((e.keyCode == 13) && !status && this.active) {  //Enter
+            Score.score = 0;
             mainGame.init();
             this.visible = false;
         } else if ((e.keyCode == 84) && !status) { //T
             this.active = !this.active;
         } else if (!this.active) {
-             thist.active = true;
+             this.active = true;
         }
     };
 };

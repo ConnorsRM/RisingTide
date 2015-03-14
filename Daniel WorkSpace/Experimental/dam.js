@@ -27,3 +27,7 @@ Dam.prototype.draw = function(camera) {
 	this.x - camera.x + camera.viewWidth, 
 	this.y - camera.y + camera.viewHeight);
 };
+
+Dam.prototype.remove = function () {
+    this.spr = null;
+};

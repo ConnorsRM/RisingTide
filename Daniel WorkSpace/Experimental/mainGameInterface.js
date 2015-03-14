@@ -130,7 +130,7 @@ mainGame.init = function() {
         } else if (e.keyCode == 16) {   //Shift Key
             //Display Evaluation Overlay
         	this.obj_array[IslandIndex].isOverlay = status;
-        } else if (e.keyCode == 32 && gameOver == true) {
+        } else if (e.keyCode == 32 && gameOver == true && !status) {
 			//reset game code here
 			gameOver = false;
 			this.activate();
