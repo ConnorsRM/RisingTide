@@ -67,13 +67,6 @@ var Player = function (pos) {
     //Drowning
     this.drownMax = FramesPerSecond * 1.5;
     this.drownCounter = this.drownMax;
-    
-    //score
-    this.startTime = new Date().getTime();
-    this.damsMade = 0;
-    this.timeDrowning = 0;
-    this.scoreMod = 1.0; //this will changed based on hunger
-    this.score = 0;
 };
 
 
@@ -267,7 +260,7 @@ Player.prototype.parseItemUse = function (ifs, targetPos) {
             ifs.obj_array[newIndex].elevation =
                     ifs.obj_array[IslandIndex].posToCell(targetPos).elevation;
 
-            this.damsMade += 1;
+            Score.addToScore(10);
         } else {
             this.currentAction -= 6;
         }
@@ -446,13 +439,9 @@ Player.prototype.update = function (ifs) {
             ifs.obj_array[HungerIndex].maxHungry / FramesPerSecond;
 
     var currentTime = new Date().getTime();
-    if (currentTime - this.startTime > 1000) {
-        this.score += (5 * this.scoreMod);
-        this.score += this.damsMade*20;
-        this.score -= this.timeDrowning;
-        totScore.update(this.score);
-        this.damsMade = 0;
-        this.timeDrowning = 0;
+    if (currentTime - this.startTime > 15000) {
+        console.log(this.score);
+        this.score += (100 * this.scoreMod);
         this.startTime = currentTime;
     }
 

@@ -52,15 +52,6 @@ function loadSounds() { //loads all sounds for the game
     //Squirrel Death
     SoundMap.sDeath = Sounds.push(new Audio("sounds/squirrelDeath.wav"))-1;
     
-        //journal
-    SoundMap.PageSize = 6;
-    SoundMap.Page = Sounds.push(new Audio("sounds/page1.wav")) - 1;
-    Sounds.push(new Audio("sounds/page2.wav"));
-    Sounds.push(new Audio("sounds/page3.wav"));
-    Sounds.push(new Audio("sounds/page4.wav"));
-    Sounds.push(new Audio("sounds/page5.wav"));
-    Sounds.push(new Audio("sounds/page6.wav"));
-    
     Sounds[SoundMap.Walk].addEventListener('ended', function () {
         this.currentTime = 0;
         this.play();

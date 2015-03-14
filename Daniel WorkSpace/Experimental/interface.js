@@ -10,39 +10,39 @@ var TUT_SRN = new Sprite(800, 600, 800, 600);
 
 var InterfaceStack = [];
 
-var Interface = function () {
+var Interface = function() {
     //Object Id
-    this.id;
-
+    this.id; 
+    
     //Variables for counting which frame we are on.
     this.updateFrame = 0;
     this.drawFrame = 0;
-
+    
     //Input Handling Function
     this.inputHandler;
-
+    
     //Booleans to test if the room is active or visible
     this.active = false;
     this.visible = false;
-
-    this.init = function () {
+    
+    this.init = function() {
         //A variable designed to hold a function that defines this 
         //  Interface's initial state. Personalize this for each object
         //  as necessary. Be sure to keep the code line:
         //  this.id = IterfaceStack.push(this);
         this.id = InterfaceStack.push(this);
     };
-
+    
     //An array of objects in this interface
     this.obj_array = [];
-
-    //an object of prey Objects
-    //will allow check for kill without examining useless things
-    this.sqrl_array = [];
+	
+	//an object of prey Objects
+	//will allow check for kill without examining useless things
+	this.sqrl_array = [];
 };
 
 
-Interface.prototype.clear = function () {
+Interface.prototype.clear = function() {
     //This function is designed to clear the Interface of objects so the
     //  garbage collector can take care of any objects. It calls each
     //  object's remove() function, which should remove any object's
@@ -51,12 +51,12 @@ Interface.prototype.clear = function () {
     for (var i = 0; i < this.obj_array.length; ++i) {
         this.obj_array[i].remove(this);
     }
-
+    
     this.obj_array = [];
 };
 
 
-Interface.prototype.remove = function () {
+Interface.prototype.remove = function() {
     //This function is designed to delete the Interface from the
     //  InterfaceStack (It is left in memory in the event the Interface
     //  needs to be used again).
@@ -71,7 +71,7 @@ Interface.prototype.remove = function () {
 };
 
 
-Interface.prototype.reset = function () {
+Interface.prototype.reset = function() {
     //This function is designed to set the Interface back to its initial 
     //  state without memory gimmicks. 
     this.clear();
@@ -80,7 +80,7 @@ Interface.prototype.reset = function () {
 };
 
 
-Interface.prototype.activate = function () {
+Interface.prototype.activate = function() {
     //This funciton is here to provide a formal method for telling this
     //  Interface to start calling its objects' update functions. For 
     //  now, this is merely a boolean flag. It may be updated here if
@@ -89,7 +89,7 @@ Interface.prototype.activate = function () {
 };
 
 
-Interface.prototype.deactivate = function () {
+Interface.prototype.deactivate = function() {
     //This funciton is here to provide a formal method for telling this
     //  Interface to stop calling its objects' update functions. For 
     //  now, this is merely a boolean flag. It may be updated here if
@@ -98,7 +98,7 @@ Interface.prototype.deactivate = function () {
 };
 
 
-Interface.prototype.show = function () {
+Interface.prototype.show = function() {
     //This funciton is here to provide a formal method for telling this
     //  Interface to start calling its objects' draw functions. For 
     //  now, this is merely a boolean flag. It may be updated here if
@@ -107,7 +107,7 @@ Interface.prototype.show = function () {
 };
 
 
-Interface.prototype.hide = function () {
+Interface.prototype.hide = function() {
     //This funciton is here to provide a formal method for telling this
     //  Interface to stop calling its objects' draw functions. For now, 
     //  this is merely a boolean flag. It may be updated here if more 
@@ -116,7 +116,7 @@ Interface.prototype.hide = function () {
 };
 
 
-Interface.prototype.update = function () {
+Interface.prototype.update = function() {
     //Updates all of the objects in the obj_array by calling their
     //  update() function. Passes this object as an argument in case
     //  access to the Interface the object lies in is necessary.
@@ -128,21 +128,15 @@ Interface.prototype.update = function () {
 };
 
 
-Interface.prototype.draw = function () {
+Interface.prototype.draw = function() {
     //Draws all of the objects in the obj_array by calling their draw()
     //  function.
-
-    //don't judge me
-    if (this.active == false) {
-        if (sPause == false) {
-            TUT_SRN.draw(0, 0, 0, 0);
-        } else {
-            Sounds[SoundMap.Walk].pause();
-
-            sJournal.displayEntry(entryNum);
-        }
-    }
-    else
+	
+	//don't judge me
+	if(this.active == false) {
+		TUT_SRN.draw(0,0,0,0);
+	}
+	else
     if (this.visible == true) {
         if (this.obj_array[0].camDraw) {
             this.obj_array[0].camDraw(this);
